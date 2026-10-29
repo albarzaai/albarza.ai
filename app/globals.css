@@ -62,3 +62,5 @@ input[type="range"].rng { accent-color: var(--color-gold); }
 .light .btn-gold:hover { background: #16120a; color: #fff; }
 .light .sheet { background: #fff; border-color: var(--color-line); }
 .light .menu { background: #fff; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
