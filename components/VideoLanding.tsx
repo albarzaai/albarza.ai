@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { HERO_LIGHT, gallery } from "@/lib/media";
 import { Icon } from "./Icon";
+import { FontReveal } from "./FontReveal";
 import { HeroVideo } from "./HeroVideo";
 import { Carousel } from "./Carousel";
 import { features } from "@/lib/content";
@@ -36,7 +37,7 @@ export function VideoHero({ locale }: { locale: Locale }) {
       <HeroVideo />
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/40" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(8,6,3,0.62),rgba(8,6,3,0.4)_55%,transparent_80%)]" />
-      <div className="relative z-10 mx-auto flex w-full max-w-[1000px] flex-col items-center px-5 pt-16 text-center">
+      <FontReveal className="relative z-10 mx-auto flex w-full max-w-[1000px] flex-col items-center px-5 pt-16 text-center">
         <h1 className="max-w-[760px] text-balance text-[36px] font-bold leading-[1.12] tracking-tight text-white md:text-[60px] [text-shadow:0_2px_24px_rgba(0,0,0,0.5)]">{d.heroTitle}</h1>
         <p className="mt-5 max-w-[560px] text-balance text-[15px] leading-7 text-white/90 md:text-lg md:leading-8 [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">{d.heroSub}</p>
         <form action={`/${locale}/signup`} className="mt-10 w-full max-w-[860px] rounded-3xl border border-ink/10 bg-white/75 p-4 text-start shadow-sm backdrop-blur-md">
@@ -48,7 +49,7 @@ export function VideoHero({ locale }: { locale: Locale }) {
             <button className="btn btn-gold ms-auto !px-6 !py-2.5">{d.generate}</button>
           </div>
         </form>
-      </div>
+      </FontReveal>
     </section>
   );
 }
