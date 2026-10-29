@@ -133,6 +133,8 @@ auth.post("/auth/login", async (c) => {
   }
   if (c.env.RESEND_API_KEY && !u.email_verified) return c.json({ error: "unverified" }, 403);
   await c.env.DB!.prepare("UPDATE users SET failed_logins=0, locked_until=0 WHERE id=?").bind(u.id).run();
+  // Hashes made with fewer rounds are upgraded the next time their owner signs in.
+  if (Number(String(u.password_hash).split("$")[1]) < ITER(c)) await c.env.DB!.prepare("UPDATE users SET password_hash=? WHERE id=?").bind(await hashPassword(d.password, ITER(c)), u.id).run();
   await audit(c, String(u.id), "login");
   return c.json({ ok: true, ...(await createSession(c, String(u.id))), user: publicUser(u) });
 });

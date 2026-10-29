@@ -8,7 +8,7 @@
   "preview_urls": false,
   "observability": { "enabled": true },
   "routes": [{ "pattern": "api.albarza.ai", "custom_domain": true }],
-  "vars": { "ALLOWED_ORIGINS": "https://albarza.ai,https://www.albarza.ai", "SITE_URL": "https://albarza.ai", "PBKDF2_ITERATIONS": "100000" },
+  "vars": { "ALLOWED_ORIGINS": "https://albarza.ai,https://www.albarza.ai", "SITE_URL": "https://albarza.ai", "PBKDF2_ITERATIONS": "210000" },
   // D1 database created by the deploy workflow; its id is filled in at deploy time.
   "d1_databases": [{ "binding": "DB", "database_name": "albarza-db", "database_id": "__D1_ID__", "migrations_dir": "migrations" }],
   // Secrets, set with `wrangler secret put`: GEMINI_API_KEY, INTERNAL_AUTH_SECRET; optional: RESEND_API_KEY, EMAIL_FROM, TURNSTILE_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET.
