@@ -5,6 +5,10 @@ const MSG: Record<string, { ar: string; en: string }> = {
   unverified: { ar: "فعّل بريدك الإلكتروني أولاً. راجع صندوق الوارد.", en: "Please confirm your email first. Check your inbox." },
   unavailable: { ar: "الخدمة غير متاحة حالياً. حاول لاحقاً.", en: "Service is unavailable right now. Please try again later." },
   captcha: { ar: "تعذّر التحقق الأمني. أعد المحاولة.", en: "Security check failed. Please retry." },
+  google_unavailable: { ar: "تسجيل الدخول عبر Google غير متاح حالياً.", en: "Google sign-in is not available right now." },
+  google_cancelled: { ar: "تم إلغاء تسجيل الدخول عبر Google.", en: "Google sign-in was cancelled." },
+  google_failed: { ar: "تعذّر تسجيل الدخول عبر Google. حاول مجدداً.", en: "Google sign-in failed. Please try again." },
+  google_unverified: { ar: "بريد Google غير مؤكد.", en: "Your Google email is not verified." },
   invalid_token: { ar: "الرابط غير صالح أو منتهي.", en: "This link is invalid or has expired." },
 };
 export const formMessage = (m: string | undefined, locale: "ar" | "en") => (m && MSG[m] ? MSG[m][locale] : null);

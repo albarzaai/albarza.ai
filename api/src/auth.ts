@@ -17,6 +17,8 @@ export type Env = {
   TURNSTILE_SECRET?: string;
   SITE_URL: string;
   PBKDF2_ITERATIONS?: string;
+  GOOGLE_CLIENT_ID?: string;
+  GOOGLE_CLIENT_SECRET?: string;
 };
 type C = Context<{ Bindings: Env; Variables: { uid?: string; sid?: string } }>;
 
@@ -180,6 +182,62 @@ auth.post("/auth/confirm-email", async (c) => {
   await c.env.DB!.prepare("UPDATE users SET email=?, email_verified=1, updated_at=? WHERE id=?").bind(t.payload, Date.now(), t.user_id).run();
   await audit(c, t.user_id, "email_changed");
   return c.json({ ok: true });
+});
+
+
+// ---------- Google sign-in (authorisation code flow with PKCE and a browser-bound state) ----------
+const b64u = (b: ArrayBuffer) => btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const redirectUri = (c: C) => `${c.env.SITE_URL}/api/auth/google/callback`;
+
+auth.get("/auth/google/status", (c) => c.json({ enabled: !!(c.env.GOOGLE_CLIENT_ID && c.env.GOOGLE_CLIENT_SECRET) }));
+
+auth.post("/auth/google/start", async (c) => {
+  if (!c.env.GOOGLE_CLIENT_ID || !c.env.GOOGLE_CLIENT_SECRET) return c.json({ error: "unavailable" }, 503);
+  const b = await body(c, v.googleStart); if ("error" in b) return b.error;
+  if (await limited(c)) return c.json({ error: "rate_limited" }, 429);
+  const state = randomToken(32), verifier = randomToken(48);
+  const challenge = b64u(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier)));
+  await c.env.DB!.batch([
+    c.env.DB!.prepare("DELETE FROM oauth_state WHERE expires_at<?").bind(Date.now()),
+    c.env.DB!.prepare("INSERT INTO oauth_state (id,verifier,next,locale,expires_at) VALUES (?,?,?,?,?)").bind(await sha256(state), verifier, b.data.next, b.data.locale, Date.now() + 10 * 60_000),
+  ]);
+  const url = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+  url.search = new URLSearchParams({ client_id: c.env.GOOGLE_CLIENT_ID, redirect_uri: redirectUri(c), response_type: "code", scope: "openid email profile", state, code_challenge: challenge, code_challenge_method: "S256", prompt: "select_account", hl: b.data.locale }).toString();
+  return c.json({ url: url.toString(), state });
+});
+
+auth.post("/auth/google/callback", async (c) => {
+  if (!c.env.GOOGLE_CLIENT_ID || !c.env.GOOGLE_CLIENT_SECRET) return c.json({ error: "unavailable" }, 503);
+  const b = await body(c, v.googleCallback); if ("error" in b) return b.error;
+  if (await limited(c)) return c.json({ error: "rate_limited" }, 429);
+  // The state in the URL must equal the one stored in this browser's cookie, and must exist, unused and unexpired.
+  if (!(await safeEqual(b.data.state, b.data.stateCookie))) return c.json({ error: "invalid_state" }, 400);
+  const st = await c.env.DB!.prepare("DELETE FROM oauth_state WHERE id=? AND expires_at>? RETURNING verifier, next, locale").bind(await sha256(b.data.state), Date.now()).first<{ verifier: string; next: string; locale: string }>();
+  if (!st) return c.json({ error: "invalid_state" }, 400);
+  const tokenRes = await fetch("https://oauth2.googleapis.com/token", { method: "POST", body: new URLSearchParams({ code: b.data.code, client_id: c.env.GOOGLE_CLIENT_ID, client_secret: c.env.GOOGLE_CLIENT_SECRET, redirect_uri: redirectUri(c), grant_type: "authorization_code", code_verifier: st.verifier }), signal: AbortSignal.timeout(10_000) }).catch(() => null);
+  const tok = (await tokenRes?.json().catch(() => null)) as { access_token?: string } | null;
+  if (!tokenRes?.ok || !tok?.access_token) return c.json({ error: "oauth_failed" }, 400);
+  const infoRes = await fetch("https://openidconnect.googleapis.com/v1/userinfo", { headers: { authorization: `Bearer ${tok.access_token}` }, signal: AbortSignal.timeout(10_000) }).catch(() => null);
+  const info = (await infoRes?.json().catch(() => null)) as { sub?: string; email?: string; email_verified?: boolean; name?: string } | null;
+  const em = v.email.safeParse(info?.email);
+  if (!infoRes?.ok || !info?.sub || !em.success || info.email_verified !== true) return c.json({ error: "oauth_unverified" }, 403);
+  const now = Date.now();
+  let userId = (await c.env.DB!.prepare("SELECT user_id FROM oauth_accounts WHERE provider='google' AND provider_id=?").bind(info.sub).first<{ user_id: string }>())?.user_id;
+  if (!userId) {
+    const existing = await c.env.DB!.prepare("SELECT id, email_verified FROM users WHERE email=?").bind(em.data).first<{ id: string; email_verified: number }>();
+    if (existing) {
+      userId = existing.id;
+      // A pre-registered but never-verified account may belong to an attacker: wipe its password and sessions before linking.
+      if (!existing.email_verified) await c.env.DB!.batch([c.env.DB!.prepare("UPDATE users SET password_hash=NULL, email_verified=1, updated_at=? WHERE id=?").bind(now, userId), c.env.DB!.prepare("DELETE FROM sessions WHERE user_id=?").bind(userId)]);
+    } else {
+      userId = crypto.randomUUID();
+      const nm = v.name.safeParse((info.name ?? "").replace(/[<>{}\[\]\\]/g, "").slice(0, 60));
+      await c.env.DB!.prepare("INSERT INTO users (id,email,email_verified,password_hash,name,locale,created_at,updated_at) VALUES (?,?,1,NULL,?,?,?,?)").bind(userId, em.data, nm.success ? nm.data : em.data.split("@")[0], st.locale, now, now).run();
+    }
+    await c.env.DB!.prepare("INSERT OR IGNORE INTO oauth_accounts (provider,provider_id,user_id,created_at) VALUES ('google',?,?,?)").bind(info.sub, userId, now).run();
+  }
+  await audit(c, userId, "login_google");
+  return c.json({ ok: true, next: st.next, locale: st.locale, ...(await createSession(c, userId)) });
 });
 
 // ---------- signed-in routes: Authorization: Bearer <session token> ----------

@@ -12,7 +12,7 @@ import type { Locale } from "@/lib/i18n";
 const G = () => (<svg width="18" height="18" viewBox="0 0 48 48" aria-hidden><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 12-2.1 16-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.5 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>);
 
 // Davinci-style centered modal: art panel + "Sign up or log in". Validation runs in server actions.
-export function AuthModal({ locale, initial, next, reset }: { locale: Locale; initial: "login" | "signup"; next?: string; reset?: boolean }) {
+export function AuthModal({ locale, initial, next, reset, error }: { locale: Locale; initial: "login" | "signup"; next?: string; reset?: boolean; error?: string }) {
   const d = t(locale);
   const [step, setStep] = useState<"choose" | "email">("choose");
   const [mode, setMode] = useState<"login" | "signup">(initial);
@@ -34,13 +34,17 @@ export function AuthModal({ locale, initial, next, reset }: { locale: Locale; in
           <p className="mt-2 text-center text-sm text-ink/80">{d.authSub}</p>
           {step === "choose" ? (
             <div className="mt-7 space-y-3">
-              <button type="button" disabled title={locale === "ar" ? "قريباً" : "Coming soon"} className="flex h-12 w-full cursor-not-allowed items-center justify-center gap-3 rounded-xl bg-white/70 text-sm font-semibold text-black opacity-70"><G />{d.google}<span className="rounded-full bg-gold/25 px-2 py-0.5 text-[10px]">{locale === "ar" ? "قريباً" : "Soon"}</span></button>
+              {error && <p role="alert" className="rounded-xl bg-red-500/10 p-3 text-xs text-red-500">{formMessage(error, locale) ?? formMessage("unavailable", locale)}</p>}
+              {process.env.NEXT_PUBLIC_GOOGLE_ENABLED === "1"
+                ? <a href={`/api/auth/google/start?locale=${locale}${next ? `&next=${encodeURIComponent(next)}` : ""}`} className="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-white text-sm font-semibold text-black hover:bg-gold-hi"><G />{d.google}</a>
+                : <button type="button" disabled title={locale === "ar" ? "قريباً" : "Coming soon"} className="flex h-12 w-full cursor-not-allowed items-center justify-center gap-3 rounded-xl bg-white/70 text-sm font-semibold text-black opacity-70"><G />{d.google}<span className="rounded-full bg-gold/25 px-2 py-0.5 text-[10px]">{locale === "ar" ? "قريباً" : "Soon"}</span></button>}
               <button type="button" onClick={() => setStep("email")} className={row}><Icon n="mail" size={16} />{d.withEmail}</button>
             </div>
           ) : (
             <form action={action} noValidate className="mt-7 space-y-3">
               <input type="hidden" name="locale" value={locale} />{next && <input type="hidden" name="next" value={next} />}
               {reset && <p role="status" className="rounded-xl bg-gold/15 p-3 text-xs">{locale === "ar" ? "تم تغيير كلمة المرور. سجّل الدخول." : "Password changed. Please sign in."}</p>}
+              {error && <p role="alert" className="rounded-xl bg-red-500/10 p-3 text-xs text-red-500">{formMessage(error, locale) ?? formMessage("unavailable", locale)}</p>}
               {formMessage(state?.message, locale) && <p role="alert" className="rounded-xl bg-red-500/10 p-3 text-xs text-red-500">{formMessage(state?.message, locale)}</p>}
               {mode === "signup" && (<div><label className="label" htmlFor="name">{d.name}</label><input id="name" name="name" className="input" autoComplete="name" />{err("name")}</div>)}
               <div><label className="label" htmlFor="email">{d.email}</label><input id="email" name="email" type="email" dir="ltr" className="input" autoComplete="email" />{err("email")}</div>

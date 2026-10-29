@@ -26,3 +26,7 @@ export function fieldErrors(err: z.ZodError) {
   for (const i of err.issues) { const k = String(i.path[0] ?? "form"); if (!out[k]) out[k] = i.message.length < 20 ? i.message : "invalid"; }
   return out;
 }
+
+const nextPath = z.string().regex(/^\/(ar|en)\/app(\/[\w\-/]*)?$/).max(200);
+export const googleStart = z.object({ next: nextPath, locale }).strict();
+export const googleCallback = z.object({ code: z.string().min(10).max(2048), state: token, stateCookie: token }).strict();

@@ -38,7 +38,7 @@ app.use("*", (c, next) =>
   })(c, next),
 );
 
-const ip = (c: { req: { header(n: string): string | undefined } }) => c.req.header("cf-connecting-ip") ?? "unknown";
+const ip = (c: { req: { header(n: string): string | undefined } }) => c.req.header("x-client-ip") ?? c.req.header("cf-connecting-ip") ?? "unknown";
 
 // Global per-IP limit on everything.
 app.use("*", async (c, next) => {

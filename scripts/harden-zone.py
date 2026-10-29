@@ -77,7 +77,7 @@ step("WAF custom rules", call("PUT", f"/zones/{zid}/rulesets/phases/http_request
 # Edge rate limiting (free plan: one rule, 10 s window). Static assets are excluded: one page view fetches dozens of them and must not count as abuse.
 rl = [{"description": "Rate limit per IP", "action": "block", "enabled": True,
        "expression": 'not starts_with(http.request.uri.path, "/_next/") and not starts_with(http.request.uri.path, "/media/") and not starts_with(http.request.uri.path, "/brand/") and not starts_with(http.request.uri.path, "/fonts/")',
-       "ratelimit": {"characteristics": ["ip.src", "cf.colo.id"], "period": 10, "requests_per_period": 100, "mitigation_timeout": 10}}]
+       "ratelimit": {"characteristics": ["ip.src", "cf.colo.id"], "period": 10, "requests_per_period": 250, "mitigation_timeout": 10}}]
 step("Rate limiting", call("PUT", f"/zones/{zid}/rulesets/phases/http_ratelimit/entrypoint", {"rules": rl}))
 
 # Managed WAF rulesets

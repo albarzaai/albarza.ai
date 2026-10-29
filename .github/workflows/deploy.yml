@@ -47,6 +47,8 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           TURNSTILE_SECRET: ${{ secrets.TURNSTILE_SECRET }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         run: |
           INTERNAL_AUTH_SECRET=$(openssl rand -hex 32)
           echo "::add-mask::$INTERNAL_AUTH_SECRET"
@@ -56,12 +58,17 @@ jobs:
           HASH_PEPPER=$(printf 'albarza-pepper:%s' "$CLOUDFLARE_API_TOKEN" | sha256sum | cut -d' ' -f1)
           echo "::add-mask::$HASH_PEPPER"
           printf '%s' "$HASH_PEPPER" | npx wrangler secret put HASH_PEPPER
-          for K in RESEND_API_KEY EMAIL_FROM TURNSTILE_SECRET; do V="${!K:-}"; [ -n "$V" ] && printf '%s' "$V" | npx wrangler secret put "$K"; done
+          for K in RESEND_API_KEY EMAIL_FROM TURNSTILE_SECRET GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET; do V="${!K:-}"; [ -n "$V" ] && printf '%s' "$V" | npx wrangler secret put "$K"; done
           echo "INTERNAL_AUTH_SECRET=$INTERNAL_AUTH_SECRET" >> "$GITHUB_ENV"
       - name: Build and deploy frontend (albarza.ai)
+        env:
+          NEXT_PUBLIC_GOOGLE_ENABLED: ${{ secrets.GOOGLE_CLIENT_ID != '' && '1' || '0' }}
         run: |
           npx opennextjs-cloudflare build
           npx opennextjs-cloudflare deploy
           printf '%s' "$INTERNAL_AUTH_SECRET" | npx wrangler secret put INTERNAL_AUTH_SECRET
+      - name: Smoke test accounts (sign up, read, delete a throwaway user)
+        continue-on-error: true
+        run: bash scripts/smoke-accounts.sh
       - name: Harden zone (TLS, HSTS, bots, WAF, rate limits)
         run: python3 scripts/harden-zone.py
