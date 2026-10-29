@@ -17,7 +17,7 @@ export function AppSidebar({ locale }: { locale: Locale }) {
   const path = usePathname();
   const base = `/${locale}/app`;
   const [collapsed, setCollapsed] = useState(false);
-  const toggle = () => { const c = !collapsed; setCollapsed(c); document.documentElement.style.setProperty("--sb", c ? "64px" : "220px"); };
+  const toggle = () => { const c = !collapsed; setCollapsed(c); document.documentElement.style.setProperty("--sb", c ? "64px" : "260px"); };
   const Item = ({ seg, k, icon }: { seg: string; k: string; icon: string }) => {
     const href = seg ? `${base}/${seg}` : base;
     const active = seg ? path === href || path.startsWith(href + "/") : path === base;
@@ -29,7 +29,7 @@ export function AppSidebar({ locale }: { locale: Locale }) {
   };
   const mi = "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-white/5";
   return (
-    <aside className="sheet z-30 m-2.5 flex flex-col overflow-hidden md:sticky md:top-2.5 md:h-[calc(100dvh-20px)]">
+    <aside className="z-30 flex flex-col overflow-hidden border-b border-white/10 md:border-b-0 bg-[#0b0b0b] md:sticky md:top-0 md:h-dvh md:[border-inline-end-width:1px]">
       <div className="flex h-16 items-center justify-between px-4">
         {!collapsed && <Link href={base} className="flex items-center gap-2"><img src="/brand/logo.svg" alt="" width={22} height={28} /><span className="text-lg font-bold tracking-wide">{a.myAccount === "حسابي" ? "البرزة" : "ALBARZA"}</span></Link>}
         <button onClick={toggle} aria-label={a.collapse} className="hidden text-white/50 hover:text-white md:block"><Icon n="panel" size={16} /></button>
