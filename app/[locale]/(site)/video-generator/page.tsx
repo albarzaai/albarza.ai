@@ -7,7 +7,7 @@ export default async function VideoGenerator({ params }: { params: Promise<{ loc
   const locale = (await params).locale as Locale;
   return (
     <main>
-      <VideoHero locale={locale} video="/media/hero-abudhabi.mp4" />
+      <VideoHero locale={locale} />
       <Models locale={locale} />
       <VideoSteps locale={locale} />
       <VideoBuilt locale={locale} />

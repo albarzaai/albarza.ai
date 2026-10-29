@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { HERO_LIGHT, gallery } from "@/lib/media";
 import { Icon } from "./Icon";
+import { HeroVideo } from "./HeroVideo";
 import { Carousel } from "./Carousel";
 import { features } from "@/lib/content";
 import { t } from "@/lib/dict";
@@ -27,14 +28,12 @@ const copy = {
 };
 const c = (k: keyof typeof copy, l: Locale) => copy[k][l];
 
-export function VideoHero({ locale, video }: { locale: Locale; video?: string }) {
+export function VideoHero({ locale }: { locale: Locale }) {
   const d = t(locale);
   const pill = "inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-ink/5 px-3.5 py-2 text-xs font-medium hover:bg-ink/10";
   return (
     <section className="relative flex min-h-[620px] items-center justify-center overflow-hidden bg-[#fdf8ec] md:h-[760px]">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={HERO_LIGHT} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
-      {video && <video src={video} poster={HERO_LIGHT} autoPlay muted loop playsInline preload="metadata" className="absolute inset-0 h-full w-full object-cover" />}
+      <HeroVideo />
       <div className="absolute inset-0 bg-gradient-to-b from-white/35 via-white/10 to-white" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(253,248,236,0.88),rgba(253,248,236,0.55)_55%,transparent_80%)]" />
       <div className="relative z-10 mx-auto flex w-full max-w-[1000px] flex-col items-center px-5 pt-16 text-center">

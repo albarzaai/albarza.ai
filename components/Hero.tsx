@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { preload } from "react-dom";
-import { HERO_LIGHT } from "@/lib/media";
+import { HeroVideo, HERO_POSTER } from "./HeroVideo";
 import { Icon } from "./Icon";
 import { t } from "@/lib/dict";
 import type { Locale } from "@/lib/i18n";
@@ -8,12 +8,10 @@ import type { Locale } from "@/lib/i18n";
 // The prompt bar is a plain form posting to signup; all validation happens on the server.
 export function Hero({ locale, variant = "video" }: { locale: Locale; variant?: "video" | "image" }) {
   const d = t(locale);
-  preload(HERO_LIGHT, { as: "image", fetchPriority: "high" });
+  preload(HERO_POSTER, { as: "image", fetchPriority: "high" });
   return (
     <section className="relative flex min-h-[100svh] items-end justify-center overflow-hidden bg-[#fdf8ec]">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={HERO_LIGHT} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
-      <video src="/media/hero-abudhabi.mp4" poster={HERO_LIGHT} autoPlay muted loop playsInline preload="auto" className="absolute inset-0 h-full w-full object-cover" />
+      <HeroVideo />
       <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/70" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(253,248,236,0.88),rgba(253,248,236,0.55)_55%,transparent_80%)]" />
       <nav aria-label="breadcrumb" className="absolute start-10 top-[112px] z-10 hidden text-sm text-ink/80 md:block">
