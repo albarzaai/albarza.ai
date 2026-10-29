@@ -4,7 +4,7 @@ import { cookies, headers } from "next/headers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 type Env = { API?: { fetch(url: string, init?: RequestInit): Promise<Response> }; INTERNAL_AUTH_SECRET?: string };
-export type User = { id: string; email: string; emailVerified: boolean; name: string; locale: "ar" | "en"; marketing: boolean; plan: string; planCancelAtPeriodEnd: boolean; planPeriodEnd: number | null; credits: number; hasPassword: boolean; createdAt: number };
+export type User = { id: string; email: string; emailVerified: boolean; name: string; locale: "ar" | "en"; marketing: boolean; role: "user" | "admin"; plan: string; planCancelAtPeriodEnd: boolean; planPeriodEnd: number | null; credits: number; hasPassword: boolean; createdAt: number };
 export type ApiResult<T = Record<string, unknown>> = { status: number; ok: boolean; data: T & { error?: string; fields?: Record<string, string>; retryAfter?: number } };
 
 // The session lives in an HttpOnly, Secure, SameSite cookie: page scripts can never read it.

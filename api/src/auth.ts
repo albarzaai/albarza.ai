@@ -88,7 +88,7 @@ async function useToken(c: C, raw: string, kind: string) {
   return c.env.DB!.prepare("UPDATE tokens SET used_at=? WHERE id=? AND kind=? AND used_at IS NULL AND expires_at>? RETURNING user_id, payload").bind(Date.now(), await sha256(raw), kind, Date.now()).first<{ user_id: string; payload: string | null }>();
 }
 const link = (c: C, path: string, t: string, locale: string) => `${c.env.SITE_URL}/${locale}${path}?token=${t}`;
-const publicUser = (u: Record<string, unknown>) => ({ id: u.id, email: u.email, emailVerified: !!u.email_verified, name: u.name, locale: u.locale, marketing: !!u.marketing_opt_in, plan: u.plan, planCancelAtPeriodEnd: !!u.plan_cancel_at_period_end, planPeriodEnd: u.plan_period_end, credits: u.credits, hasPassword: !!u.password_hash, createdAt: u.created_at });
+const publicUser = (u: Record<string, unknown>) => ({ id: u.id, email: u.email, emailVerified: !!u.email_verified, name: u.name, locale: u.locale, marketing: !!u.marketing_opt_in, role: u.role === "admin" ? "admin" : "user", plan: u.plan, planCancelAtPeriodEnd: !!u.plan_cancel_at_period_end, planPeriodEnd: u.plan_period_end, credits: u.credits, hasPassword: !!u.password_hash, createdAt: u.created_at });
 
 // ---------- public flows ----------
 auth.post("/auth/signup", async (c) => {

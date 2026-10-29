@@ -22,4 +22,6 @@ except Exception:
 [ -n "$ID" ] || fail "Could not find or create the albarza-db database."
 sed -i "s/__D1_ID__/$ID/" wrangler.jsonc
 npx wrangler d1 migrations apply albarza-db --remote || fail "Could not apply database migrations."
+# Admin role: only for a verified email (Google sign-in verifies it). Safe to repeat; does nothing until that account exists.
+npx wrangler d1 execute albarza-db --remote --command "UPDATE users SET role='admin' WHERE email='albarzaplatform@gmail.com' AND email_verified=1" || echo "::warning title=D1::Could not apply the admin role."
 echo "D1 ready: $ID"
