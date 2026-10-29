@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { preload } from "react-dom";
 import { HERO_LIGHT } from "@/lib/media";
 import { Icon } from "./Icon";
 import { t } from "@/lib/dict";
@@ -7,8 +8,9 @@ import type { Locale } from "@/lib/i18n";
 // The prompt bar is a plain form posting to signup; all validation happens on the server.
 export function Hero({ locale, variant = "video" }: { locale: Locale; variant?: "video" | "image" }) {
   const d = t(locale);
+  preload(HERO_LIGHT, { as: "image", fetchPriority: "high" });
   return (
-    <section className="relative flex min-h-[100svh] items-end justify-center overflow-hidden">
+    <section className="relative flex min-h-[100svh] items-end justify-center overflow-hidden bg-[#fdf8ec]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={HERO_LIGHT} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/70" />

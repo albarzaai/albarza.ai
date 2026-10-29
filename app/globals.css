@@ -54,7 +54,7 @@ a.card:hover, article.card:hover { border-color: var(--color-gold); }
 input[type="range"].rng { accent-color: var(--color-gold); }
 
 /* Marketing + auth surfaces: white background, ink text, same gold accent. The logged-in app stays dark. */
-.light { --color-bg: #ffffff; --color-surface: #fbf6ea; --color-surface-2: #f5ebd3; --color-line: #e9dcc0; --color-ink: #16120a; --color-muted: #6a5e46; --color-gold-hi: #8a6a2a; --color-gold-deep: #7d5f22;
+.light { background: var(--color-bg); color: var(--color-ink); --color-bg: #ffffff; --color-surface: #fbf6ea; --color-surface-2: #f5ebd3; --color-line: #e9dcc0; --color-ink: #16120a; --color-muted: #6a5e46; --color-gold-hi: #8a6a2a; --color-gold-deep: #7d5f22;
   background: var(--color-bg); color: var(--color-ink); min-height: 100dvh; }
 .light .glass { background: rgba(255,255,255,.78); border-color: rgba(22,18,10,.08); box-shadow: 0 10px 40px rgba(120,90,30,.12); }
 .light .btn-white { background: var(--color-ink); color: #fff; }

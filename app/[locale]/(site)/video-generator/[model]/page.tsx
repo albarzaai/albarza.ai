@@ -16,12 +16,12 @@ export default async function ModelPage({ params }: { params: Promise<{ locale: 
   const d = t(locale);
   return (
     <main>
-      <section className="relative flex min-h-[78svh] items-end overflow-hidden">
+      <section className="relative flex min-h-[78svh] items-end overflow-hidden bg-[#fdf8ec]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={HERO_LIGHT} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/80" />
         <nav aria-label="breadcrumb" className="absolute start-10 top-[112px] z-10 hidden text-sm text-ink/80 md:block">
-          <Link href={`/${locale}`}>{d.home}</Link> / <Link href={`/${locale}`}>{d.videoGenerator}</Link> / <span className="text-ink">{m.name}</span>
+          <Link href={`/${locale}`}>{d.home}</Link> / <Link href={`/${locale}/video-generator`}>{d.videoGenerator}</Link> / <span className="text-ink">{m.name}</span>
         </nav>
         <div className="relative z-10 mx-auto w-full max-w-[1000px] px-5 pb-20 text-center">
           <h1 className="text-4xl font-semibold md:text-5xl">{m.name}</h1>

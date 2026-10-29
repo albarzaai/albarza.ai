@@ -7,7 +7,7 @@ import type { Locale } from "@/lib/i18n";
 export function SiteHeader({ locale, overlay = true }: { locale: Locale; overlay?: boolean }) {
   const d = t(locale);
   const other = locale === "ar" ? "en" : "ar";
-  const nav: [string, boolean, string][] = [[d.navAiImage, true, "/image-generator"], [d.navAiVideo, true, "/video-generator/veo-3-1"], [d.navEditor, false, "/signup"], [d.navExplore, false, "/signup"], [d.navTemplates, false, "/signup"]];
+  const nav: [string, boolean, string][] = [[d.navAiImage, true, "/image-generator"], [d.navAiVideo, true, "/video-generator"], [d.navEditor, false, "/signup"], [d.navExplore, false, "/signup"], [d.navTemplates, false, "/signup"]];
   return (
     <header className={`${overlay ? "absolute" : "relative"} inset-x-0 top-0 z-40`}>
       <div className="flex h-[76px] items-center justify-between px-5 md:px-10">
