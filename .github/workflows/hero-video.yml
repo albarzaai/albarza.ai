@@ -15,8 +15,10 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - name: Install requests
-        run: python3 -m pip install --quiet requests
+      - name: Install requests and ffmpeg
+        run: |
+          python3 -m pip install --quiet requests
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
       - name: Generate with Veo
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -30,4 +32,4 @@ jobs:
           git commit -m "Add Abu Dhabi hero video (Veo)"
           git push
 
-# retry 8
+# retry 9
