@@ -160,7 +160,7 @@ export function ProjectWorkspace({ locale, id }: { locale: Locale; id: string })
       </header>
       <input value={p.logline} onChange={(e) => update((x) => ({ ...x, logline: e.target.value }))} placeholder={t.loglinePh} className="mb-6 w-full max-w-[760px] bg-transparent text-sm text-white/70 outline-none placeholder:text-white/30" />
 
-      <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
+      <div className="grid gap-6 lg:grid-cols-[340px_1fr] [&>*]:min-w-0">
         <aside className="sheet h-fit p-4 lg:sticky lg:top-24">
           <div className="flex gap-1">
             {(["library", "characters"] as const).map((k) => <button key={k} onClick={() => setTab(k)} className={`pill ${tab === k ? "!bg-white/15" : ""}`}>{t[k]}</button>)}
@@ -226,7 +226,7 @@ export function ProjectWorkspace({ locale, id }: { locale: Locale; id: string })
                   <button onClick={() => move(s.id, 1)} disabled={i === p.scenes.length - 1} aria-label={t.down} className="grid size-8 place-items-center rounded-full hover:bg-white/10 disabled:opacity-25"><Icon n="up" size={14} className="rotate-180" /></button>
                   <button onClick={() => update((x) => ({ ...x, scenes: x.scenes.filter((k) => k.id !== s.id) }))} aria-label={t.del} className="grid size-8 place-items-center rounded-full hover:bg-white/10"><Icon n="trash" size={14} /></button>
                 </div>
-                <div className="mt-3 grid gap-3 md:grid-cols-[1fr_200px]">
+                <div className="mt-3 grid gap-3 md:grid-cols-[1fr_200px] [&>*]:min-w-0">
                   <textarea value={s.description} onChange={(e) => setScene(s.id, { description: e.target.value })} placeholder={t.sceneDesc} rows={3} className={`${field} resize-none`} />
                   <div className="grid grid-cols-2 gap-2 md:grid-cols-1">
                     <label className="text-[11px] text-white/45">{t.shot}<select value={s.shot} onChange={(e) => setScene(s.id, { shot: e.target.value })} className={`${field} mt-1`}>{SHOTS.map((x) => <option key={x} className="bg-black">{x}</option>)}</select></label>
