@@ -67,7 +67,7 @@ export function CreationsList({ locale, kind, q = "" }: { locale: Locale; kind: 
           ) : (
             <button type="button" onClick={() => setOpen({ src: r.src, prompt: r.prompt, model: r.model, kind: r.kind })} className="group relative mx-auto block overflow-hidden rounded-[28px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={r.src} alt="" loading="lazy" width={400} height={400} className={`object-cover ${r.kind === "video" ? "aspect-video w-[min(80vw,680px)]" : "aspect-square w-[min(80vw,400px)]"}`} />
+              <img src={r.src} alt="" loading="lazy" decoding="async" width={400} height={400} className={`object-cover ${r.kind === "video" ? "aspect-video w-[min(80vw,680px)]" : "aspect-square w-[min(80vw,400px)]"}`} />
               {r.kind === "video" && <span className="absolute start-3 top-3 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-xs"><Icon n="play" size={11} />0:04</span>}
             </button>
           )}

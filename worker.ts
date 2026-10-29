@@ -18,7 +18,7 @@ async function hasSession(req: Request, env: Env): Promise<boolean> {
   return !!r?.ok;
 }
 
-const TTL = 3600;
+const TTL = 6 * 3600;
 
 function cacheable(req: Request): boolean {
   if (req.method !== "GET") return false;

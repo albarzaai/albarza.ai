@@ -43,7 +43,7 @@ export function Feed({ locale, type, titles = false, open = "viewer", q = "", so
   const card = (it: Item) => (
     <button key={it.id} type="button" onClick={() => open !== "none" && setSel(it)} className={`group relative block w-full overflow-hidden rounded-2xl bg-[#1a1a1a] text-start ${view === "grid" ? "mb-3 break-inside-avoid" : ""}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={it.src} alt="" loading="lazy" width={400} height={it.tall ? 600 : 300} className={`w-full object-cover transition group-hover:scale-[1.02] ${view === "row" ? "aspect-video" : it.tall ? "aspect-[3/4.2]" : "aspect-[4/3]"}`} />
+      <img src={it.src} alt="" loading="lazy" decoding="async" width={400} height={it.tall ? 600 : 300} className={`w-full object-cover transition group-hover:scale-[1.02] ${view === "row" ? "aspect-video" : it.tall ? "aspect-[3/4.2]" : "aspect-[4/3]"}`} />
       {it.kind === "video" && <span className="absolute end-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-black/55"><Icon n="mute" size={13} /></span>}
       {titles && <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent p-3 pt-10 text-sm font-semibold">{it.title}</div>}
     </button>

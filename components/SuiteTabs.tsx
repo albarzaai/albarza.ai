@@ -24,7 +24,7 @@ export function SuiteTabs({ locale }: { locale: Locale }) {
       <div className="relative aspect-[16/9] overflow-hidden rounded-[28px] border border-line bg-surface-2 lg:aspect-[16/8.2]">
         {suiteTabs.map((x, k) => (
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={x.key} src={pic("suite", k + 1)} alt="" loading="lazy" className={`absolute inset-0 size-full object-cover transition-opacity duration-500 ${k === i ? "opacity-100" : "opacity-0"}`} />
+          <img key={x.key} src={pic("suite", k + 1)} alt="" loading="lazy" decoding="async" className={`absolute inset-0 size-full object-cover transition-opacity duration-500 ${k === i ? "opacity-100" : "opacity-0"}`} />
         ))}
         <div className="absolute inset-x-3 bottom-3 rounded-2xl border border-white/30 bg-black/35 p-3 text-white backdrop-blur-xl sm:inset-x-6 sm:bottom-6 sm:p-4 lg:inset-x-[12%]">
           <p className="line-clamp-2 text-[13px] leading-5 sm:text-sm">{tab.prompt[locale]}</p>

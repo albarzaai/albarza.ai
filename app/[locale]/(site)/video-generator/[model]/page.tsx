@@ -35,7 +35,7 @@ export default async function ModelPage({ params }: { params: Promise<{ locale: 
           {[d.best1, d.best2, d.best3].map((b, i) => (
             <article key={b} className="card overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={pic("model", i + 1)} alt="" width={400} height={300} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+              <img src={pic("model", i + 1)} alt="" width={400} height={300} loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover" />
               <div className="p-5"><p className="text-xs text-gold-hi">{d.modelBest}</p><h3 className="mt-1 font-semibold">{b}</h3></div>
             </article>
           ))}

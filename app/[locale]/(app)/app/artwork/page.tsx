@@ -24,9 +24,9 @@ export default async function Page({ params, searchParams }: { params: Promise<{
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {boards.concat(boards).map((b, k) => (
               <article key={k} className="relative flex h-[216px] items-center justify-center overflow-hidden rounded-3xl" style={{ background: b[2] }}>
-                {[-1, 1].map((d) => /* eslint-disable-next-line @next/next/no-img-element */ <img key={d} src={gallery(k + 3 + d)} alt="" loading="lazy" className="absolute h-[140px] w-[100px] rounded-2xl object-cover opacity-80" style={{ transform: `translateX(${d * 78}px) rotate(${d * 6}deg)` }} />)}
+                {[-1, 1].map((d) => /* eslint-disable-next-line @next/next/no-img-element */ <img key={d} src={gallery(k + 3 + d)} alt="" loading="lazy" decoding="async" className="absolute h-[140px] w-[100px] rounded-2xl object-cover opacity-80" style={{ transform: `translateX(${d * 78}px) rotate(${d * 6}deg)` }} />)}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={gallery(k + 3)} alt="" loading="lazy" className="relative h-[170px] w-[112px] rounded-2xl object-cover shadow-xl" />
+                <img src={gallery(k + 3)} alt="" loading="lazy" decoding="async" className="relative h-[170px] w-[112px] rounded-2xl object-cover shadow-xl" />
                 <p className="absolute bottom-3 start-4 text-sm font-medium text-white drop-shadow">{b[i]}</p>
               </article>
             ))}

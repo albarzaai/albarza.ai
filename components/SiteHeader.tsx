@@ -16,7 +16,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           <Logo locale={locale} adaptive />
           <nav className="hidden items-center gap-8 text-sm font-medium lg:flex">
             {nav.map(([label, chev, href]) => (
-              <Link key={label} href={`/${locale}${href}`} className="flex items-center gap-1 hover:opacity-70">{label}{chev && <Icon n="chev" size={13} />}</Link>
+              <Link key={label} href={`/${locale}${href}`} prefetch={false} className="flex items-center gap-1 hover:opacity-70">{label}{chev && <Icon n="chev" size={13} />}</Link>
             ))}
           </nav>
         </div>

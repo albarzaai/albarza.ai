@@ -77,7 +77,7 @@ export function VideoBuilt({ locale }: { locale: Locale }) {
         <Carousel label="Showcase">
           {[1, 2, 3, 4].map((n) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={n} src={pic("built", n)} alt="" width={1260} height={708} loading="lazy" className="aspect-video w-full shrink-0 snap-start rounded-[28px] border border-line object-cover md:w-[calc(100%-2rem)]" />
+            <img key={n} src={pic("built", n)} alt="" width={1260} height={708} loading="lazy" decoding="async" className="aspect-video w-full shrink-0 snap-start rounded-[28px] border border-line object-cover md:w-[calc(100%-2rem)]" />
           ))}
         </Carousel>
       </div>
@@ -94,7 +94,7 @@ export function VideoPipeline({ locale }: { locale: Locale }) {
           {features.map((f, i) => (
             <article key={f.t.en}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={pic("pipe", i + 1)} alt="" width={620} height={330} loading="lazy" className="aspect-[1.86] w-full rounded-2xl object-cover" />
+              <img src={pic("pipe", i + 1)} alt="" width={620} height={330} loading="lazy" decoding="async" className="aspect-[1.86] w-full rounded-2xl object-cover" />
               <h3 className="mt-4 text-xl font-medium">{f.t[locale]}</h3>
               <p className="mt-2 text-[13px] leading-5 text-muted">{f.d[locale]}</p>
             </article>
@@ -118,7 +118,7 @@ export function VideoWhy({ locale }: { locale: Locale }) {
           {items.map(([title, text], i) => (
             <article key={title} className="w-[min(86vw,780px)] shrink-0 snap-start">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={pic("why", (i % 6) + 1)} alt="" width={780} height={440} loading="lazy" className="aspect-[1.77] w-full rounded-[24px] border border-line object-cover" />
+              <img src={pic("why", (i % 6) + 1)} alt="" width={780} height={440} loading="lazy" decoding="async" className="aspect-[1.77] w-full rounded-[24px] border border-line object-cover" />
               <p className="mt-5 text-lg leading-7 text-muted"><strong className="font-semibold text-ink">{title}.</strong> {text}</p>
             </article>
           ))}

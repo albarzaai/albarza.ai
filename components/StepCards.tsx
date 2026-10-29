@@ -31,7 +31,7 @@ function UploadCard({ locale }: { locale: Locale }) {
       </div>
       <div className="step-float absolute start-[3%] top-[52%] w-[30%]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/media/hero-abudhabi.jpg" alt="" width={140} height={100} loading="lazy" className="aspect-[1.3] w-full rotate-[-8deg] rounded-xl border-[5px] border-white object-cover shadow-xl" />
+        <img src="/media/hero-abudhabi.jpg" alt="" width={140} height={100} loading="lazy" decoding="async" className="aspect-[1.3] w-full rotate-[-8deg] rounded-xl border-[5px] border-white object-cover shadow-xl" />
         <span className="absolute -top-3 start-[-6px] grid size-7 place-items-center rounded-full bg-gold text-xs font-bold text-white shadow">1</span>
         <svg viewBox="0 0 24 24" className="absolute -bottom-3 end-[-4px] size-8 drop-shadow rtl:-scale-x-100" aria-hidden><path d="M5 3l14 8-6 1.5L9.5 19z" fill="#16120a" stroke="#fff" strokeWidth="1.6" strokeLinejoin="round" /></svg>
       </div>
@@ -56,7 +56,7 @@ function ResultCard({ locale }: { locale: Locale }) {
     <div className={`${shell} flex flex-col`}>
       <div className="relative m-3 mb-0 flex-1 overflow-hidden rounded-xl">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/media/showcase-gulf.jpg" alt="" width={400} height={225} loading="lazy" className="absolute inset-0 size-full object-cover" />
+        <img src="/media/showcase-gulf.jpg" alt="" width={400} height={225} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
         <span className="absolute start-2.5 top-2.5 rounded-full bg-black/45 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur-md">{L.model[locale]}</span>
         <span className="step-pulse absolute inset-0 m-auto grid size-12 place-items-center rounded-full bg-white/85 text-ink shadow-lg"><Icon n="play" size={18} /></span>
       </div>

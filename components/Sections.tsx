@@ -46,7 +46,7 @@ export function Features({ locale }: { locale: Locale }) {
         {features.map((f, i) => (
           <article key={f.t.en} className="card flex h-full min-h-[200px] overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={gallery(i + 1)} alt="" width={400} height={300} loading="lazy" className="hidden h-full w-[190px] shrink-0 object-cover sm:block" />
+            <img src={gallery(i + 1)} alt="" width={400} height={300} loading="lazy" decoding="async" className="hidden h-full w-[190px] shrink-0 object-cover sm:block" />
             <div className="flex flex-col justify-center p-6"><h3 className="text-lg font-semibold">{f.t[locale]}</h3><p className="mt-2 text-sm leading-6 text-muted">{f.d[locale]}</p></div>
           </article>
         ))}
@@ -80,7 +80,7 @@ export function TryModel({ locale }: { locale: Locale }) {
     <section className="section pt-0">
       <div className="relative overflow-hidden rounded-3xl border border-line px-6 py-20 text-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={pic("bg", "cta")} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-70" />
+        <img src={pic("bg", "cta")} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover opacity-70" />
         <div className="relative"><H2>{d.tryModelTitle}</H2><p className="mx-auto mt-4 max-w-xl text-ink/80">{d.tryModelSub}</p><div className="mt-6"><Start locale={locale} /></div></div>
       </div>
     </section>
@@ -97,7 +97,7 @@ export function Toolkit({ locale }: { locale: Locale }) {
         {tools.map((name, i) => (
           <article key={name.en} className="relative h-[440px] w-[78vw] max-w-[640px] shrink-0 snap-center overflow-hidden rounded-3xl border border-line">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={TOOL_IMG[i % TOOL_IMG.length]} alt="" width={640} height={440} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+            <img src={TOOL_IMG[i % TOOL_IMG.length]} alt="" width={640} height={440} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
             <div className="glass absolute inset-x-4 bottom-4 flex items-center justify-between rounded-2xl p-4">
               <h3 className="font-semibold">{name[locale]}</h3>
               <Link href={`/${locale}/signup`} className="btn btn-white !py-1.5">{d.tryTool}</Link>
@@ -135,7 +135,7 @@ function Phone({ src, className = "" }: { src: string; className?: string }) {
   return (
     <div className={`relative aspect-[9/19] w-[210px] overflow-hidden rounded-[34px] border-[6px] border-ink bg-ink shadow-2xl ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
+      <img src={src} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
       <span className="absolute inset-x-0 top-2 mx-auto h-4 w-16 rounded-full bg-ink" />
       <div className="absolute inset-x-2.5 bottom-3 flex items-center gap-2 rounded-full bg-white/85 py-1.5 ps-3 pe-1.5 text-[10px] text-ink/60 backdrop-blur-md"><span className="flex-1 truncate">Describe your idea…</span><span className="grid size-6 place-items-center rounded-full bg-gold text-white"><Icon n="spark" size={11} /></span></div>
     </div>
@@ -220,7 +220,7 @@ export function Cta({ locale }: { locale: Locale }) {
   return (
     <section className="relative overflow-hidden py-28 text-center">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={pic("bg", "feature")} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-60" />
+      <img src={pic("bg", "feature")} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover opacity-60" />
       <div className="relative px-5"><h2 className="text-balance text-[32px] font-bold leading-tight tracking-tight md:text-5xl">{d.designTitle}</h2><p className="mx-auto mt-4 max-w-xl text-base text-ink/80">{d.designSub}</p><div className="mt-8"><Start locale={locale} label={d.signupBtn} /></div></div>
     </section>
   );

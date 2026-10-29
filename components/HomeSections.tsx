@@ -39,11 +39,11 @@ export function Collage({ locale }: { locale: Locale }) {
       <Wrap>
         <div className="relative mx-auto aspect-[1.3] max-w-[1180px] md:aspect-[1.9]">
           {/* eslint-disable @next/next/no-img-element */}
-          <div className={`${tile} hidden md:block start-[5%] top-[2%] h-[36%] w-[24%]`}><img src={im(2)} alt="" loading="lazy" className="size-full object-cover" /></div>
-          <div className={`${tile} hidden md:block end-[3%] top-[18%] h-[28%] w-[14%]`}><img src={im(3)} alt="" loading="lazy" className="size-full object-cover" /></div>
-          <div className={`${tile} hidden md:block start-[8%] bottom-[8%] h-[26%] w-[12%]`}><img src={im(4)} alt="" loading="lazy" className="size-full object-cover" /></div>
-          <div className={`${tile} hidden md:block end-[1%] bottom-[10%] h-[20%] w-[13%]`}><img src={im(5)} alt="" loading="lazy" className="size-full object-cover" /></div>
-          <div className={`${tile} inset-x-[3%] top-0 bottom-0 z-10 md:inset-x-[20%] md:top-[12%] !rounded-[22px]`}><img src={im(1)} alt="" loading="lazy" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block start-[5%] top-[2%] h-[36%] w-[24%]`}><img src={im(2)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block end-[3%] top-[18%] h-[28%] w-[14%]`}><img src={im(3)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block start-[8%] bottom-[8%] h-[26%] w-[12%]`}><img src={im(4)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block end-[1%] bottom-[10%] h-[20%] w-[13%]`}><img src={im(5)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
+          <div className={`${tile} inset-x-[3%] top-0 bottom-0 z-10 md:inset-x-[20%] md:top-[12%] !rounded-[22px]`}><img src={im(1)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
           {/* eslint-enable @next/next/no-img-element */}
         </div>
         <div className="mx-auto mt-14 max-w-[760px] text-center">
@@ -68,7 +68,7 @@ export function FeaturedModels({ locale }: { locale: Locale }) {
               {featured.map((f, i) => (
                 <article key={f.name} className="relative aspect-[3/4] w-[245px] shrink-0 snap-start overflow-hidden rounded-2xl bg-ink md:w-[300px]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={pic("feat", i + 1)} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
+                  <img src={pic("feat", i + 1)} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
                   <span className="absolute start-4 top-4 inline-flex items-center gap-1.5 text-sm font-medium text-white"><Icon n="spark" size={14} />{f.name}</span>
                   <p className="absolute inset-x-5 bottom-5 text-sm leading-5 text-white">{f.cap[locale]}</p>
@@ -110,7 +110,7 @@ export function Channels({ locale }: { locale: Locale }) {
               <article key={c.lead.en} className="w-[280px] shrink-0 snap-start md:w-[300px]">
                 <div className="aspect-[3/3.8] overflow-hidden rounded-2xl border border-line">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={pic("channel", i + 1)} alt="" loading="lazy" className="size-full object-cover" />
+                  <img src={pic("channel", i + 1)} alt="" loading="lazy" decoding="async" className="size-full object-cover" />
                 </div>
                 <p className="mt-4 text-sm leading-6 text-muted"><strong className="font-semibold text-ink">{c.lead[locale]}</strong> {c.text[locale]}</p>
               </article>
@@ -126,7 +126,7 @@ function Phone() {
   return (
     <div className="relative aspect-[9/19] w-[230px] overflow-hidden rounded-[36px] border-[7px] border-ink bg-ink shadow-2xl">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={gallery(6)} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
+      <img src={gallery(6)} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
       <span className="absolute inset-x-0 top-2 mx-auto h-4 w-16 rounded-full bg-ink" />
       <div className="absolute inset-x-2.5 bottom-3 flex items-center gap-2 rounded-full bg-white/85 py-1.5 ps-3 pe-1.5 text-[10px] text-ink/60 backdrop-blur-md"><span className="flex-1 truncate">…</span><span className="grid size-6 place-items-center rounded-full bg-gold text-white"><Icon n="spark" size={11} /></span></div>
     </div>
@@ -224,7 +224,7 @@ export function HomeCta({ locale }: { locale: Locale }) {
   return (
     <section className="relative overflow-hidden py-32 text-center text-white">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={pic("home", "cta")} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
+      <img src={pic("home", "cta")} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
       <div className="absolute inset-0 bg-black/20" />
       <div className="relative px-5">
         <h2 className="text-balance text-[32px] font-bold leading-tight tracking-tight [text-shadow:0_2px_20px_rgba(0,0,0,0.4)] md:text-5xl">{d.designTitle}</h2>

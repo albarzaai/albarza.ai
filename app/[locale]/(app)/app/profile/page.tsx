@@ -22,7 +22,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
       {tab === "creations" ? (
         <div className="mt-6 grid grid-cols-3 gap-1.5">
           {Array.from({ length: 9 }, (_, k) => (
-            <div key={k} className="group relative aspect-square overflow-hidden bg-[#1a1a1a]">{/* eslint-disable-next-line @next/next/no-img-element */}<img src={gallery(k + 1)} alt="" loading="lazy" className="h-full w-full object-cover" />
+            <div key={k} className="group relative aspect-square overflow-hidden bg-[#1a1a1a]">{/* eslint-disable-next-line @next/next/no-img-element */}<img src={gallery(k + 1)} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
               {k % 3 === 1 && <span className="absolute start-2 top-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-xs"><Icon n="play" size={10} />0:04</span>}
               <span className="absolute end-2 top-2 hidden flex-col gap-2 group-hover:flex"><Icon n="heart" size={16} /><Icon n="download" size={16} /></span></div>
           ))}

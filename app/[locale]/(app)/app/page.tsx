@@ -8,7 +8,7 @@ function Banner({ n, badge, title, desc, buttons, locale }: { n: number; badge: 
   return (
     <section className="relative mt-5 flex min-h-[320px] items-end overflow-hidden rounded-3xl border border-white/10 md:min-h-[366px]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={gallery(n)} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={gallery(n)} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
       <div className="relative flex w-full flex-wrap items-end justify-between gap-4 p-6 md:p-[60px]">
         <div><span className="inline-flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1 text-xs"><Icon n={badge.icon} size={12} />{badge.label}</span><h2 className="mt-3 text-3xl font-bold md:text-4xl">{title}</h2><p className="mt-2 text-lg text-white/85">{desc}</p></div>
@@ -18,7 +18,7 @@ function Banner({ n, badge, title, desc, buttons, locale }: { n: number; badge: 
   );
 }
 const Cards = ({ items, cols }: { items: { t: string; d: string; n: number }[]; cols: string }) => (
-  <div className={`mt-5 grid gap-4 ${cols}`}>{items.map((c) => (<article key={c.t}>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={gallery(c.n)} alt="" loading="lazy" className="aspect-[16/9] w-full rounded-xl border border-white/10 object-cover" /><h3 className="mt-3 font-semibold">{c.t}</h3><p className="truncate text-sm text-white/55">{c.d}</p></article>))}</div>
+  <div className={`mt-5 grid gap-4 ${cols}`}>{items.map((c) => (<article key={c.t}>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={gallery(c.n)} alt="" loading="lazy" decoding="async" className="aspect-[16/9] w-full rounded-xl border border-white/10 object-cover" /><h3 className="mt-3 font-semibold">{c.t}</h3><p className="truncate text-sm text-white/55">{c.d}</p></article>))}</div>
 );
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
