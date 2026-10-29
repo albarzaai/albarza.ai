@@ -2,6 +2,9 @@ name: Generate hero video
 
 on:
   workflow_dispatch:
+  push:
+    branches: [claude/serene-carson-k64lwr]
+    paths: [".github/workflows/hero-video.yml"]
 
 permissions:
   contents: write
