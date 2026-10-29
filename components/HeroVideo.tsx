@@ -25,6 +25,7 @@ export function HeroVideo({ slug = "hero-abudhabi" }: { slug?: string }) {
       <video ref={vref} poster={poster} autoPlay muted loop playsInline preload="auto" onPlaying={() => setPlaying(true)}
         className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${playing ? "opacity-100" : "opacity-0"}`}>
         <source src={`/media/${slug}-sm.mp4`} type="video/mp4" media="(max-width: 767px)" />
+        <source src={`/media/${slug}-hd.mp4`} type="video/mp4" media="(min-width: 1280px)" />
         <source src={`/media/${slug}.mp4`} type="video/mp4" />
       </video>
     </div>
