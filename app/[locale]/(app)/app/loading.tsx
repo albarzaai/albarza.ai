@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Bar, RouteSkeleton } from "@/components/AppSkeletons";
-import { FeedSkeleton } from "@/components/Feed";
+import { FeedSkeleton } from "@/components/FeedSkeleton";
 import type { Locale } from "@/lib/i18n";
 
 // Mirrors app/[locale]/(app)/app/page.tsx element for element (same wrappers, spacing, grid columns, aspect ratios and text line heights).

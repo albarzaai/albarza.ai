@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Composer, type Mode } from "./Composer";
 import { EditProfile } from "./EditProfile";
 import { EnhancerApp } from "./EnhancerApp";
-import { FeedSkeleton } from "./Feed";
+import { FeedSkeleton } from "./FeedSkeleton";
 import { Icon } from "./Icon";
 import { PageHeader, type TabDef } from "./PageHeader";
 import { PopularPill } from "./PopularPill";
