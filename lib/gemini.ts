@@ -7,7 +7,7 @@ type Env = { API?: { fetch(url: string, init?: RequestInit): Promise<Response> }
 export type ImageResult = { ok: true; image: string } | { ok: false; error: "rate" | "unavailable" | "blocked" };
 
 // The Gemini key lives only in the api.albarza.ai Worker. This frontend reaches it over a private service binding.
-export async function generateImage(prompt: string, aspect?: string): Promise<ImageResult> {
+export async function generateImage(prompt: string, aspect?: string, quality: "flash" | "pro" = "flash"): Promise<ImageResult> {
   const env = getCloudflareContext().env as unknown as Env;
   if (!env.API || !env.INTERNAL_AUTH_SECRET) return { ok: false, error: "unavailable" };
 
@@ -17,7 +17,7 @@ export async function generateImage(prompt: string, aspect?: string): Promise<Im
     res = await env.API.fetch("https://api.albarza.ai/v1/generate/image", {
       method: "POST",
       headers: { "content-type": "application/json", "x-internal-auth": env.INTERNAL_AUTH_SECRET },
-      body: JSON.stringify({ prompt, aspect, userIp }),
+      body: JSON.stringify({ prompt, aspect, quality, userIp }),
     });
   } catch {
     return { ok: false, error: "unavailable" };

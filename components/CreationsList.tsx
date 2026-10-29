@@ -9,7 +9,7 @@ import type { Locale } from "@/lib/i18n";
 
 type Row = { id: number; prompt: string; model: string; src: string; kind: "image" | "video" | "audio"; progress?: number };
 const seed = (kind: "image" | "video" | "audio", ar: boolean): Row[] => [
-  { id: 1, prompt: ar ? "تفاحة حمراء على طاولة خشبية بإضاءة ناعمة" : "a red apple on a wooden table, soft light", model: "Nano Banana 2", src: gallery(2), kind },
+  { id: 1, prompt: ar ? "تفاحة حمراء على طاولة خشبية بإضاءة ناعمة" : "a red apple on a wooden table, soft light", model: "Nano Banana", src: gallery(2), kind },
   { id: 2, prompt: ar ? "رجل يركض خلف جرذ بأسلوب ثلاثي الأبعاد" : "a man running after rat 3d", model: "GPT Image 2.5 Flare", src: gallery(5), kind },
   { id: 3, prompt: ar ? "مغامرة متحركة مدتها ١٥ ثانية بأسلوب بيكسار، عمودية ٩:١٦" : "15-second animated adventure, 9:16 vertical. STYLE: Pixar-style 3D family-feature look", model: "Seedance 2.0 Fast", src: gallery(3), kind },
 ];
@@ -21,15 +21,29 @@ export function CreationsList({ locale, kind, q = "" }: { locale: Locale; kind: 
   const [open, setOpen] = useState<Creation | null>(null);
 
   useEffect(() => {
-    const onGen = (e: Event) => {
-      const d = (e as CustomEvent<{ prompt: string; model: string }>).detail;
-      const id = Date.now();
-      setRows((r) => [{ id, prompt: d.prompt || "—", model: d.model || "Nano Banana 2", src: gallery(id % 12), kind, progress: 4 }, ...r]);
-      const t = setInterval(() => setRows((r) => r.map((x) => (x.id === id && x.progress !== undefined ? (x.progress >= 100 ? { ...x, progress: undefined } : { ...x, progress: Math.min(100, x.progress + 12) }) : x))), 500);
-      setTimeout(() => clearInterval(t), 6000);
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const onStart = (e: Event) => {
+      const d = (e as CustomEvent<{ id: number; prompt: string; model: string }>).detail;
+      setRows((r) => [{ id: d.id, prompt: d.prompt || "—", model: d.model || "Nano Banana", src: "", kind, progress: 4 }, ...r]);
+      // Ease towards 90% and wait there until the server answers.
+      clearInterval(timer);
+      timer = setInterval(() => setRows((r) => r.map((x) => (x.id === d.id && x.progress !== undefined && x.progress < 90 ? { ...x, progress: x.progress + Math.max(1, (90 - x.progress) * 0.08) } : x))), 500);
     };
-    window.addEventListener("albarza:generate", onGen);
-    return () => window.removeEventListener("albarza:generate", onGen);
+    const onDone = (e: Event) => {
+      const d = (e as CustomEvent<{ id: number; ok: boolean; images?: string[] }>).detail;
+      clearInterval(timer);
+      setRows((r) => {
+        const row = r.find((x) => x.id === d.id);
+        if (!row) return r;
+        if (!d.ok) return r.filter((x) => x.id !== d.id);
+        const imgs = d.images?.length ? d.images : [gallery(d.id % 12)];
+        const made = imgs.map((src, i) => ({ ...row, id: d.id + i, src, progress: undefined }));
+        return r.flatMap((x) => (x.id === d.id ? made : [x]));
+      });
+    };
+    window.addEventListener("albarza:generate-start", onStart);
+    window.addEventListener("albarza:generate-done", onDone);
+    return () => { clearInterval(timer); window.removeEventListener("albarza:generate-start", onStart); window.removeEventListener("albarza:generate-done", onDone); };
   }, [kind]);
 
   const shown = rows.filter((r) => !q || r.prompt.toLowerCase().includes(q.toLowerCase()));

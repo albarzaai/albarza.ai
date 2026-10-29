@@ -13,7 +13,7 @@ type Bindings = {
   GLOBAL_LIMIT: Limiter;
 };
 
-const MODEL = "gemini-2.5-flash-image";
+const MODELS = { flash: "gemini-2.5-flash-image", pro: "gemini-3-pro-image-preview" } as const;
 const app = new Hono<{ Bindings: Bindings }>();
 
 app.use("*", secureHeaders({
@@ -62,6 +62,7 @@ async function authorized(c: { env: Bindings; req: { header(n: string): string |
 const generateSchema = z.object({
   prompt: z.string().trim().min(1).max(2000),
   aspect: z.string().regex(/^\d{1,2}:\d{1,2}$/).optional(),
+  quality: z.enum(["flash", "pro"]).default("flash"),
   userIp: z.string().max(64).optional(),
 });
 
@@ -71,21 +72,25 @@ app.post("/v1/generate/image", bodyLimit({ maxSize: 8 * 1024, onError: (c) => c.
 
   const parsed = generateSchema.safeParse(await c.req.json().catch(() => null));
   if (!parsed.success) return c.json({ error: "invalid" }, 400);
-  const { prompt, aspect, userIp } = parsed.data;
+  const { prompt, aspect, quality, userIp } = parsed.data;
 
   // The frontend forwards the visitor's IP so limits apply per visitor, not per frontend.
   if (!(await c.env.GENERATE_LIMIT.limit({ key: userIp ?? ip(c) })).success) return c.json({ error: "rate_limited" }, 429);
   if (!c.env.GEMINI_API_KEY) return c.json({ error: "unavailable" }, 503);
 
   const text = aspect ? `${prompt}\n\nAspect ratio: ${aspect}` : prompt;
-  let res: Response;
-  try {
-    res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
+  const call = (model: string) =>
+    fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
       method: "POST",
-      headers: { "content-type": "application/json", "x-goog-api-key": c.env.GEMINI_API_KEY },
+      headers: { "content-type": "application/json", "x-goog-api-key": c.env.GEMINI_API_KEY! },
       body: JSON.stringify({ contents: [{ parts: [{ text }] }], generationConfig: { responseModalities: ["IMAGE"] } }),
       signal: AbortSignal.timeout(55_000),
     });
+  let res: Response;
+  try {
+    res = await call(MODELS[quality]);
+    // The pro model is a preview: fall back to the stable one if it is unavailable.
+    if (!res.ok && quality === "pro") res = await call(MODELS.flash);
   } catch {
     return c.json({ error: "unavailable" }, 502);
   }

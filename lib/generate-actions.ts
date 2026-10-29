@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { generateImage } from "@/lib/gemini";
 
-export type GenState = { ok: boolean; error?: "invalid" | "prompt" | "rate" | "unavailable" | "blocked"; image?: string; at?: number } | null;
+export type GenState = { ok: boolean; error?: "invalid" | "prompt" | "rate" | "unavailable" | "blocked"; images?: string[]; at?: number } | null;
 
 const s = (n: number) => z.string().trim().max(n).optional();
 const schema = z.object({
@@ -22,9 +22,16 @@ export async function generateAction(_: GenState, form: FormData): Promise<GenSt
   if (!r.success) return { ok: false, error: "invalid", at: Date.now() };
   if (needsPrompt.has(r.data.mode) && !r.data.prompt) return { ok: false, error: "prompt", at: Date.now() };
   if (r.data.mode === "createImage" || r.data.mode === "createArtwork") {
-    const img = await generateImage(r.data.prompt!, r.data.aspect);
-    if (!img.ok) return { ok: false, error: img.error, at: Date.now() };
-    return { ok: true, image: img.image, at: Date.now() };
+    const n = Math.min(4, Math.max(1, Number(r.data.outputs) || 1));
+    const aspect = r.data.aspect && r.data.aspect !== "Auto" ? r.data.aspect : undefined;
+    const quality = r.data.model?.includes("Pro") ? "pro" : "flash";
+    const results = await Promise.all(Array.from({ length: n }, () => generateImage(r.data.prompt!, aspect, quality)));
+    const images = results.flatMap((x) => (x.ok ? [x.image] : []));
+    if (!images.length) {
+      const first = results.find((x) => !x.ok);
+      return { ok: false, error: first && !first.ok ? first.error : "unavailable", at: Date.now() };
+    }
+    return { ok: true, images, at: Date.now() };
   }
   return { ok: true, at: Date.now() };
 }

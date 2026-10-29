@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { Icon } from "./Icon";
 import { Pop } from "./Pop";
 import { generateAction, type GenState } from "@/lib/generate-actions";
@@ -15,7 +15,7 @@ const catIcon: Record<Cat, string> = { image: "image", video: "video", audio: "w
 const modeIcon: Record<Mode, string> = { createImage: "explore", createArtwork: "palette", createVideo: "video", editVideo: "cards", extendVideo: "expand", motionControl: "user", voiceover: "mic", musicGenerator: "note", voiceChanger: "wave" };
 const catOf = (m: Mode): Cat => (modes.image.includes(m) ? "image" : modes.video.includes(m) ? "video" : "audio");
 const models: Partial<Record<Mode, string[]>> = {
-  createImage: ["Nano Banana 2", "Nano Banana 2.1", "GPT Image 2.5 Flare", "Seedream 5.0 Pro", "Flux 3"],
+  createImage: ["Nano Banana", "Nano Banana Pro"],
   createVideo: ["Seedance 2.0 Fast", "Seedance 2.5", "Gemini Omni Flash 1.1", "Veo 3.1", "Kling O3", "Wan 2.6", "Sora 2"],
   editVideo: ["Kling O3 Edit"], extendVideo: ["Veo 3.1 Extend"], motionControl: ["Kling Motion 3.0"],
 };
@@ -40,7 +40,7 @@ export function Composer({ locale, initialMode = "createImage", count = 1 }: { l
   const [mode, setMode] = useState<Mode>(initialMode);
   const cat = catOf(mode);
   const [prompt, setPrompt] = useState("");
-  const [model, setModel] = useState<Record<string, string>>({ createImage: "Nano Banana 2", createVideo: "Seedance 2.0 Fast", editVideo: "Kling O3 Edit", extendVideo: "Veo 3.1 Extend", motionControl: "Kling Motion 3.0" });
+  const [model, setModel] = useState<Record<string, string>>({ createImage: "Nano Banana", createVideo: "Seedance 2.0 Fast", editVideo: "Kling O3 Edit", extendVideo: "Veo 3.1 Extend", motionControl: "Kling Motion 3.0" });
   const [aspect, setAspect] = useState("Auto"); const [outputs, setOutputs] = useState(1); const [res, setRes] = useState("512px");
   const [dur, setDur] = useState(4); const [vres, setVres] = useState("480p"); const [audio, setAudio] = useState(true); const [enhance, setEnhance] = useState(false);
   const [voice, setVoice] = useState("Bella"); const [lang, setLang] = useState(a.english);
@@ -49,9 +49,17 @@ export function Composer({ locale, initialMode = "createImage", count = 1 }: { l
   const [keepSound, setKeepSound] = useState(true); const [scene, setScene] = useState("Image"); const [orient, setOrient] = useState("Video");
   const [state, action, pending] = useActionState<GenState, FormData>(generateAction, null);
 
+  // Tell the creations list when a generation starts (shows a progress card) and when it ends (swaps in the real images).
+  const genId = useRef(0);
   useEffect(() => {
-    if (state?.ok) window.dispatchEvent(new CustomEvent("albarza:generate", { detail: { cat, mode, prompt, model: model[mode] ?? "", image: state.image } }));
-  }, [state]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!pending) return;
+    genId.current = Date.now();
+    window.dispatchEvent(new CustomEvent("albarza:generate-start", { detail: { id: genId.current, prompt, model: model[mode] ?? "" } }));
+  }, [pending]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!state) return;
+    window.dispatchEvent(new CustomEvent("albarza:generate-done", { detail: { id: genId.current, ok: state.ok, images: state.images } }));
+  }, [state]);
 
   const pill = "pill";
   const price = cost[mode] * (mode === "createImage" ? outputs : 1);
