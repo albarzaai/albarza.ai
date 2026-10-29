@@ -1,0 +1,47 @@
+name: Generate page videos
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/serene-carson-k64lwr]
+    paths: [".github/workflows/extra-videos.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: |
+          python3 -m pip install --quiet requests pillow
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Video generator page hero (Dubai Marina and Palm at blue hour)
+        env:
+          ATLASCLOUD_API_KEY: ${{ secrets.ATLASCLOUD_API_KEY }}
+          VIDEO_SLUG: vg-hero
+          VIDEO_PROMPT: >-
+            Smooth cinematic aerial flight over Dubai Marina and Palm Jumeirah at blue hour, glowing skyscrapers, yachts leaving white wakes on dark
+            turquoise water, city lights twinkling on, slow forward drone motion with gentle parallax, warm gold highlights against deep blue,
+            photorealistic, filmic, no text, no logos, no people in close-up.
+        run: python3 scripts/generate-hero-video.py
+      - name: Image generator page hero (calligraphy and golden ink)
+        env:
+          ATLASCLOUD_API_KEY: ${{ secrets.ATLASCLOUD_API_KEY }}
+          VIDEO_SLUG: ig-hero
+          VIDEO_PROMPT: >-
+            Slow-motion macro cinematography of a calligrapher's reed pen drawing flowing Arabic calligraphy in liquid gold ink on cream paper,
+            the strokes unfolding into an intricate Islamic geometric pattern that glows softly, shallow depth of field, warm studio light with
+            floating golden dust, elegant and luxurious, photorealistic, no readable text, no logos.
+        run: python3 scripts/generate-hero-video.py
+      - name: Commit videos
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add public/media/vg-hero*.mp4 public/media/vg-hero.jpg public/media/ig-hero*.mp4 public/media/ig-hero.jpg lib/lqip.json
+          git commit -m "Add page hero videos (Atlas Cloud Seedance)"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push

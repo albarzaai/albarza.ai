@@ -109,3 +109,14 @@ subprocess.run(["ffmpeg", "-y", "-i", "/tmp/raw.mp4", "-frames:v", "1", "-vf", "
 for f in ("hd", "", "sm"):
     n = "public/media/" + SLUG + "" + ("-" + f if f else "") + ".mp4"
     print(n, os.path.getsize(n), "bytes")
+
+# Tiny inlined colour wash for the first paint (keyed by slug in lib/lqip.json).
+import base64, io
+from PIL import Image, ImageFilter
+im = Image.open("public/media/" + SLUG + ".jpg").convert("RGB")
+im = im.resize((32, round(32 * im.height / im.width)), Image.LANCZOS).filter(ImageFilter.GaussianBlur(0.6))
+buf = io.BytesIO(); im.save(buf, "JPEG", quality=45)
+path = "lib/lqip.json"
+table = json.load(open(path)) if os.path.exists(path) else {}
+table[SLUG] = "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+json.dump(table, open(path, "w"))
