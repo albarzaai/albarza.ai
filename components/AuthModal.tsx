@@ -42,7 +42,7 @@ export function AuthModal({ locale, initial }: { locale: Locale; initial: "login
               <div><label className="label" htmlFor="email">{d.email}</label><input id="email" name="email" type="email" dir="ltr" className="input" autoComplete="email" />{err("email")}</div>
               <div><label className="label" htmlFor="password">{d.password}</label><input id="password" name="password" type="password" dir="ltr" className="input" autoComplete={mode === "login" ? "current-password" : "new-password"} />{err("password")}</div>
               {mode === "signup" && (<label className="flex items-start gap-2 text-xs text-muted"><input type="checkbox" name="agree" className="mt-0.5 accent-[#bd9b5f]" />{d.agree}</label>)}
-              {mode === "login" && <a href="#" className="block text-xs text-gold-hi">{d.forgot}</a>}
+              {mode === "login" && <Link href={`/${locale}/forgot-password`} className="block text-xs text-gold-hi">{d.forgot}</Link>}
               <button disabled={pending} className="btn btn-gold w-full !py-3">{mode === "login" ? d.login : d.signup}</button>
               <div className="flex justify-between text-xs text-muted">
                 <button type="button" onClick={() => setStep("choose")} className="hover:text-white">‹ {d.back}</button>

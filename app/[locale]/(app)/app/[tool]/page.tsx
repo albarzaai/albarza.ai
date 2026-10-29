@@ -1,27 +1,32 @@
 import { notFound } from "next/navigation";
-import { gallery } from "@/lib/media";
 import { Composer } from "@/components/Composer";
 import { Feed } from "@/components/Feed";
-import { Icon } from "@/components/Icon";
-import { ToolHeader } from "@/components/ToolHeader";
+import { JobList, sampleJobs } from "@/components/JobList";
+import { ToolHeader, type View } from "@/components/ToolHeader";
+import { VoiceLibrary } from "@/components/VoiceLibrary";
+import { gallery } from "@/lib/media";
 import { t } from "@/lib/dict";
 import { isTool, tools, type Tab } from "@/lib/tools";
 import type { Locale } from "@/lib/i18n";
 
-export default async function ToolPage({ params, searchParams }: { params: Promise<{ locale: string; tool: string }>; searchParams: Promise<{ tab?: string }> }) {
+type SP = { tab?: string; q?: string; sort?: string; view?: string; kind?: string };
+
+export default async function ToolPage({ params, searchParams }: { params: Promise<{ locale: string; tool: string }>; searchParams: Promise<SP> }) {
   const { locale: l, tool } = await params;
-  const { tab: rawTab } = await searchParams;
+  const sp = await searchParams;
   if (!isTool(tool)) notFound();
   const locale = l as Locale;
   const d = t(locale);
   const cfg = tools[tool];
-  const tab: Tab = cfg.tabs.includes(rawTab as Tab) ? (rawTab as Tab) : cfg.defaultTab;
+  const tab: Tab = cfg.tabs.includes(sp.tab as Tab) ? (sp.tab as Tab) : cfg.defaultTab;
+  const v: View = { q: (sp.q ?? "").slice(0, 60), sort: sp.sort === "old" ? "old" : "new", view: sp.view === "row" ? "row" : "grid", kind: ["image", "video", "audio"].includes(sp.kind ?? "") ? sp.kind! : "all" };
+  const feedType = tab === "creations" ? (tool === "image" ? "image" : v.kind) : tab === "library" ? "motion" : "template";
   return (
     <>
-      <ToolHeader locale={locale} tool={tool} tab={tab} />
+      <ToolHeader locale={locale} tool={tool} tab={tab} v={v} />
       <main className="px-5 pb-8 md:px-8">
-        {tab === "templates" && <Feed locale={locale} type="template" action={d.useTemplate} />}
-        {tab === "library" && <Feed locale={locale} type="motion" action={d.useTemplate} />}
+        {(tab === "templates" || tab === "library") && <Feed locale={locale} type={feedType} action={d.useTemplate} q={v.q} sort={v.sort} view={v.view} />}
+        {tab === "voices" && <VoiceLibrary locale={locale} />}
         {tab === "tutorial" && (
           <div>
             <h1 className="mb-6 text-xl font-semibold">{d.tutorialTitle}</h1>
@@ -37,11 +42,9 @@ export default async function ToolPage({ params, searchParams }: { params: Promi
           </div>
         )}
         {tab === "creations" && (
-          <div className="flex min-h-[calc(100dvh-72px)] flex-col">
-            <div className="flex flex-1 flex-col items-center justify-center py-16 text-center">
-              <span className="grid h-16 w-16 place-items-center rounded-2xl bg-white/5 text-gold"><Icon n={cfg.icon} size={28} /></span>
-              <h2 className="mt-5 font-semibold">{d.emptyCreations}</h2><p className="mt-1 text-sm text-muted">{d.emptyHint}</p>
-            </div>
+          <div className="flex min-h-[calc(100dvh-72px)] flex-col gap-6">
+            <section aria-label={d.activity}><JobList locale={locale} compact jobs={sampleJobs.filter((j) => j.tool === tool || tool !== "video").slice(0, 3)} /></section>
+            <div className="flex-1"><Feed locale={locale} type={feedType} q={v.q} sort={v.sort} view={v.view} /></div>
             <Composer locale={locale} tool={tool} />
           </div>
         )}

@@ -2,7 +2,7 @@ import { toolTitles } from "./content";
 
 export type Field = { key: string; label: string; options: string[] };
 export type ToolSlug = keyof typeof toolTitles;
-export type Tab = "creations" | "library" | "templates" | "tutorial";
+export type Tab = "creations" | "library" | "templates" | "tutorial" | "voices";
 
 export const tools: Record<ToolSlug, {
   icon: string; tabs: Tab[]; defaultTab: Tab; promptKey: string; uploads: string[]; fields: Field[]; cost: number; needsPrompt: boolean;
@@ -38,7 +38,7 @@ export const tools: Record<ToolSlug, {
     fields: [{ key: "quality", label: "quality", options: ["2x", "4x", "8x"] }],
   },
   "text-to-voice": {
-    icon: "mic", tabs: ["creations", "tutorial"], defaultTab: "creations", promptKey: "describeScript", needsPrompt: true,
+    icon: "mic", tabs: ["creations", "voices", "tutorial"], defaultTab: "creations", promptKey: "describeScript", needsPrompt: true,
     uploads: [], cost: 3,
     fields: [
       { key: "voice", label: "voice", options: ["حمد (ar-AE)", "فاطمة (ar-AE)", "Noor (en)", "James (en)"] },

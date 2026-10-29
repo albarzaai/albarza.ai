@@ -1,5 +1,6 @@
 import type { Locale } from "./i18n";
 import { arMore, enMore } from "./dict-more";
+import { arUi, enUi } from "./dict-ui";
 
 type T = Record<string, string>;
 const ar: T = {
@@ -124,7 +125,7 @@ const en: T = {
   currentPlan: "Current plan", invoices: "Invoices", free: "Free",
 };
 
-export const dict = { ar: { ...ar, ...arMore }, en: { ...en, ...enMore } };
+export const dict = { ar: { ...ar, ...arMore, ...arUi }, en: { ...en, ...enMore, ...enUi } };
 export const t = (l: Locale) => dict[l];
 export type Dict = T;
 

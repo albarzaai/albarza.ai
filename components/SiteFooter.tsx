@@ -8,9 +8,9 @@ export function SiteFooter({ locale }: { locale: Locale }) {
   const d = t(locale);
   const p = (s: string) => `/${locale}${s}`;
   const cols: [string, [string, string][]][] = [
-    [d.footModels, models.slice(0, 7).map((m) => [m.name, p("/signup")])],
-    [d.footFeatures, [[d.videoGenerator, p("/signup")], [d.navAiImage, p("/signup")], [d.upscale, p("/signup")], [d.lipsync, p("/signup")], [d.t2v, p("/signup")], [d.vc, p("/signup")]]],
-    [d.footCompany, [[d.pricing, p("/pricing")], [d.help, p("/")], [d.privacy, p("/privacy")], [d.refund, p("/terms")], [d.cookies, p("/privacy")], [d.terms, p("/terms")], [d.contact, p("/")]]],
+    [d.footModels, models.slice(0, 7).map((m) => [m.name, p(`/video-generator/${m.id}`)])],
+    [d.footFeatures, [[d.videoGenerator, p("/signup")], [d.navAiImage, p("/image-generator")], [d.upscale, p("/signup")], [d.lipsync, p("/signup")], [d.t2v, p("/signup")], [d.vc, p("/signup")]]],
+    [d.footCompany, [[d.pricing, p("/pricing")], [d.help, p("/help")], [d.privacy, p("/privacy")], [d.refund, p("/refund")], [d.cookies, p("/cookies")], [d.terms, p("/terms")], [d.contact, p("/contact")]]],
     [d.footSocial, [["Instagram", "#"], ["X", "#"], ["TikTok", "#"], ["YouTube", "#"]]],
   ];
   return (
