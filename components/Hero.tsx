@@ -1,34 +1,22 @@
 import { t } from "@/lib/dict";
 import type { Locale } from "@/lib/i18n";
 
-// The prompt box is a plain form that posts to signup; validation happens on the server.
+// The prompt bar is a plain form that posts to signup; validation happens on the server.
 export function Hero({ locale }: { locale: Locale }) {
   const d = t(locale);
   return (
-    <section className="bg-surface-2">
-      <div className="section grid items-center gap-12 py-16 lg:grid-cols-[1.2fr_1fr] lg:py-24">
-        <div>
-          <h1 className="text-4xl font-bold leading-tight md:text-5xl">{d.heroTitle}</h1>
-          <p className="mt-5 max-w-xl text-muted">{d.heroSub}</p>
-          <form action={`/${locale}/signup`} className="card mt-8 bg-white p-3">
-            <textarea name="prompt" rows={3} maxLength={1000} placeholder={d.promptPh} className="w-full resize-none bg-transparent p-3 outline-none placeholder:text-muted" />
-            <div className="flex flex-wrap items-center justify-between gap-3 p-1">
-              <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted">
-                {["Seedance 2.0 Fast", d.auto, d.sec4, d.res, d.audio].map((c) => (
-                  <span key={c} className="rounded-md bg-surface-2 px-3 py-1.5">{c}</span>
-                ))}
-              </div>
-              <button className="btn btn-gold">{d.generate}</button>
-            </div>
-          </form>
-        </div>
-        <div className="arch-outline mx-auto w-full max-w-sm bg-white">
-          <div className="relative flex aspect-[3/4] items-center justify-center bg-gold">
-            <svg viewBox="0 0 24 24" className="h-20 w-20" aria-hidden><path d="M7 4v16l13-8z" fill="#fff" /></svg>
-          </div>
-        </div>
+    <section className="relative flex min-h-[100svh] items-end justify-center overflow-hidden">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/media/hero.svg" alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+      <div className="relative z-10 mx-auto flex w-full max-w-[1000px] flex-col items-center px-5 pb-24 text-center">
+        <h1 className="text-4xl font-semibold leading-tight md:text-5xl">{d.heroTitle}</h1>
+        <p className="mt-4 max-w-[900px] text-[15px] leading-7 text-white/90 md:text-base">{d.heroLong}</p>
+        <form action={`/${locale}/signup`} className="glass mt-8 flex w-full max-w-2xl items-center gap-3 rounded-full py-2 ps-6 pe-2">
+          <input name="prompt" maxLength={1000} placeholder={d.promptPh} className="min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-white/60" />
+          <button className="btn btn-white">✦ {d.generate}</button>
+        </form>
       </div>
-      <div className="band bg-white" />
     </section>
   );
 }

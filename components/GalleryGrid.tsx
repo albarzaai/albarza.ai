@@ -50,7 +50,7 @@ export function GalleryGrid({ locale }: { locale: Locale }) {
           <div key={it.id} className="card relative mb-4 break-inside-avoid overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={it.src} alt="" loading="lazy" width={400} height={it.tall ? 500 : 300} className="h-auto w-full" />
-            {it.kind !== "image" && <span className="absolute start-2 top-2 rounded-full bg-bg/80 px-2 py-0.5 text-xs text-gold">{it.kind === "video" ? "▶" : "♪"}</span>}
+            {it.kind !== "image" && <span className="absolute start-2 top-2 rounded-full bg-black/70 px-2 py-0.5 text-xs text-gold">{it.kind === "video" ? "▶" : "♪"}</span>}
           </div>
         ))}
       </div>

@@ -6,20 +6,20 @@ import type { Locale } from "@/lib/i18n";
 export function SiteHeader({ locale }: { locale: Locale }) {
   const d = t(locale);
   const other = locale === "ar" ? "en" : "ar";
+  const nav: [string, string][] = [[d.navAiImage, "#tools"], [d.navAiVideo, "#models"], [d.navEditor, "#tools"], [d.navExplore, "#gallery"], [d.navTemplates, "#tools"]];
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-5">
-        <div className="flex items-center gap-8">
+    <header className="absolute inset-x-0 top-0 z-40">
+      <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between px-6">
+        <div className="flex items-center gap-10">
           <Logo locale={locale} />
-          <nav className="hidden items-center gap-6 text-sm text-muted md:flex">
-            <Link href={`/${locale}#models`} className="hover:text-gold-deep">{d.navVideo}</Link>
-            <Link href={`/${locale}#tools`} className="hover:text-gold-deep">{d.toolsTitle}</Link>
-            <Link href={`/${locale}#pricing`} className="hover:text-gold-deep">{d.navPricing}</Link>
+          <nav className="hidden items-center gap-7 text-sm text-white lg:flex">
+            {nav.map(([label, href]) => <Link key={label} href={`/${locale}${href}`} className="hover:text-gold-hi">{label}</Link>)}
           </nav>
         </div>
-        <div className="flex items-center gap-3">
-          <Link href={`/${other}`} className="text-sm text-muted hover:text-gold-deep" hrefLang={other}>{other === "ar" ? "العربية" : "English"}</Link>
-          <Link href={`/${locale}/login`} className="btn btn-ghost hidden sm:inline-flex">{d.login}</Link>
+        <div className="flex items-center gap-5 text-sm">
+          <Link href={`/${other}`} hrefLang={other} className="text-white/80 hover:text-white">{other === "ar" ? "العربية" : "English"}</Link>
+          <Link href={`/${locale}#pricing`} className="hidden text-white/80 hover:text-white sm:block">{d.navPricing}</Link>
+          <Link href={`/${locale}/login`} className="text-white/80 hover:text-white">{d.login}</Link>
           <Link href={`/${locale}/signup`} className="btn btn-gold">{d.signup}</Link>
         </div>
       </div>

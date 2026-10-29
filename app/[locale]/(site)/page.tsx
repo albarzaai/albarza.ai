@@ -1,22 +1,20 @@
 import { Hero } from "@/components/Hero";
-import { Cta, Faq, Features, Models, Pricing, Steps, Why } from "@/components/Sections";
+import { AppPromo, Faq, HowTo, Models, Pricing, Takeaways, Toolkit, Why } from "@/components/Sections";
 import type { Locale } from "@/lib/i18n";
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const locale = (await params).locale as Locale;
-  const tint = "bg-surface-2";
   return (
-    <>
+    <main>
       <Hero locale={locale} />
       <Models locale={locale} />
-      <div className="band" />
-      <div className={tint}><Steps locale={locale} /></div>
-      <Features locale={locale} />
-      <div className="band" />
-      <div className={tint}><Why locale={locale} /></div>
+      <HowTo locale={locale} />
+      <Why locale={locale} />
+      <Toolkit locale={locale} />
+      <AppPromo locale={locale} />
+      <Takeaways locale={locale} />
       <Pricing locale={locale} />
-      <div className={tint}><Faq locale={locale} /></div>
-      <Cta locale={locale} />
-    </>
+      <Faq locale={locale} />
+    </main>
   );
 }
