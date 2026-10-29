@@ -39,15 +39,15 @@ def atlas_video():
     if not ATLAS:
         errors.append("atlas: ATLASCLOUD_API_KEY secret is not set")
         return None
+    import requests  # Atlas documents the `requests` client; it identifies itself honestly.
     h = {"Authorization": f"Bearer {ATLAS}", "Content-Type": "application/json"}
 
     def a(method, url, body=None):
-        r = urllib.request.Request(url, method=method, data=json.dumps(body).encode() if body is not None else None, headers=h)
+        r = requests.request(method, url, headers=h, json=body, timeout=120)
         try:
-            with urllib.request.urlopen(r, timeout=120) as resp:
-                return resp.status, json.loads(resp.read())
-        except urllib.error.HTTPError as e:
-            return e.code, {"error": e.read()[:300].decode(errors="replace")}
+            return r.status_code, r.json()
+        except ValueError:
+            return r.status_code, {"error": r.text[:300]}
 
     code, d = a("POST", "https://api.atlascloud.ai/api/v1/model/generateVideo", {
         "model": "bytedance/seedance-2.0-mini/text-to-video", "prompt": PROMPT, "duration": 10, "resolution": "720p",
