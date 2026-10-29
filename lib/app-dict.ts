@@ -2,7 +2,7 @@ import type { Locale } from "./i18n";
 
 type T = Record<string, string>;
 const ar: T = {
-  home: "الرئيسية", explore: "استكشف", templates: "القوالب", reshoot: "إعادة التصوير", tools: "الأدوات",
+  home: "الرئيسية", explore: "استكشف", templates: "القوالب", reshoot: "إعادة التصوير", tools: "الأدوات", projects: "المشاريع",
   image: "الصور", video: "الفيديو", music: "الموسيقى", voice: "الصوت", artwork: "الأعمال الفنية", enhancer: "المحسّن", editor: "المحرر",
   upgradeCta: "ترقية الخطة", myAccount: "حسابي", proPlan: "خطة Pro", collapse: "طي القائمة",
   creditsLeft: "متبقٍ", topUp: "شراء أرصدة", get: "احصل", viewProfile: "عرض الملف الشخصي", pricingPlans: "الأسعار والخطط", manageAccount: "إدارة الحساب", helpCenter: "مركز المساعدة", signOut: "تسجيل الخروج", reactivate: "تنشيط",
@@ -45,7 +45,7 @@ const ar: T = {
   loadingMore: "جارٍ تحميل المزيد…", noResults: "لا توجد نتائج",
 };
 const en: T = {
-  home: "Home", explore: "Explore", templates: "Templates", reshoot: "Reshoot", tools: "Tools",
+  home: "Home", explore: "Explore", templates: "Templates", reshoot: "Reshoot", tools: "Tools", projects: "Projects",
   image: "Image", video: "Video", music: "Music", voice: "Voice", artwork: "Artwork", enhancer: "Enhancer", editor: "Editor",
   upgradeCta: "Upgrade plan", myAccount: "My account", proPlan: "Pro Plan", collapse: "Collapse sidebar",
   creditsLeft: "left", topUp: "Top-up Credits", get: "Get", viewProfile: "View Profile", pricingPlans: "Pricing & Plans", manageAccount: "Manage Account", helpCenter: "Help Center", signOut: "Sign out", reactivate: "Reactivate",

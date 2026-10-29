@@ -9,7 +9,7 @@ import { ta } from "@/lib/app-dict";
 import type { Locale } from "@/lib/i18n";
 
 const main = [["", "home", "home"], ["explore", "explore", "explore"], ["templates", "templates", "cards"], ["reshoot", "reshoot", "reshoot"]] as const;
-const tools = [["image", "image", "image"], ["video", "video", "video"], ["music", "music", "note"], ["voice", "voice", "wave"], ["artwork", "artwork", "palette"], ["enhancer", "enhancer", "enhance"], ["editor", "editor", "pen"]] as const;
+const tools = [["image", "image", "image"], ["video", "video", "video"], ["music", "music", "note"], ["voice", "voice", "wave"], ["artwork", "artwork", "palette"], ["enhancer", "enhancer", "enhance"], ["editor", "editor", "pen"], ["projects", "projects", "folder"]] as const;
 
 export function AppSidebar({ locale }: { locale: Locale }) {
   const a = ta(locale);
