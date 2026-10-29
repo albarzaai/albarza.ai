@@ -5,7 +5,7 @@ import { Carousel } from "./Carousel";
 import { SuiteTabs } from "./SuiteTabs";
 import { Icon } from "./Icon";
 import { H, channels, featured, homeFaqs, modelNames, whyCards } from "@/lib/home-copy";
-import { pic } from "@/lib/media";
+import { gallery, pic } from "@/lib/media";
 import { plans, planName, t } from "@/lib/dict";
 import { aed, type Locale } from "@/lib/i18n";
 
@@ -126,7 +126,7 @@ function Phone() {
   return (
     <div className="relative aspect-[9/19] w-[230px] overflow-hidden rounded-[36px] border-[7px] border-ink bg-ink shadow-2xl">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={pic("home-collage", 1)} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
+      <img src={gallery(6)} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
       <span className="absolute inset-x-0 top-2 mx-auto h-4 w-16 rounded-full bg-ink" />
       <div className="absolute inset-x-2.5 bottom-3 flex items-center gap-2 rounded-full bg-white/85 py-1.5 ps-3 pe-1.5 text-[10px] text-ink/60 backdrop-blur-md"><span className="flex-1 truncate">…</span><span className="grid size-6 place-items-center rounded-full bg-gold text-white"><Icon n="spark" size={11} /></span></div>
     </div>

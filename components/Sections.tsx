@@ -11,7 +11,7 @@ import { aed, type Locale } from "@/lib/i18n";
 const Start = ({ locale, label }: { locale: Locale; label?: string }) => <Link href={`/${locale}/signup`} className="btn btn-gold">{label ?? t(locale).startCreating}</Link>;
 const img = gallery;
 // One picture per tool card, matched to what the tool does (order follows toolTitles).
-const TOOL_IMG = [gallery(9), gallery(2), pic("card", 1), gallery(8), pic("card", 6), pic("card", 3)];
+const TOOL_IMG = [gallery(9), gallery(11), pic("card", 1), gallery(8), pic("card", 6), pic("card", 3)];
 const H2 = ({ children }: { children: React.ReactNode }) => <h2 className="text-3xl font-semibold leading-tight md:text-[40px]">{children}</h2>;
 
 export function Models({ locale }: { locale: Locale }) {
