@@ -5,3 +5,5 @@ node_modules
 next-env.d.ts
 .open-next
 .wrangler
+api/node_modules
+api/.wrangler

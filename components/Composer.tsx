@@ -50,7 +50,7 @@ export function Composer({ locale, initialMode = "createImage", count = 1 }: { l
   const [state, action, pending] = useActionState<GenState, FormData>(generateAction, null);
 
   useEffect(() => {
-    if (state?.ok) window.dispatchEvent(new CustomEvent("albarza:generate", { detail: { cat, mode, prompt, model: model[mode] ?? "" } }));
+    if (state?.ok) window.dispatchEvent(new CustomEvent("albarza:generate", { detail: { cat, mode, prompt, model: model[mode] ?? "", image: state.image } }));
   }, [state]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const pill = "pill";
@@ -146,7 +146,7 @@ export function Composer({ locale, initialMode = "createImage", count = 1 }: { l
             </div>
           )}
         </div>
-        {state && !state.ok && <p role="alert" className="mt-2 text-center text-xs text-red-400">{locale === "ar" ? "أدخل وصفاً صالحاً للمتابعة" : "Enter a valid prompt to continue"}</p>}
+        {state && !state.ok && <p role="alert" className="mt-2 text-center text-xs text-red-400">{state.error === "rate" ? (locale === "ar" ? "طلبات كثيرة، حاول بعد قليل" : "Too many requests, try again shortly") : state.error === "unavailable" || state.error === "blocked" ? (locale === "ar" ? "تعذّر إنشاء الصورة الآن، حاول مرة أخرى" : "Couldn't generate the image, please try again") : locale === "ar" ? "أدخل وصفاً صالحاً للمتابعة" : "Enter a valid prompt to continue"}</p>}
       </div>
     </form>
   );

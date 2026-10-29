@@ -1,8 +1,9 @@
 "use server";
 
 import { z } from "zod";
+import { generateImage } from "@/lib/gemini";
 
-export type GenState = { ok: boolean; error?: string; at?: number } | null;
+export type GenState = { ok: boolean; error?: "invalid" | "prompt" | "rate" | "unavailable" | "blocked"; image?: string; at?: number } | null;
 
 const s = (n: number) => z.string().trim().max(n).optional();
 const schema = z.object({
@@ -14,11 +15,16 @@ const schema = z.object({
 });
 const needsPrompt = new Set(["createImage", "createArtwork", "createVideo", "editVideo", "extendVideo", "voiceover", "musicGenerator"]);
 
-// All validation is server-side. Enqueueing to the Hono/Queues backend is wired in a later phase.
+// All validation is server-side. Images go to Gemini; other modes are enqueued by the backend in a later phase.
 export async function generateAction(_: GenState, form: FormData): Promise<GenState> {
   const data = Object.fromEntries([...form.entries()].filter(([, v]) => typeof v === "string"));
   const r = schema.safeParse(data);
   if (!r.success) return { ok: false, error: "invalid", at: Date.now() };
   if (needsPrompt.has(r.data.mode) && !r.data.prompt) return { ok: false, error: "prompt", at: Date.now() };
+  if (r.data.mode === "createImage" || r.data.mode === "createArtwork") {
+    const img = await generateImage(r.data.prompt!, r.data.aspect);
+    if (!img.ok) return { ok: false, error: img.error, at: Date.now() };
+    return { ok: true, image: img.image, at: Date.now() };
+  }
   return { ok: true, at: Date.now() };
 }
