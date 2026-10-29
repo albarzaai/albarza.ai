@@ -29,7 +29,7 @@ export function ToolPage({ locale, title, fields, cost }: { locale: Locale; titl
           <button className="btn btn-gold">{d.generate}</button>
         </div>
       </form>
-      <section className="card pattern flex min-h-[420px] items-center justify-center p-6 text-center text-sm text-muted">{d.result}</section>
+      <section className="card flex min-h-[420px] items-center justify-center p-6 text-center text-sm text-muted">{d.result}</section>
     </div>
   );
 }

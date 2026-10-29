@@ -12,7 +12,7 @@ export function Models({ locale }: { locale: Locale }) {
         {models.map(([id, name, desc], i) => (
           <article key={id} className="card group overflow-hidden transition hover:border-gold">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`/media/gallery-${(i % 12) + 1}.svg`} alt="" width={400} height={300} loading="lazy" className="h-40 w-full object-cover" />
+            <img src={`/media/gallery-${(i % 12) + 1}.svg`} alt="" width={400} height={300} loading="lazy" className="arch mx-auto mt-4 h-44 w-[80%] object-cover" />
             <div className="space-y-2 p-4">
               <h3 className="font-semibold">{name}</h3>
               <p className="line-clamp-3 text-sm text-muted">{desc[locale]}</p>
@@ -53,9 +53,9 @@ export function Features({ locale }: { locale: Locale }) {
       <h2 className="text-3xl font-bold md:text-4xl">{d.toolsTitle}</h2>
       <div className="mt-10 grid gap-4 md:grid-cols-2">
         {items.map(([title, text], i) => (
-          <div key={title} className="card flex gap-4 overflow-hidden p-0">
+          <div key={title} className="card flex gap-2 overflow-hidden p-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`/media/gallery-${i + 9}.svg`} alt="" width={400} height={300} loading="lazy" className="h-auto w-32 shrink-0 object-cover" />
+            <img src={`/media/gallery-${i + 9}.svg`} alt="" width={400} height={300} loading="lazy" className="arch m-4 h-32 w-24 shrink-0 object-cover" />
             <div className="p-5"><h3 className="font-semibold">{title}</h3><p className="mt-2 text-sm text-muted">{text}</p></div>
           </div>
         ))}
@@ -121,10 +121,10 @@ export function Cta({ locale }: { locale: Locale }) {
   const d = t(locale);
   return (
     <section className="section text-center">
-      <div className="card pattern px-6 py-14">
+      <div className="rounded-xl bg-gold px-6 py-14 text-ink">
         <h2 className="text-3xl font-bold">{d.ctaTitle}</h2>
-        <p className="mt-3 text-muted">{d.ctaSub}</p>
-        <Link href={`/${locale}/signup`} className="btn btn-gold mt-8">{d.startCreating}</Link>
+        <p className="mt-3">{d.ctaSub}</p>
+        <Link href={`/${locale}/signup`} className="btn mt-8 bg-ink text-bg hover:bg-white hover:text-ink">{d.startCreating}</Link>
       </div>
     </section>
   );
