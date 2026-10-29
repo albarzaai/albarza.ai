@@ -13,7 +13,7 @@ export function ModelShowcase({ locale }: { locale: Locale }) {
   const [i, setI] = useState(0);
   const m = models[i];
   return (
-    <div className="relative mt-12 overflow-hidden rounded-3xl bg-black text-start text-white md:h-[720px]">
+    <div className="relative mt-12 overflow-hidden rounded-3xl bg-black text-start text-white md:h-[760px] xl:h-[920px]">
       <video src="/media/hero-abudhabi.mp4" poster={HERO_POSTER} autoPlay muted loop playsInline preload="metadata" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
       <div className="relative flex h-full flex-col p-3 md:p-10">
         <div className="grid h-full gap-8 rounded-3xl border border-white/20 bg-gradient-to-br from-white/25 via-white/10 to-white/5 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-2xl backdrop-saturate-150 md:w-[57%] md:grid-cols-[minmax(0,240px)_1fr] md:gap-0 md:p-0">
