@@ -53,3 +53,5 @@ jobs:
           npx opennextjs-cloudflare build
           npx opennextjs-cloudflare deploy
           printf '%s' "$INTERNAL_AUTH_SECRET" | npx wrangler secret put INTERNAL_AUTH_SECRET
+      - name: Harden zone (TLS, HSTS, bots, WAF, rate limits)
+        run: python3 scripts/harden-zone.py
