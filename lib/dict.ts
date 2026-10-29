@@ -137,5 +137,5 @@ export const plans = [
 export const planName: Record<string, T> = {
   starter: { ar: "البداية", en: "Starter" },
   creator: { ar: "العضوية الذهبية", en: "Golden" },
-  studio: { ar: "الماس", en: "Diamond" },
+  studio: { ar: "العضوية الماسية", en: "Diamond" },
 };
