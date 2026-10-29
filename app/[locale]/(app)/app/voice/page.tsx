@@ -14,11 +14,11 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   const locale = (await params).locale as Locale;
   const sp = await searchParams;
   const a = ta(locale);
-  const tab = ["creations", "voices", "tutorial"].includes(sp.tab ?? "") ? sp.tab! : "creations";
+  const tab = ["creations", "voices"].includes(sp.tab ?? "") ? sp.tab! : "creations";
   const i = locale === "ar" ? 0 : 1;
   return (
     <>
-      <PageHeader locale={locale} crumb={a.voice} tabs={[{ key: "creations", label: a.creations, icon: "wave" }, { key: "voices", label: a.voices, icon: "mic" }, { key: "tutorial", label: a.tutorial, icon: "tutorial" }]} active={tab} basePath="voice" toolbar={tab === "creations"} />
+      <PageHeader locale={locale} crumb={a.voice} tabs={[{ key: "creations", label: a.creations, icon: "wave" }, { key: "voices", label: a.voices, icon: "mic" }]} active={tab} basePath="voice" toolbar={tab === "creations"} />
       <main className="px-5 pb-80 md:px-8">
         {tab === "creations" && <CreationsList locale={locale} kind="audio" q={sp.q} />}
         {tab === "voices" && (
@@ -35,7 +35,6 @@ export default async function Page({ params, searchParams }: { params: Promise<{
             </div>
           </div>
         )}
-        {tab === "tutorial" && <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{[a.voiceover, a.voiceChanger, a.voices].map((t) => <article key={t} className="rounded-2xl bg-[#111] p-6"><h3 className="font-semibold">{t}</h3><div className="mt-4 flex h-16 items-center gap-[3px]" aria-hidden>{Array.from({ length: 40 }, (_, k) => <i key={k} className="w-[3px] rounded bg-gold/60" style={{ height: `${15 + ((k * 29) % 80)}%` }} />)}</div></article>)}</div>}
       </main>
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30 h-[300px] bg-gradient-to-t from-black via-black/80 to-transparent md:ms-[calc(var(--sb)+20px)]" aria-hidden />
       <Composer locale={locale} initialMode="voiceover" />

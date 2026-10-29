@@ -50,9 +50,6 @@ function CreationsBody({ kind, locale }: { kind: "image" | "video" | "audio"; lo
   );
 }
 
-const TutorialCards = ({ titles, cols, offset = 0 }: { titles: string[]; cols: string; offset?: number }) => (
-  <div className={`grid gap-4 ${cols}`}>{titles.map((t, i) => (<article key={t + i + offset} className="overflow-hidden rounded-2xl bg-[#111]"><Bar className="aspect-video w-full" /><p className="p-4 text-sm font-semibold">{t}</p></article>))}</div>
-);
 
 // ---- page shell ------------------------------------------------------------------------------------------------------------------
 function Shell({ locale, header, main = "pb-72", mode, fade, children }: { locale: Locale; header: React.ReactNode; main?: string; mode?: Mode; fade?: number; children: React.ReactNode }) {
@@ -82,19 +79,12 @@ export function RouteSkeleton({ route, locale, sp, id }: { route: string; locale
         </Shell>
       );
     case "image": {
-      const t = pick(["creations", "templates", "tutorial"], "creations");
-      const tabs: TabDef[] = [{ key: "creations", label: a.creations, icon: "library" }, { key: "templates", label: a.templates, icon: "cards" }, { key: "tutorial", label: a.tutorial, icon: "tutorial" }];
+      const t = pick(["creations", "templates"], "creations");
+      const tabs: TabDef[] = [{ key: "creations", label: a.creations, icon: "library" }, { key: "templates", label: a.templates, icon: "cards" }];
       return (
         <Shell locale={locale} mode="createImage" header={hdr({ crumb: a.image, tabs, active: t, basePath: "image", toolbar: true, filters: true })}>
           {t === "creations" && <CreationsBody kind="image" locale={locale} />}
           {t === "templates" && <FeedBody row={row} />}
-          {t === "tutorial" && (
-            <div className="relative mx-auto max-w-[1000px] overflow-hidden rounded-3xl">
-              <Bar className="aspect-video w-full" />
-              <div className="absolute inset-0 grid place-items-center bg-black/35 text-center"><div><p className="text-4xl font-bold md:text-6xl">{ar ? "نقدّم لكم" : "Introducing"}</p><p className="mt-6 text-4xl font-bold md:text-6xl">{ar ? "نماذج الصور" : "Image Models"}</p></div></div>
-              <div className="absolute start-6 top-1/2 hidden w-64 -translate-y-1/2 space-y-2 md:block"><p className="dock !rounded-2xl p-3 text-xs">{a.describeImage}</p>{[a.changeLighting, a.background, a.retouch].map((x) => <p key={x} className="dock flex items-center gap-2 !rounded-full px-3 py-1.5 text-xs"><Icon n="spark" size={12} />{x}</p>)}</div>
-            </div>
-          )}
         </Shell>
       );
     }
@@ -124,36 +114,34 @@ export function RouteSkeleton({ route, locale, sp, id }: { route: string; locale
       );
     }
     case "video": {
-      const t = pick(["creations", "library", "templates", "tutorial"], "creations");
-      const tabs: TabDef[] = [{ key: "creations", label: a.creations, icon: "library" }, { key: "library", label: a.motionLibrary, icon: "video" }, { key: "templates", label: a.templates, icon: "cards" }, { key: "tutorial", label: a.tutorial, icon: "tutorial" }];
+      const t = pick(["creations", "library", "templates"], "creations");
+      const tabs: TabDef[] = [{ key: "creations", label: a.creations, icon: "library" }, { key: "library", label: a.motionLibrary, icon: "video" }, { key: "templates", label: a.templates, icon: "cards" }];
       return (
         <Shell locale={locale} mode={t === "library" ? "motionControl" : "createVideo"} header={hdr({ crumb: a.video, tabs, active: t, basePath: "video", toolbar: true })}>
           {t === "creations" && <CreationsBody kind="video" locale={locale} />}
           {t === "library" && <FeedBody max={4} row={row} />}
           {t === "templates" && <FeedBody row={row} />}
-          {t === "tutorial" && <TutorialCards titles={[a.createVideo, a.editVideo, a.extendVideo, a.motionControl]} cols="sm:grid-cols-2 xl:grid-cols-4" />}
         </Shell>
       );
     }
     case "music": {
-      const t = pick(["creations", "studio", "tutorial"], "studio");
+      const t = pick(["creations", "studio"], "studio");
       const shelf = (title: string) => (
         <section><h2 className="mb-4 text-lg font-semibold">{title}</h2>
           <div className="noscroll flex gap-4 overflow-x-auto pb-2">{Array.from({ length: 6 }, (_, k) => <article key={k} className="w-[200px] shrink-0 md:w-[223px]"><Bar className="aspect-[4/5] w-full rounded-2xl" /><div className="mt-3 flex h-5 items-center"><Bar className="h-3.5 w-24 rounded" /></div></article>)}</div>
         </section>
       );
       return (
-        <Shell locale={locale} main="space-y-8 pb-80" fade={310} mode="musicGenerator" header={hdr({ crumb: a.music, tabs: [{ key: "creations", label: a.creations, icon: "library" }, { key: "studio", label: a.studio, icon: "gem" }, { key: "tutorial", label: a.tutorial, icon: "tutorial" }], active: t, basePath: "music" })}>
+        <Shell locale={locale} main="space-y-8 pb-80" fade={310} mode="musicGenerator" header={hdr({ crumb: a.music, tabs: [{ key: "creations", label: a.creations, icon: "library" }, { key: "studio", label: a.studio, icon: "gem" }], active: t, basePath: "music" })}>
           {t === "studio" && <>{shelf(a.editorsChoice)}{shelf(a.newReleases)}</>}
           {t === "creations" && <CreationsBody kind="audio" locale={locale} />}
-          {t === "tutorial" && <TutorialCards titles={[a.autoLyrics, a.genre, a.advancedSettings]} cols="sm:grid-cols-2 xl:grid-cols-3" />}
         </Shell>
       );
     }
     case "voice": {
-      const t = pick(["creations", "voices", "tutorial"], "creations");
+      const t = pick(["creations", "voices"], "creations");
       return (
-        <Shell locale={locale} main="pb-80" fade={300} mode="voiceover" header={hdr({ crumb: a.voice, tabs: [{ key: "creations", label: a.creations, icon: "wave" }, { key: "voices", label: a.voices, icon: "mic" }, { key: "tutorial", label: a.tutorial, icon: "tutorial" }], active: t, basePath: "voice", toolbar: t === "creations" })}>
+        <Shell locale={locale} main="pb-80" fade={300} mode="voiceover" header={hdr({ crumb: a.voice, tabs: [{ key: "creations", label: a.creations, icon: "wave" }, { key: "voices", label: a.voices, icon: "mic" }], active: t, basePath: "voice", toolbar: t === "creations" })}>
           {t === "creations" && <CreationsBody kind="audio" locale={locale} />}
           {t === "voices" && (
             <div className="mx-auto max-w-[1000px]">
@@ -169,7 +157,6 @@ export function RouteSkeleton({ route, locale, sp, id }: { route: string; locale
               </div>
             </div>
           )}
-          {t === "tutorial" && <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{[a.voiceover, a.voiceChanger, a.voices].map((x) => <article key={x} className="rounded-2xl bg-[#111] p-6"><h3 className="font-semibold">{x}</h3><Bar className="mt-4 h-16 rounded" /></article>)}</div>}
         </Shell>
       );
     }
