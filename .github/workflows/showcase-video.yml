@@ -1,0 +1,39 @@
+name: Generate showcase video
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/serene-carson-k64lwr]
+    paths: [".github/workflows/showcase-video.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install requests and ffmpeg
+        run: |
+          python3 -m pip install --quiet requests
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Generate with Atlas Cloud
+        env:
+          ATLASCLOUD_API_KEY: ${{ secrets.ATLASCLOUD_API_KEY }}
+          VIDEO_SLUG: showcase-gulf
+          VIDEO_PROMPT: >-
+            Slow, elegant cinematic scene of Gulf heritage meeting modern Dubai at golden hour: a traditional wooden dhow gliding across calm water
+            in Dubai Creek with the glass skyline glowing behind it, then a graceful Arabian horse galloping along a quiet beach in slow motion with
+            sea spray catching the warm light, then lantern-lit old souq alleys with drifting golden dust. Smooth continuous camera motion, shallow depth
+            of field, rich warm gold and cream color grade, soft haze, filmic, photorealistic, no text, no logos, no subtitles.
+        run: python3 scripts/generate-hero-video.py
+      - name: Commit video
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add public/media/showcase-gulf*.mp4 public/media/showcase-gulf.jpg
+          git commit -m "Add Gulf showcase video (Atlas Cloud Seedance)"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push
