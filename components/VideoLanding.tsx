@@ -34,11 +34,11 @@ export function VideoHero({ locale }: { locale: Locale }) {
   return (
     <section className="relative flex min-h-[620px] items-center justify-center overflow-hidden bg-[#fdf8ec] md:h-[760px]">
       <HeroVideo />
-      <div className="absolute inset-0 bg-gradient-to-b from-white/35 via-white/10 to-white" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(253,248,236,0.88),rgba(253,248,236,0.55)_55%,transparent_80%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/40" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(8,6,3,0.62),rgba(8,6,3,0.4)_55%,transparent_80%)]" />
       <div className="relative z-10 mx-auto flex w-full max-w-[1000px] flex-col items-center px-5 pt-16 text-center">
-        <h1 className="max-w-[660px] text-[40px] font-bold leading-[1.1] md:text-[56px] [text-shadow:0_1px_18px_rgba(253,248,236,0.9)]">{d.heroTitle}</h1>
-        <p className="mt-5 max-w-[520px] text-sm leading-6 font-medium text-ink md:text-base [text-shadow:0_1px_12px_rgba(253,248,236,0.9)]">{d.heroSub}</p>
+        <h1 className="max-w-[660px] text-[40px] font-bold leading-[1.1] md:text-[56px] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.55)]">{d.heroTitle}</h1>
+        <p className="mt-5 max-w-[520px] text-sm leading-6 font-medium text-white md:text-base [text-shadow:0_1px_12px_rgba(0,0,0,0.6)]">{d.heroSub}</p>
         <form action={`/${locale}/signup`} className="mt-10 w-full max-w-[860px] rounded-3xl border border-ink/10 bg-white/75 p-4 text-start shadow-sm backdrop-blur-md">
           <textarea name="prompt" rows={2} maxLength={1000} placeholder={locale === "ar" ? "صِف الفيديو الذي تريده" : "Describe your video"} className="min-h-[56px] w-full resize-none bg-transparent px-1 text-sm outline-none placeholder:text-ink/45" />
           <div className="mt-3 flex flex-wrap items-center gap-2">
