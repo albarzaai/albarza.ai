@@ -17,7 +17,7 @@ export function HeaderShell({ children }: { children: React.ReactNode }) {
   }, []);
   const top = onHero && !scrolled;
   return (
-    <header data-top={top} className="group fixed inset-x-0 top-0 z-40 transition-colors duration-300 data-[top=false]:border-b data-[top=false]:border-line data-[top=false]:bg-bg/90 data-[top=false]:backdrop-blur-md data-[top=true]:text-white">
+    <header data-top={top} className="group fixed inset-x-0 top-0 z-40 transition-colors duration-300 data-[top=false]:bg-white/55 data-[top=false]:backdrop-blur-xl data-[top=false]:backdrop-saturate-150 data-[top=true]:text-white">
       {children}
     </header>
   );

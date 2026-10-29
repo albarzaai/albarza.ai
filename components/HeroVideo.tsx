@@ -14,7 +14,7 @@ export function HeroVideo() {
     if (v && !v.paused && v.readyState >= 3) setReady(true);
   }, []);
   return (
-    <div className="absolute inset-x-0 bottom-0 top-[76px] overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={HERO_POSTER} alt="" fetchPriority="high" decoding="sync" className="absolute inset-0 h-full w-full object-cover" />
       <video ref={ref} poster={HERO_POSTER} autoPlay muted loop playsInline preload="auto" onPlaying={() => setReady(true)}
