@@ -10,6 +10,8 @@ import { aed, type Locale } from "@/lib/i18n";
 
 const Start = ({ locale, label }: { locale: Locale; label?: string }) => <Link href={`/${locale}/signup`} className="btn btn-gold">{label ?? t(locale).startCreating}</Link>;
 const img = gallery;
+// One picture per tool card, matched to what the tool does (order follows toolTitles).
+const TOOL_IMG = [gallery(9), gallery(2), pic("card", 1), gallery(8), pic("card", 6), pic("card", 3)];
 const H2 = ({ children }: { children: React.ReactNode }) => <h2 className="text-3xl font-semibold leading-tight md:text-[40px]">{children}</h2>;
 
 export function Models({ locale }: { locale: Locale }) {
@@ -40,12 +42,12 @@ export function HowTo({ locale }: { locale: Locale }) {
 export function Features({ locale }: { locale: Locale }) {
   return (
     <section className="section pt-0">
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid auto-rows-fr gap-4 md:grid-cols-2">
         {features.map((f, i) => (
-          <article key={f.t.en} className="card flex overflow-hidden">
+          <article key={f.t.en} className="card flex h-full min-h-[200px] overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={gallery(i + 1)} alt="" width={400} height={300} loading="lazy" className="hidden h-auto w-40 shrink-0 object-cover sm:block" />
-            <div className="p-6"><h3 className="font-semibold">{f.t[locale]}</h3><p className="mt-2 text-sm leading-6 text-muted">{f.d[locale]}</p></div>
+            <img src={gallery(i + 1)} alt="" width={400} height={300} loading="lazy" className="hidden h-full w-[190px] shrink-0 object-cover sm:block" />
+            <div className="flex flex-col justify-center p-6"><h3 className="text-lg font-semibold">{f.t[locale]}</h3><p className="mt-2 text-sm leading-6 text-muted">{f.d[locale]}</p></div>
           </article>
         ))}
       </div>
@@ -95,7 +97,7 @@ export function Toolkit({ locale }: { locale: Locale }) {
         {tools.map((name, i) => (
           <article key={name.en} className="relative h-[440px] w-[78vw] max-w-[640px] shrink-0 snap-center overflow-hidden rounded-3xl border border-line">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={pic("card", (i % 6) + 1)} alt="" width={400} height={500} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+            <img src={TOOL_IMG[i % TOOL_IMG.length]} alt="" width={640} height={440} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
             <div className="glass absolute inset-x-4 bottom-4 flex items-center justify-between rounded-2xl p-4">
               <h3 className="font-semibold">{name[locale]}</h3>
               <Link href={`/${locale}/signup`} className="btn btn-white !py-1.5">{d.tryTool}</Link>
@@ -129,13 +131,37 @@ export function Community({ locale }: { locale: Locale }) {
   );
 }
 
+function Phone({ src, className = "" }: { src: string; className?: string }) {
+  return (
+    <div className={`relative aspect-[9/19] w-[210px] overflow-hidden rounded-[34px] border-[6px] border-ink bg-ink shadow-2xl ${className}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
+      <span className="absolute inset-x-0 top-2 mx-auto h-4 w-16 rounded-full bg-ink" />
+      <div className="absolute inset-x-2.5 bottom-3 flex items-center gap-2 rounded-full bg-white/85 py-1.5 ps-3 pe-1.5 text-[10px] text-ink/60 backdrop-blur-md"><span className="flex-1 truncate">Describe your idea…</span><span className="grid size-6 place-items-center rounded-full bg-gold text-white"><Icon n="spark" size={11} /></span></div>
+    </div>
+  );
+}
+
 export function AppPromo({ locale }: { locale: Locale }) {
   const d = t(locale);
+  const badge = "inline-flex h-12 items-center gap-2 rounded-xl border border-line bg-ink px-5 text-sm font-medium text-white opacity-90";
   return (
     <section className="section">
-      <H2>{d.appTitle}</H2>
-      <p className="mt-4 max-w-xl text-muted">{d.appSub}</p>
-      <p className="mt-3 text-sm text-gold-hi">{d.appSoon}</p>
+      <div className="grid items-center gap-10 overflow-hidden rounded-3xl border border-line bg-surface px-6 py-12 md:grid-cols-2 md:px-14">
+        <div>
+          <H2>{d.appTitle}</H2>
+          <p className="mt-4 max-w-md text-muted">{d.appSub}</p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <span className={badge} aria-disabled>App Store</span>
+            <span className={badge} aria-disabled>Google Play</span>
+          </div>
+          <p className="mt-4 text-sm text-gold-hi">{d.appSoon}</p>
+        </div>
+        <div className="relative flex justify-center gap-5 md:justify-end">
+          <Phone src={gallery(5)} className="mt-8" />
+          <Phone src={gallery(10)} className="-mb-8 hidden sm:block" />
+        </div>
+      </div>
     </section>
   );
 }
@@ -145,8 +171,8 @@ export function Takeaways({ locale }: { locale: Locale }) {
   return (
     <section className="section max-w-3xl">
       <div className="text-center"><H2>{d.takeTitle}</H2></div>
-      <ul className="mt-8 space-y-3 text-sm leading-7 text-muted">
-        {[d.k1, d.k2, d.k3, d.k4].map((k) => <li key={k} className="flex gap-3"><span className="text-gold">•</span>{k}</li>)}
+      <ul className="mt-8 space-y-3 rounded-2xl border border-line bg-surface p-6 text-[15px] leading-7 text-muted md:p-8">
+        {[d.k1, d.k2, d.k3, d.k4].map((k) => <li key={k} className="flex gap-3"><span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-gold text-white"><Icon n="spark" size={11} /></span>{k}</li>)}
       </ul>
     </section>
   );

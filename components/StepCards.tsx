@@ -29,7 +29,7 @@ function UploadCard({ locale }: { locale: Locale }) {
           </div>
         </div>
       </div>
-      <div className="step-float absolute start-[9%] top-[40%] w-[34%]">
+      <div className="step-float absolute start-[3%] top-[52%] w-[30%]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/media/hero-abudhabi.jpg" alt="" width={140} height={100} loading="lazy" className="aspect-[1.3] w-full rotate-[-8deg] rounded-xl border-[5px] border-white object-cover shadow-xl" />
         <span className="absolute -top-3 start-[-6px] grid size-7 place-items-center rounded-full bg-gold text-xs font-bold text-white shadow">1</span>
