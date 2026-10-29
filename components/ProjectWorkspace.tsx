@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { zipSync } from "fflate";
 import { Icon } from "./Icon";
+import { ProjectSkeleton } from "./AppSkeletons";
 import { SHOTS, delBlob, getBlob, getProject, newScene, putBlob, saveProject, uid, type Asset, type Character, type Project, type Scene } from "@/lib/projects";
 import type { Locale } from "@/lib/i18n";
 
@@ -64,7 +65,7 @@ export function ProjectWorkspace({ locale, id }: { locale: Locale; id: string })
   }, [t.saved]);
 
   const total = useMemo(() => p?.scenes.reduce((n, s) => n + (Number(s.duration) || 0), 0) ?? 0, [p]);
-  if (p === undefined) return <p className="p-8 text-white/50">{t.loading}</p>;
+  if (p === undefined) return <ProjectSkeleton locale={locale} />;
   if (p === null) return <p className="p-8 text-white/60">{t.missing} <Link className="text-gold underline" href={`/${locale}/app/projects`}>{t.back}</Link></p>;
 
   const asset = (aid: string) => p.assets.find((a) => a.id === aid);

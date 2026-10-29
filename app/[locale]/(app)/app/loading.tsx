@@ -1,9 +1,10 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { Suspense } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Bar, RouteSkeleton } from "@/components/AppSkeletons";
 import { FeedSkeleton } from "@/components/Feed";
-
-const Bar = ({ className }: { className: string }) => <div className={`skeleton ${className}`} />;
+import type { Locale } from "@/lib/i18n";
 
 // Mirrors app/[locale]/(app)/app/page.tsx element for element (same wrappers, spacing, grid columns, aspect ratios and text line heights).
 const Banner = ({ buttons = 1 }: { buttons?: number }) => (
@@ -52,14 +53,21 @@ function HomeSkeleton() {
   );
 }
 
+// useSearchParams (active tab / view) needs a Suspense boundary; it only ever suspends during static prerender, never in a live navigation.
 export default function Loading() {
+  return <Suspense fallback={null}><RouteLoading /></Suspense>;
+}
+
+function RouteLoading() {
   const path = usePathname();
-  if (/^\/(ar|en)\/app\/?$/.test(path)) return <HomeSkeleton />;
-  const four = /\/app\/(reshoot|video)/.test(path);
-  return (
+  const sp = useSearchParams();
+  const m = /^\/(ar|en)\/app(?:\/([^/]+))?(?:\/([^/]+))?\/?$/.exec(path);
+  if (!m || !m[2]) return <HomeSkeleton />;
+  const node = RouteSkeleton({ route: m[2], locale: m[1] as Locale, sp, id: m[3] });
+  return <>{node ?? (
     <div aria-busy="true">
       <header className="flex h-[76px] items-center px-5 md:px-8"><Bar className="h-6 w-24 rounded-md" /></header>
-      <main className="px-5 pb-72 md:px-8"><FeedSkeleton max={four ? 4 : 5} /></main>
+      <main className="px-5 pb-72 md:px-8"><FeedSkeleton max={5} /></main>
     </div>
-  );
+  )}</>;
 }
