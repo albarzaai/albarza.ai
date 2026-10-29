@@ -30,6 +30,7 @@ jobs:
           git config user.email "actions@github.com"
           git add public/media/hero-abudhabi*.mp4 public/media/hero-abudhabi.jpg
           git commit -m "Add Abu Dhabi hero video (Veo)"
+          git pull --rebase origin "$GITHUB_REF_NAME"
           git push
 
-# retry 10: 1080p
+# retry 11: rebase before push
