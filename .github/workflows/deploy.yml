@@ -50,7 +50,8 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         run: |
-          INTERNAL_AUTH_SECRET=$(openssl rand -hex 32)
+          # Derived (never stored) so a cancelled deploy can never leave the API and the site with different secrets.
+          INTERNAL_AUTH_SECRET=$(printf 'albarza-internal:%s' "$CLOUDFLARE_API_TOKEN" | sha256sum | cut -d' ' -f1)
           echo "::add-mask::$INTERNAL_AUTH_SECRET"
           printf '%s' "$GEMINI_API_KEY" | npx wrangler secret put GEMINI_API_KEY
           printf '%s' "$INTERNAL_AUTH_SECRET" | npx wrangler secret put INTERNAL_AUTH_SECRET
