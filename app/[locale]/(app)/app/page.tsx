@@ -32,12 +32,6 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       <main className="mx-auto max-w-[1100px] px-5 pb-16 md:px-4">
         <Banner n={3} video="home-banner" locale={locale} badge={{ icon: "flame", label: a.hot }} title={a.banner1T} desc={a.banner1D} buttons={[[a.banner1B, "video"]]} />
         <Cards cols="grid-cols-2 md:grid-cols-5" items={[{ t: a.hCards1, d: a.hCards1d, n: 2, v: "home-c1" }, { t: a.hCards2, d: a.hCards2d, n: 5, v: "home-c2" }, { t: a.hCards3, d: a.hCards3d, n: 8, v: "home-c3" }, { t: a.hCards4, d: a.hCards4d, n: 11, v: "home-c4" }, { t: a.hCards5, d: a.hCards5d, n: 4, v: "home-c5" }]} />
-        <Banner n={7} locale={locale} badge={{ icon: "star", label: a.featured }} title={locale === "ar" ? "نقدّم لكم نماذج الصور" : "Introducing Image Models"} desc={a.createImage} buttons={[[a.createImage, "image"]]} />
-        <Cards cols="grid-cols-1 md:grid-cols-3" items={[{ t: a.studio1, d: a.studio1d, n: 6 }, { t: a.studio2, d: a.studio2d, n: 9 }, { t: a.studio3, d: a.studio3d, n: 12 }]} />
-        <Banner n={10} locale={locale} badge={{ icon: "star", label: a.featured }} title={a.banner2T} desc={a.banner2D} buttons={[[a.banner2B, "image"]]} />
-        <Cards cols="grid-cols-1 md:grid-cols-3" items={[{ t: a.news1, d: a.news1d, n: 1 }, { t: a.news2, d: a.news2d, n: 3 }, { t: a.news3, d: a.news3d, n: 5 }]} />
-        <Banner n={12} locale={locale} badge={{ icon: "arrow", label: a.trending }} title={a.banner3T} desc={a.banner3D} buttons={[[a.banner3B1, "voice"], [a.banner3B2, "music"]]} />
-        <Cards cols="grid-cols-2 md:grid-cols-4" items={[{ t: a.voiceCards1, d: "", n: 2 }, { t: a.voiceCards2, d: "", n: 4 }, { t: a.voiceCards3, d: "", n: 6 }, { t: a.voiceCards4, d: "", n: 8 }]} />
       </main>
     </>
   );
