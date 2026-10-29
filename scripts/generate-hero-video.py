@@ -22,6 +22,14 @@ def req(method, url, body=None):
         return e.code, e.read()
 
 
+code, raw = req("GET", f"{BASE}/models?pageSize=200")
+avail = json.loads(raw).get("models", []) if code == 200 else []
+vid = [m for m in avail if "predictLongRunning" in m.get("supportedGenerationMethods", []) or any(k in m["name"] for k in ("veo", "omni", "video"))]
+print("::notice title=video-models::" + ", ".join(f"{m['name'].split('/')[-1]}[{','.join(m.get('supportedGenerationMethods', []))}]" for m in vid)[:900])
+for m in vid:
+    n = m["name"].split("/")[-1]
+    if n not in MODELS and "predictLongRunning" in m.get("supportedGenerationMethods", []):
+        MODELS.insert(0, n)
 op = None
 errors = []
 for m in MODELS:
