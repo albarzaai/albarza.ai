@@ -7,7 +7,7 @@ export function Hero({ locale }: { locale: Locale }) {
   const d = t(locale);
   return (
     <section className="pattern relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(189,155,95,.35),transparent)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_0%,#f8e9cc,transparent)]" />
       <div className="section relative flex flex-col items-center py-24 text-center md:py-32">
         <h1 className="max-w-3xl text-4xl font-bold leading-tight md:text-5xl">{d.heroTitle}</h1>
         <p className="mt-5 max-w-2xl text-muted">{d.heroSub}</p>
