@@ -41,7 +41,7 @@ function UploadCard({ locale }: { locale: Locale }) {
 
 function PromptCard({ locale }: { locale: Locale }) {
   return (
-    <div className={`${shell} p-7`}>
+    <div className={`${shell} p-7 text-start`}>
       <p className="text-[21px] font-semibold leading-[1.4] tracking-tight text-ink/40">
         {PROMPT[locale].map(([text, hot], i) => <span key={i} className={hot ? "text-ink" : undefined}>{text}</span>)}
         <span className="step-caret ms-0.5 inline-block h-[1em] w-[2px] translate-y-[3px] bg-gold" />
