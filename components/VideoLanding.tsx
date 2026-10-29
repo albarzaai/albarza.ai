@@ -35,9 +35,10 @@ export function VideoHero({ locale }: { locale: Locale }) {
   return (
     <section className="relative flex min-h-[620px] items-center justify-center overflow-hidden bg-black md:h-[760px]">
       <HeroVideo />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/10" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(8,6,3,0.62),rgba(8,6,3,0.4)_55%,transparent_80%)]" />
-      <FontReveal className="relative z-10 mx-auto flex w-full max-w-[1000px] flex-col items-center px-5 pt-16 text-center">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[220px] bg-gradient-to-b from-transparent via-[#fdf8ec]/55 to-[var(--color-bg)]" />
+      <FontReveal className="relative z-10 mx-auto flex w-full max-w-[1000px] flex-col items-center px-5 pb-16 pt-16 text-center">
         <h1 className="max-w-[760px] text-balance text-[36px] font-bold leading-[1.12] tracking-tight text-white md:text-[60px] [text-shadow:0_2px_24px_rgba(0,0,0,0.5)]">{d.heroTitle}</h1>
         <p className="mt-5 max-w-[560px] text-balance text-[15px] leading-7 text-white/90 md:text-lg md:leading-8 [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">{d.heroSub}</p>
         <form action={`/${locale}/signup`} className="mt-10 w-full max-w-[860px] rounded-3xl border border-ink/10 bg-white/75 p-4 text-start shadow-sm backdrop-blur-md">
