@@ -1,0 +1,41 @@
+name: Generate login video
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/serene-carson-k64lwr]
+    paths: [".github/workflows/login-video.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install requests and ffmpeg
+        run: |
+          python3 -m pip install --quiet requests
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Generate with Atlas Cloud
+        env:
+          ATLASCLOUD_API_KEY: ${{ secrets.ATLASCLOUD_API_KEY }}
+          VIDEO_SLUG: login-dubai
+          VIDEO_PROMPT: >-
+            Fast-paced cinematic highlight reel of a desert crossing in Dubai, a new shot every one second with hard cuts and energetic rhythm,
+            ten shots in total: a camel caravan walking along a sunlit dune ridge; a 4x4 SUV carving through sand at speed with a spray of golden dust;
+            close-up of camel feet in rippled sand; a falconer on the dunes with a falcon taking flight; wind-blown sand crest at sunrise in macro detail;
+            a Land Cruiser driving along a dune crest at golden hour; drone shot over endless orange dunes; a Bedouin camp with glowing lanterns at dusk;
+            a rider on a horse galloping across the sand; the Dubai skyline with Burj Khalifa glowing on the horizon beyond the desert at sunset.
+            Warm gold and cream color grade, shallow depth of field, dynamic camera moves, photorealistic, no text, no logos, no subtitles.
+        run: python3 scripts/generate-hero-video.py
+      - name: Commit video
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add public/media/login-dubai*.mp4 public/media/login-dubai.jpg
+          git commit -m "Add Dubai desert login video (Atlas Cloud Seedance)"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push

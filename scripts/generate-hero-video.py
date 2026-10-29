@@ -6,7 +6,8 @@ KEY = os.environ.get("GEMINI_API_KEY", "")
 ATLAS = os.environ.get("ATLASCLOUD_API_KEY", "")
 BASE = "https://generativelanguage.googleapis.com/v1beta"
 MODELS = ["gemini-omni-1.1-flash", "gemini-omni-flash-preview"]
-PROMPT = (
+SLUG = os.environ.get("VIDEO_SLUG", "hero-abudhabi")
+PROMPT = os.environ.get("VIDEO_PROMPT") or (
     "Cinematic slow aerial drone shot of Abu Dhabi at golden hour: the white marble domes and minarets of Sheikh Zayed Grand Mosque "
     "reflecting in still water, then gliding along the Corniche skyline with glass towers glowing in warm gold and cream light. "
     "Smooth, steady camera motion, soft haze, elegant and luxurious mood, photorealistic, no text, no logos, no people in close-up."
@@ -101,10 +102,10 @@ open("/tmp/raw.mp4", "wb").write(data)
 def enc(out, width, crf, maxrate):
     subprocess.run(["ffmpeg", "-y", "-i", "/tmp/raw.mp4", "-an", "-vf", f"scale='min({width},iw)':-2:flags=lanczos,fps=24", "-c:v", "libx264", "-crf", str(crf),
                     "-preset", "slow", "-maxrate", maxrate, "-bufsize", "2M", "-profile:v", "high", "-movflags", "+faststart", "-pix_fmt", "yuv420p", out], check=True)
-enc("public/media/hero-abudhabi-hd.mp4", 1920, 23, "3M")
-enc("public/media/hero-abudhabi.mp4", 1280, 24, "1.6M")
-enc("public/media/hero-abudhabi-sm.mp4", 720, 26, "0.8M")
-subprocess.run(["ffmpeg", "-y", "-i", "/tmp/raw.mp4", "-frames:v", "1", "-vf", "scale='min(1920,iw)':-2:flags=lanczos", "-q:v", "3", "public/media/hero-abudhabi.jpg"], check=True)
+enc("public/media/" + SLUG + "-hd.mp4", 1920, 23, "3M")
+enc("public/media/" + SLUG + ".mp4", 1280, 24, "1.6M")
+enc("public/media/" + SLUG + "-sm.mp4", 720, 26, "0.8M")
+subprocess.run(["ffmpeg", "-y", "-i", "/tmp/raw.mp4", "-frames:v", "1", "-vf", "scale='min(1920,iw)':-2:flags=lanczos", "-q:v", "3", "public/media/" + SLUG + ".jpg"], check=True)
 for f in ("hd", "", "sm"):
-    n = "public/media/hero-abudhabi" + ("-" + f if f else "") + ".mp4"
+    n = "public/media/" + SLUG + "" + ("-" + f if f else "") + ".mp4"
     print(n, os.path.getsize(n), "bytes")
