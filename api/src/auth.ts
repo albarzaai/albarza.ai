@@ -26,7 +26,8 @@ const DAY = 86_400_000;
 const SESSION_TTL = 30 * DAY;
 const MAX_FAILS = 5;
 const LOCK_MS = 15 * 60_000;
-const ITER = (c: C) => Math.min(Math.max(Number(c.env.PBKDF2_ITERATIONS) || 210_000, 100_000), 600_000);
+// Workers' WebCrypto refuses PBKDF2 above 100,000 iterations (it throws, so sign-up and login would fail), so that is the ceiling.
+const ITER = (c: C) => Math.min(Number(c.env.PBKDF2_ITERATIONS) || 100_000, 100_000);
 
 export const auth = new Hono<{ Bindings: Env; Variables: { uid?: string; sid?: string } }>();
 
