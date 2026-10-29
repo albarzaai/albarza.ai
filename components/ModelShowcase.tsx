@@ -3,11 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { models } from "@/lib/content";
-import { HERO_POSTER } from "./HeroVideo";
 import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/dict";
 
-const SRC = "/media/hero-abudhabi.mp4";
 const Arrow = () => (
   <svg width="14" height="14" fill="none" viewBox="0 0 14 14" className="size-3.5 rtl:rotate-180" aria-hidden><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" d="M8.166 3.208 11.958 7l-3.792 3.792M11.666 7H2.041" /></svg>
 );
@@ -20,7 +18,13 @@ export function ModelShowcase({ locale }: { locale: Locale }) {
   const m = models[i];
   const more = (n: string) => (locale === "ar" ? `المزيد عن ${n}` : `More on ${n}`);
   const tryIt = (n: string) => (locale === "ar" ? `جرّب ${n}` : `Try ${n}`);
-  const video = <video src={SRC} poster={HERO_POSTER} autoPlay muted loop playsInline preload="metadata" aria-hidden className="absolute inset-0 size-full object-cover object-center" />;
+  const video = (
+    <video poster="/media/showcase-gulf.jpg" autoPlay muted loop playsInline preload="metadata" aria-hidden className="absolute inset-0 size-full object-cover object-center">
+      <source src="/media/showcase-gulf-sm.mp4" type="video/mp4" media="(max-width: 767px)" />
+      <source src="/media/showcase-gulf-hd.mp4" type="video/mp4" media="(min-width: 1280px)" />
+      <source src="/media/showcase-gulf.mp4" type="video/mp4" />
+    </video>
+  );
   return (
     <div className="mt-6 text-start lg:mt-[70px]">
       {/* desktop */}
