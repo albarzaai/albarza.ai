@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { FeedSkeleton } from "@/components/Feed";
 
 const Bar = ({ className }: { className: string }) => <div className={`skeleton ${className}`} />;
 
@@ -52,12 +53,13 @@ function HomeSkeleton() {
 }
 
 export default function Loading() {
-  const home = /^\/(ar|en)\/app\/?$/.test(usePathname());
-  if (home) return <HomeSkeleton />;
+  const path = usePathname();
+  if (/^\/(ar|en)\/app\/?$/.test(path)) return <HomeSkeleton />;
+  const four = /\/app\/(reshoot|video)/.test(path);
   return (
-    <div className="p-5 md:p-8" aria-busy="true">
-      <div className="skeleton mb-6 h-8 w-48 rounded-xl" />
-      <div className="columns-2 gap-3 md:columns-4">{Array.from({ length: 8 }, (_, i) => <div key={i} className={`skeleton mb-3 rounded-2xl ${i % 3 === 0 ? "h-72" : "h-44"}`} />)}</div>
+    <div aria-busy="true">
+      <header className="flex h-[76px] items-center px-5 md:px-8"><Bar className="h-6 w-24 rounded-md" /></header>
+      <main className="px-5 pb-72 md:px-8"><FeedSkeleton max={four ? 4 : 5} /></main>
     </div>
   );
 }
