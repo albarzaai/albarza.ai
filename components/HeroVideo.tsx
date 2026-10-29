@@ -14,7 +14,7 @@ export function HeroVideo() {
     if (v && !v.paused && v.readyState >= 3) setReady(true);
   }, []);
   return (
-    <>
+    <div className="absolute inset-x-0 bottom-0 top-[76px] overflow-hidden">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={HERO_POSTER} alt="" fetchPriority="high" decoding="sync" className="absolute inset-0 h-full w-full object-cover" />
       <video ref={ref} poster={HERO_POSTER} autoPlay muted loop playsInline preload="auto" onPlaying={() => setReady(true)}
@@ -22,6 +22,6 @@ export function HeroVideo() {
         <source src="/media/hero-abudhabi-sm.mp4" type="video/mp4" media="(max-width: 767px)" />
         <source src="/media/hero-abudhabi.mp4" type="video/mp4" />
       </video>
-    </>
+    </div>
   );
 }

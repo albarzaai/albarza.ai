@@ -10,7 +10,7 @@ export function Hero({ locale, variant = "video" }: { locale: Locale; variant?: 
   const d = t(locale);
   preload(HERO_POSTER, { as: "image", fetchPriority: "high" });
   return (
-    <section className="relative flex min-h-[100svh] items-end justify-center overflow-hidden bg-[#fdf8ec]">
+    <section className="relative flex min-h-[100svh] items-end justify-center overflow-hidden bg-black">
       <HeroVideo />
       <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-black/45" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(8,6,3,0.62),rgba(8,6,3,0.4)_55%,transparent_80%)]" />
