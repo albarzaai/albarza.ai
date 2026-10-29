@@ -62,7 +62,7 @@ def atlas_video():
     else:
         return None
     pid = d["data"]["id"]
-    for _ in range(90):
+    for _ in range(240):
         time.sleep(5)
         code, d = a("GET", f"https://api.atlascloud.ai/api/v1/model/prediction/{pid}")
         st = d.get("data", {}).get("status")
