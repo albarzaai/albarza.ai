@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HERO_LIGHT, gallery } from "@/lib/media";
+import { Carousel } from "./Carousel";
 import { StepCards } from "./StepCards";
 import { ModelShowcase } from "./ModelShowcase";
 import { Icon } from "./Icon";
@@ -111,14 +112,17 @@ export function Community({ locale }: { locale: Locale }) {
   return (
     <section className="section">
       <div className="text-center"><H2>{d.communityTitle}</H2><p className="mx-auto mt-4 max-w-2xl text-muted">{d.communitySub}</p></div>
-      <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {testimonials.map((x) => (
-          <figure key={x.t.en} className="card p-6">
-            <h3 className="font-semibold">{x.t[locale]}</h3>
-            <p className="mt-3 text-sm leading-6 text-muted">{x.d[locale]}</p>
-            <figcaption className="mt-5 flex items-center gap-3 text-sm"><span className="grid h-9 w-9 place-items-center rounded-full bg-gold text-black"><Icon n="mic" size={14} /></span>{x.n[locale]}</figcaption>
-          </figure>
-        ))}
+      <div className="mt-12">
+        <Carousel label={d.communityTitle} gap="gap-4">
+          {testimonials.map((x) => (
+            <figure key={x.t.en} className="flex min-h-[260px] w-[306px] shrink-0 snap-start flex-col rounded-2xl border border-line bg-surface p-5 text-start">
+              <div className="flex gap-0.5 text-gold" aria-hidden>{"★★★★★".split("").map((c, k) => <span key={k}>{c}</span>)}</div>
+              <h3 className="mt-3 text-base font-semibold leading-snug">{x.t[locale]}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">{x.d[locale]}</p>
+              <figcaption className="mt-auto flex items-center gap-3 pt-5 text-sm"><span className="grid size-9 place-items-center rounded-full bg-gradient-to-br from-gold to-[#8a6a2a] text-sm font-semibold text-white">{x.n[locale].trim().charAt(0)}</span>{x.n[locale]}</figcaption>
+            </figure>
+          ))}
+        </Carousel>
       </div>
       <p className="mt-4 text-center text-xs text-muted/60">{d.sampleNote}</p>
     </section>
@@ -171,7 +175,7 @@ export function Pricing({ locale }: { locale: Locale }) {
 export function Faq({ locale }: { locale: Locale }) {
   const d = t(locale);
   return (
-    <section className="section max-w-3xl">
+    <section className="section max-w-[680px]">
       <div className="text-center"><H2>{d.faqTitle}</H2></div>
       <div className="mt-10 divide-y divide-line border-y border-line">
         {faqs.map((f, i) => (
@@ -191,7 +195,7 @@ export function Cta({ locale }: { locale: Locale }) {
     <section className="relative overflow-hidden py-28 text-center">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={HERO_LIGHT} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-60" />
-      <div className="relative"><H2>{d.designTitle}</H2><p className="mt-3 text-ink/80">{d.designSub}</p><div className="mt-8"><Start locale={locale} label={d.signupBtn} /></div></div>
+      <div className="relative px-5"><h2 className="text-balance text-[32px] font-bold leading-tight tracking-tight md:text-5xl">{d.designTitle}</h2><p className="mx-auto mt-4 max-w-xl text-base text-ink/80">{d.designSub}</p><div className="mt-8"><Start locale={locale} label={d.signupBtn} /></div></div>
     </section>
   );
 }
