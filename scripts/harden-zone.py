@@ -32,6 +32,8 @@ def step(name, res):
     print(("ok   " if ok else "FAIL ") + name + ("" if ok else " -> " + "; ".join(e.get("message", "") for e in res.get("errors", []))))
     if not ok:
         failed.append(name)
+        msg = "; ".join(e.get("message", "") for e in res.get("errors", []))
+        print(f"::error title=harden-zone::{name}: {msg}")
 
 
 zones = call("GET", f"/zones?name={ZONE_NAME}")
@@ -87,4 +89,4 @@ if not res.get("success"):
 step("Managed WAF ruleset", res)
 
 print("\nfailed steps:", failed or "none")
-sys.exit(0)
+sys.exit(1 if failed else 0)
