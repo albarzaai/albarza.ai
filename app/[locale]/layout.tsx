@@ -5,8 +5,8 @@ import { dirOf, isLocale, locales } from "@/lib/i18n";
 import { t } from "@/lib/dict";
 import "../globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const kufi = Noto_Kufi_Arabic({ subsets: ["arabic"], variable: "--font-kufi", display: "swap" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "block", preload: true });
+const kufi = Noto_Kufi_Arabic({ subsets: ["arabic"], variable: "--font-kufi", display: "block", preload: true });
 
 export const generateStaticParams = () => locales.map((locale) => ({ locale }));
 

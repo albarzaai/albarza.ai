@@ -80,6 +80,19 @@ rl = [{"description": "Rate limit per IP", "action": "block", "enabled": True,
 step("Rate limiting", call("PUT", f"/zones/{zid}/rulesets/phases/http_ratelimit/entrypoint", {"rules": rl}))
 
 # Managed WAF rulesets
+# Speed: compression, protocols, tiered cache.
+for key, value in {"brotli": "on", "early_hints": "on", "http3": "on", "0rtt": "on", "ipv6": "on"}.items():
+    step(f"setting {key}={value}", call("PATCH", f"/zones/{zid}/settings/{key}", {"value": value}))
+step("Tiered cache", call("PATCH", f"/zones/{zid}/argo/tiered_caching", {"value": "on"}))
+
+# Edge-cache pages for an hour. Static assets keep their own headers; the cache is purged after every deploy.
+step("Cache rule (HTML at the edge)", call("PUT", f"/zones/{zid}/rulesets/phases/http_request_cache_settings/entrypoint", {"rules": [{
+    "description": "Cache site pages at the edge",
+    "expression": '(http.host in {"albarza.ai" "www.albarza.ai"}) and not starts_with(http.request.uri.path, "/_next/") and not starts_with(http.request.uri.path, "/media/") and not starts_with(http.request.uri.path, "/brand/") and not starts_with(http.request.uri.path, "/api/")',
+    "action": "set_cache_settings", "enabled": True,
+    "action_parameters": {"cache": True, "edge_ttl": {"mode": "override_origin", "default": 3600}, "browser_ttl": {"mode": "override_origin", "default": 0}}}]}))
+step("Purge cache", call("POST", f"/zones/{zid}/purge_cache", {"purge_everything": True}))
+
 # Pro plans and above use the full Cloudflare Managed Ruleset; free plans get the Free Managed Ruleset.
 managed = lambda rid, name: call("PUT", f"/zones/{zid}/rulesets/phases/http_request_firewall_managed/entrypoint", {"rules": [
     {"action": "execute", "expression": "true", "description": name, "action_parameters": {"id": rid}}]})
