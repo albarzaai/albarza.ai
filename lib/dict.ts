@@ -1,4 +1,5 @@
 import type { Locale } from "./i18n";
+import { arMore, enMore } from "./dict-more";
 
 type T = Record<string, string>;
 const ar: T = {
@@ -123,20 +124,9 @@ const en: T = {
   currentPlan: "Current plan", invoices: "Invoices", free: "Free",
 };
 
-export const dict = { ar, en };
+export const dict = { ar: { ...ar, ...arMore }, en: { ...en, ...enMore } };
 export const t = (l: Locale) => dict[l];
 export type Dict = T;
-
-export const models = [
-  ["sora-2", "Sora 2", { ar: "نموذج نص إلى فيديو واقعي يركز على السرد والحركة المتناسقة.", en: "High-end text-to-video focused on realism and storytelling with coherent motion." }],
-  ["sora-2-pro", "Sora 2 Pro", { ar: "أداء أعلى بدقة بصرية واتساق أقوى لنتائج جاهزة للإنتاج.", en: "Higher fidelity, stronger consistency and refined motion for production-ready results." }],
-  ["veo-3-1", "Veo 3.1", { ar: "نموذج سينمائي بتفاصيل واقعية واستمرارية مشهد قوية.", en: "Cinematic realism, fluid motion and strong scene continuity." }],
-  ["veo-3-1-fast", "Veo 3.1 Fast", { ar: "نسخة أسرع للأفكار والتجارب السريعة.", en: "A faster Veo for quick ideation and iteration." }],
-  ["seedance-2", "Seedance 2.0", { ar: "تسلسلات سينمائية متعددة الوسائط مع صوت متزامن.", en: "Multimodal cinematic sequences with synced sound and multi-shot continuity." }],
-  ["kling-o3", "Kling O3", { ar: "فيزياء واقعية ولقطات متعددة وصوت متزامن.", en: "True-to-life physics, multi-shot continuity and synced audio." }],
-  ["wan-2-6", "Wan 2.6", { ar: "نص وصورة إلى فيديو مع صوت أصلي وتحكم دقيق.", en: "Text and image to video with native audio and precise control." }],
-  ["grok-imagine", "Grok Imagine", { ar: "مرئيات ديناميكية وفهم قوي للوصف.", en: "Dynamic visuals and strong prompt understanding." }],
-] as const;
 
 export const plans = [
   { id: "starter", price: 0, credits: 50 },

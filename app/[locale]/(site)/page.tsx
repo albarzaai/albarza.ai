@@ -1,5 +1,5 @@
 import { Hero } from "@/components/Hero";
-import { AppPromo, Faq, HowTo, Models, Pricing, Takeaways, Toolkit, Why } from "@/components/Sections";
+import { AppPromo, Community, Cta, Faq, Features, HowTo, Models, Takeaways, Toolkit, TryModel, Why } from "@/components/Sections";
 import type { Locale } from "@/lib/i18n";
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
@@ -9,12 +9,15 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <Hero locale={locale} />
       <Models locale={locale} />
       <HowTo locale={locale} />
+      <Features locale={locale} />
       <Why locale={locale} />
+      <TryModel locale={locale} />
       <Toolkit locale={locale} />
+      <Community locale={locale} />
       <AppPromo locale={locale} />
       <Takeaways locale={locale} />
-      <Pricing locale={locale} />
       <Faq locale={locale} />
+      <Cta locale={locale} />
     </main>
   );
 }

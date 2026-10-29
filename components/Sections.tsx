@@ -1,30 +1,22 @@
 import Link from "next/link";
-import { models, plans, planName, t } from "@/lib/dict";
+import { ModelShowcase } from "./ModelShowcase";
+import { Icon } from "./Icon";
+import { faqs, features, testimonials, toolTitles } from "@/lib/content";
+import { plans, planName, t } from "@/lib/dict";
 import { aed, type Locale } from "@/lib/i18n";
 
-const Start = ({ locale }: { locale: Locale }) => <Link href={`/${locale}/signup`} className="btn btn-gold">{t(locale).startCreating}</Link>;
+const Start = ({ locale, label }: { locale: Locale; label?: string }) => <Link href={`/${locale}/signup`} className="btn btn-gold">{label ?? t(locale).startCreating}</Link>;
 const img = (n: number) => `/media/gallery-${((n - 1) % 12) + 1}.svg`;
+const H2 = ({ children }: { children: React.ReactNode }) => <h2 className="text-3xl font-semibold leading-tight md:text-[40px]">{children}</h2>;
 
 export function Models({ locale }: { locale: Locale }) {
   const d = t(locale);
   return (
-    <section id="models" className="section text-center">
-      <h2 className="text-3xl font-semibold md:text-4xl">{d.modelsTitle}</h2>
+    <section className="section text-center">
+      <H2>{d.modelsTitle}</H2>
       <p className="mx-auto mt-4 max-w-2xl text-muted">{d.modelsSub}</p>
       <div className="mt-6"><Start locale={locale} /></div>
-      <div className="relative mt-12 min-h-[480px] overflow-hidden rounded-3xl border border-line text-start">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/media/hero.svg" alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="glass relative m-5 w-full max-w-sm rounded-2xl p-6">
-          <p className="mb-4 text-sm font-semibold">{d.navAiVideo}</p>
-          <ul className="space-y-1.5 text-sm">
-            {models.map(([id, name], i) => (
-              <li key={id}><Link href={`/${locale}/signup`} className={`block rounded-lg px-3 py-1.5 transition ${i === 0 ? "bg-white/10 text-gold-hi" : "text-white/70 hover:text-white"}`}>{name}</Link></li>
-            ))}
-          </ul>
-          <p className="mt-5 border-t border-white/10 pt-4 text-xs text-white/70">{models[0][2][locale]}</p>
-        </div>
-      </div>
+      <ModelShowcase locale={locale} />
     </section>
   );
 }
@@ -34,17 +26,33 @@ export function HowTo({ locale }: { locale: Locale }) {
   const steps = [[d.how1, d.how1d], [d.how2, d.how2d], [d.how3, d.how3d]];
   return (
     <section className="section">
-      <h2 className="text-3xl font-semibold md:text-4xl">{d.howTitle}</h2>
-      <p className="mt-4 max-w-2xl text-muted">{d.howSub}</p>
+      <H2>{d.howTitle}</H2>
+      <p className="mt-4 max-w-3xl text-muted">{d.howSub}</p>
       <div className="mt-6"><Start locale={locale} /></div>
       <div className="mt-12 grid gap-8 md:grid-cols-3">
         {steps.map(([title, text], i) => (
           <div key={title}>
             <h3 className="font-semibold"><span className="text-gold">{i + 1}.</span> {title}</h3>
-            <p className="mt-2 text-sm text-muted">{text}</p>
+            <p className="mt-2 text-sm leading-6 text-muted">{text}</p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={img(i + 2)} alt="" width={400} height={300} loading="lazy" className="mt-5 h-56 w-full rounded-2xl border border-line object-cover" />
+            <img src={img(i + 2)} alt="" width={400} height={300} loading="lazy" className="mt-5 h-60 w-full rounded-2xl border border-line object-cover" />
           </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function Features({ locale }: { locale: Locale }) {
+  return (
+    <section className="section pt-0">
+      <div className="grid gap-4 md:grid-cols-2">
+        {features.map((f, i) => (
+          <article key={f.t.en} className="card flex overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={img(i + 6)} alt="" width={400} height={300} loading="lazy" className="hidden h-auto w-40 shrink-0 object-cover sm:block" />
+            <div className="p-6"><h3 className="font-semibold">{f.t[locale]}</h3><p className="mt-2 text-sm leading-6 text-muted">{f.d[locale]}</p></div>
+          </article>
         ))}
       </div>
     </section>
@@ -53,18 +61,31 @@ export function HowTo({ locale }: { locale: Locale }) {
 
 export function Why({ locale }: { locale: Locale }) {
   const d = t(locale);
-  const items = [[d.w1, d.w1d], [d.w2, d.w2d], [d.w3, d.w3d], [d.w4, d.w4d], [d.why5, d.why5d], [d.why6, d.why6d]];
+  const items = [[d.w1, d.w1d], [d.w2, d.w2d], [d.w3, d.w3d], [d.w4, d.w4d], [d.w5, d.w5d], [d.w6, d.w6d]];
   return (
     <section className="section grid gap-12 lg:grid-cols-2">
       <div>
-        <h2 className="text-3xl font-semibold md:text-4xl">{d.whyTitle}</h2>
-        <p className="mt-4 max-w-md text-muted">{d.heroSub}</p>
+        <H2>{d.whyTitle}</H2>
+        <p className="mt-4 max-w-md text-muted">{d.whyIntro}</p>
         <div className="mt-6"><Start locale={locale} /></div>
       </div>
       <div className="space-y-3">
         {items.map(([title, text]) => (
-          <div key={title} className="card p-5"><h3 className="text-sm font-semibold"><span className="text-gold">›</span> {title}</h3><p className="mt-1.5 ps-4 text-xs text-muted">{text}</p></div>
+          <div key={title} className="card p-5"><h3 className="text-sm font-semibold"><span className="text-gold">›</span> {title}</h3><p className="mt-1.5 ps-4 text-xs leading-6 text-muted">{text}</p></div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+export function TryModel({ locale }: { locale: Locale }) {
+  const d = t(locale);
+  return (
+    <section className="section pt-0">
+      <div className="relative overflow-hidden rounded-3xl border border-line px-6 py-20 text-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/media/hero.svg" alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-70" />
+        <div className="relative"><H2>{d.tryModelTitle}</H2><p className="mx-auto mt-4 max-w-xl text-white/80">{d.tryModelSub}</p><div className="mt-6"><Start locale={locale} /></div></div>
       </div>
     </section>
   );
@@ -72,20 +93,17 @@ export function Why({ locale }: { locale: Locale }) {
 
 export function Toolkit({ locale }: { locale: Locale }) {
   const d = t(locale);
-  const tools = [d.t2i, d.i2v, d.lipsync, d.upscale, d.t2v, d.vc];
+  const tools = Object.values(toolTitles);
   return (
-    <section id="tools" className="py-20">
-      <div className="mx-auto max-w-[1200px] px-5 text-center">
-        <h2 className="text-3xl font-semibold md:text-4xl">{d.anyTitle}</h2>
-        <p className="mx-auto mt-4 max-w-2xl text-muted">{d.anySub}</p>
-      </div>
+    <section className="py-20">
+      <div className="mx-auto max-w-[1200px] px-5 text-center"><H2>{d.anyTitle}</H2><p className="mx-auto mt-4 max-w-2xl text-muted">{d.anySub}</p></div>
       <div className="noscroll mt-10 flex snap-x gap-5 overflow-x-auto px-5">
         {tools.map((name, i) => (
-          <article key={name} className="relative h-[420px] w-[78vw] max-w-[620px] shrink-0 snap-center overflow-hidden rounded-3xl border border-line">
+          <article key={name.en} className="relative h-[440px] w-[78vw] max-w-[640px] shrink-0 snap-center overflow-hidden rounded-3xl border border-line">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={img(i + 1)} alt="" width={400} height={500} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
             <div className="glass absolute inset-x-4 bottom-4 flex items-center justify-between rounded-2xl p-4">
-              <h3 className="font-semibold">{name}</h3>
+              <h3 className="font-semibold">{name[locale]}</h3>
               <Link href={`/${locale}/signup`} className="btn btn-white !py-1.5">{d.tryTool}</Link>
             </div>
           </article>
@@ -95,17 +113,32 @@ export function Toolkit({ locale }: { locale: Locale }) {
   );
 }
 
+export function Community({ locale }: { locale: Locale }) {
+  const d = t(locale);
+  return (
+    <section className="section">
+      <div className="text-center"><H2>{d.communityTitle}</H2><p className="mx-auto mt-4 max-w-2xl text-muted">{d.communitySub}</p></div>
+      <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {testimonials.map((x) => (
+          <figure key={x.t.en} className="card p-6">
+            <h3 className="font-semibold">{x.t[locale]}</h3>
+            <p className="mt-3 text-sm leading-6 text-muted">{x.d[locale]}</p>
+            <figcaption className="mt-5 flex items-center gap-3 text-sm"><span className="grid h-9 w-9 place-items-center rounded-full bg-gold text-black"><Icon n="mic" size={14} /></span>{x.n[locale]}</figcaption>
+          </figure>
+        ))}
+      </div>
+      <p className="mt-4 text-center text-xs text-muted/60">{d.sampleNote}</p>
+    </section>
+  );
+}
+
 export function AppPromo({ locale }: { locale: Locale }) {
   const d = t(locale);
   return (
     <section className="section">
-      <h2 className="text-3xl font-semibold md:text-4xl">{d.appTitle}</h2>
+      <H2>{d.appTitle}</H2>
       <p className="mt-4 max-w-xl text-muted">{d.appSub}</p>
-      <p className="mt-2 text-sm text-muted">{d.appAvail}</p>
-      <div className="mt-6 flex flex-wrap gap-3">
-        <span className="btn btn-gold"> {d.ios}</span>
-        <span className="btn btn-ghost">▶ {d.android}</span>
-      </div>
+      <p className="mt-3 text-sm text-gold-hi">{d.appSoon}</p>
     </section>
   );
 }
@@ -113,9 +146,9 @@ export function AppPromo({ locale }: { locale: Locale }) {
 export function Takeaways({ locale }: { locale: Locale }) {
   const d = t(locale);
   return (
-    <section className="section max-w-3xl text-center">
-      <h2 className="text-3xl font-semibold md:text-4xl">{d.takeTitle}</h2>
-      <ul className="mt-8 space-y-3 text-start text-sm text-muted">
+    <section className="section max-w-3xl">
+      <div className="text-center"><H2>{d.takeTitle}</H2></div>
+      <ul className="mt-8 space-y-3 text-sm leading-7 text-muted">
         {[d.k1, d.k2, d.k3, d.k4].map((k) => <li key={k} className="flex gap-3"><span className="text-gold">•</span>{k}</li>)}
       </ul>
     </section>
@@ -125,11 +158,11 @@ export function Takeaways({ locale }: { locale: Locale }) {
 export function Pricing({ locale }: { locale: Locale }) {
   const d = t(locale);
   return (
-    <section id="pricing" className="section">
-      <h2 className="text-center text-3xl font-semibold md:text-4xl">{d.pricingTitle}</h2>
+    <section className="section">
+      <div className="text-center"><H2>{d.pricingTitle}</H2><p className="mt-3 text-sm text-muted">{d.vatNote}</p></div>
       <div className="mt-10 grid gap-4 md:grid-cols-3">
         {plans.map((p) => (
-          <div key={p.id} className={`card p-6 ${"popular" in p ? "!border-gold" : ""}`}>
+          <div key={p.id} className={`card p-7 ${"popular" in p ? "!border-gold" : ""}`}>
             {"popular" in p && <span className="rounded-full bg-gold px-3 py-1 text-xs font-semibold text-black">{d.popular}</span>}
             <h3 className="mt-3 text-xl font-semibold">{planName[p.id][locale]}</h3>
             <p className="mt-4 text-4xl font-bold">{aed(p.price, locale)} <span className="text-sm font-normal text-muted">{d.perMonth}</span></p>
@@ -144,18 +177,28 @@ export function Pricing({ locale }: { locale: Locale }) {
 
 export function Faq({ locale }: { locale: Locale }) {
   const d = t(locale);
-  const qs = [[d.q1, d.a1], [d.q2, d.a2], [d.q3, d.a3], [d.q4, d.a4]];
   return (
     <section className="section max-w-3xl">
-      <h2 className="text-center text-3xl font-semibold md:text-4xl">{d.faqTitle}</h2>
-      <div className="mt-8 divide-y divide-line border-y border-line">
-        {qs.map(([q, a]) => (
-          <details key={q} className="group py-4">
-            <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-medium">{q}<span className="text-gold transition group-open:rotate-45">+</span></summary>
-            <p className="mt-3 text-sm text-muted">{a}</p>
+      <div className="text-center"><H2>{d.faqTitle}</H2></div>
+      <div className="mt-10 divide-y divide-line border-y border-line">
+        {faqs.map((f, i) => (
+          <details key={f.q.en} className="group py-5" open={i === 0}>
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-medium">{f.q[locale]}<span className="text-gold transition group-open:rotate-45">+</span></summary>
+            <p className="mt-3 text-sm leading-7 text-muted">{f.a[locale]}</p>
           </details>
         ))}
       </div>
+    </section>
+  );
+}
+
+export function Cta({ locale }: { locale: Locale }) {
+  const d = t(locale);
+  return (
+    <section className="relative overflow-hidden py-28 text-center">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/media/hero.svg" alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-60" />
+      <div className="relative"><H2>{d.designTitle}</H2><p className="mt-3 text-white/80">{d.designSub}</p><div className="mt-8"><Start locale={locale} label={d.signupBtn} /></div></div>
     </section>
   );
 }

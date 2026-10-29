@@ -5,7 +5,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   const locale = (await params).locale as Locale;
   const d = t(locale);
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <div className="p-5 md:p-8 mx-auto max-w-2xl space-y-8">
       <h1 className="text-2xl font-bold">{d.settings}</h1>
       <form className="card space-y-4 p-6" noValidate>
         <h2 className="font-semibold">{d.account}</h2>

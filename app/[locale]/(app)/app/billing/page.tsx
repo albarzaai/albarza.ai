@@ -5,7 +5,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   const locale = (await params).locale as Locale;
   const d = t(locale);
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <div className="p-5 md:p-8 mx-auto max-w-5xl space-y-8">
       <h1 className="text-2xl font-bold">{d.billing}</h1>
       <div className="card flex items-center justify-between p-5"><span className="text-muted">{d.currentPlan}</span><b>{planName.starter[locale]} · {d.free}</b></div>
       <div className="grid gap-4 md:grid-cols-3">

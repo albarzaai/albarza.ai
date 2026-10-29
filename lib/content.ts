@@ -1,0 +1,59 @@
+import type { Locale } from "./i18n";
+
+type L = Record<Locale, string>;
+const l = (ar: string, en: string): L => ({ ar, en });
+
+export const models: { id: string; name: string; desc: L }[] = [
+  { id: "sora-2", name: "Sora 2", desc: l("نموذج نص إلى فيديو متقدّم يركّز على الواقعية والسرد، ينتج مشاهد مفصّلة بحركة سلسة ومتناسقة.", "High-end text-to-video model focused on realism and storytelling, creating detailed scenes with smooth, coherent motion.") },
+  { id: "sora-2-pro", name: "Sora 2 Pro", desc: l("أداء Sora محسّن بدقة بصرية أعلى واتساق أقوى وحركة مصقولة لنتائج احترافية جاهزة للإنتاج.", "Enhanced Sora performance with higher visual fidelity, stronger consistency, and refined motion for production-ready results.") },
+  { id: "veo-3-1", name: "Veo 3.1", desc: l("نموذج سينمائي من نص إلى فيديو بتفاصيل واقعية وحركة انسيابية واستمرارية مشهد قوية، مثالي للمرئيات المصقولة.", "Cinematic text-to-video model designed for realistic detail, fluid motion, and strong scene continuity.") },
+  { id: "veo-3-1-fast", name: "Veo 3.1 Fast", desc: l("تجربة Veo أسرع للأفكار والتكرار السريع، بحركة وجودة جيدتين ووقت توليد أقل.", "A faster Veo experience built for quick ideation and iteration, with reduced generation time.") },
+  { id: "seedance-2-5", name: "Seedance 2.5", desc: l("أنشئ مشاهد متواصلة مدتها ٣٠ ثانية من النص والصورة والفيديو والصوت، مع توجيه منظّم بوسوم @ وصوت متزامن تلقائياً.", "Generate continuous 30-second scenes from text, image, video, and audio references with auto-synced sound.") },
+  { id: "seedance-2-0", name: "Seedance 2.0", desc: l("نموذج متعدد الوسائط يبني تسلسلات سينمائية من النص والصورة والفيديو والصوت، بصوت متزامن واستمرارية لقطات متعددة.", "Multimodal model that builds cinematic sequences from text, image, video, and audio inputs, with multi-shot continuity.") },
+  { id: "kling-o3", name: "Kling O3", desc: l("النموذج الرائد من Kling بفيزياء واقعية واستمرارية سينمائية متعددة اللقطات وصوت متزامن لمشاهد جاهزة للإنتاج.", "Kling's flagship model with true-to-life physics, multi-shot continuity, and synced audio.") },
+  { id: "kling-2-6", name: "Kling 2.6 Pro", desc: l("نموذج Kling سينمائي بصوت أصلي وتحكم دقيق بالوصف وأداء معبّر للشخصيات لفيديو مصقول.", "Cinematic Kling model with native audio, precise prompt control, and expressive character performance.") },
+  { id: "grok-imagine", name: "Grok Imagine Video", desc: l("نموذج متنوع من نص إلى فيديو بمرئيات ديناميكية وفهم قوي للوصف وحركة سلسة لسير عمل إبداعي سريع.", "Versatile text-to-video model delivering dynamic visuals, strong prompt understanding, and smooth motion.") },
+  { id: "wan-2-6", name: "Wan 2.6", desc: l("نموذج عالي الجودة من نص وصورة إلى فيديو بصوت أصلي وواقعية سينمائية وتحكم دقيق بالوصف.", "High-quality text-to-video and image-to-video model with native audio and cinematic realism.") },
+  { id: "seedance-1-5", name: "Seedance 1.5 Pro", desc: l("نموذج Seedance متوازن بتفاصيل حادة وحركة ثابتة، خيار موثوق للإنشاء اليومي من نص أو صورة.", "Balanced Seedance model with sharp detail and stable motion for everyday text-to-video and image-to-video.") },
+];
+
+export const features = [
+  { t: l("إعادة إنشاء بنقرة واحدة", "One-Click Video Recreation"), d: l("أعد إنتاج المقاطع الرائجة أو المشاهد الشهيرة بأسلوب جديد؛ يلتقط الذكاء الاصطناعي الأسلوب والبنية والفكرة فتوفّر ساعات من المونتاج.", "Recreate trending clips or reimagine iconic scenes — the AI captures style, structure, and intent, so you skip hours of manual editing.") },
+  { t: l("دقة على مستوى الإطار", "Frame-Level Precision"), d: l("وجّه كل لقطة بصور مرجعية وتحكم بالكاميرا؛ تبقى التركيبة والحركة والتفاصيل كما خططت تماماً.", "Guide every shot with reference images and camera controls — composition, motion, and detail stay exactly on brief.") },
+  { t: l("سرد متعدد الكاميرات", "Multi-Camera Storytelling"), d: l("انتقل بين الزوايا والمشاهد مع ثبات الشخصيات والمنتجات والأسلوب من لقطة إلى أخرى.", "Cut between angles and scenes while your characters, products, and style stay consistent shot to shot.") },
+  { t: l("مشاهد حركة عالية التأثير", "High-Impact Motion Scenes"), d: l("أنشئ حركة سريعة وديناميكية — مطاردات وحشود وحركات كاميرا واسعة — من وصف واحد.", "Create fast, dynamic action — chases, crowds, and sweeping camera moves — straight from a single prompt.") },
+];
+
+export const faqs = [
+  { q: l("ما هو مولّد الفيديو في البرزة؟", "What is Albarza's AI video generator?"), a: l("يحوّل مولّد الفيديو في البرزة الوصف النصي والصور إلى مقاطع فيديو قصيرة، ويتيح لك مقارنة عدة نماذج في مساحة عمل واحدة. ابدأ بوصف واضح، وأنشئ نتيجة أولى، ثم حسّن التفصيل الذي يحتاج إلى تعديل.", "Albarza's AI Video Generator turns text prompts and images into short video clips and lets you compare multiple video models in one workspace. Start with a clear brief, generate a first result, and refine the detail that needs improvement.") },
+  { q: l("كيف أنشئ فيديو من صورة؟", "How do I generate a video from an image?"), a: l("ارفع إحدى صورك أو اختر صورة من جلساتك السابقة، ثم أضف وصفاً نصياً وعدّل الإعدادات واضغط إنشاء. يحيي المولّد صورتك وفق تعليماتك، ويمكنك التحكم بالحركة عبر الإطارين الأول والأخير لكل مقطع. يكفي عادةً وصف قصير ومحدد لنتيجة أولى نظيفة.", "Upload a photo or choose an image from your previous sessions, add a text prompt, adjust your settings, and click Generate. You can control the start and end frames of each clip. A short, specific prompt is usually enough for a clean first result.") },
+  { q: l("هل يمكنني استخدام الفيديوهات المُولَّدة في مشاريع تجارية؟", "Can I use AI-generated videos in commercial projects?"), a: l("نعم، بشرط الالتزام بشروط استخدام البرزة وقوانين دولة الإمارات. يدعم المولّد أعمال العملاء ومحتوى التواصل الاجتماعي والإعلانات والحملات التسويقية.", "Yes, as long as they comply with Albarza's Terms of Use and UAE law. Use cases include client work, social media content, ads, and marketing campaigns.") },
+  { q: l("ما الحقوق التي أملكها على الفيديوهات المُولَّدة؟", "What rights do I have over AI-generated videos?"), a: l("تحتفظ بكامل حقوقك على الفيديوهات التي تنشئها، ويمكنك استخدامها وتعديلها وتوزيعها وتحقيق دخل منها وفق الترخيص وشروط الاستخدام. لا تدّعي البرزة ملكية المحتوى الذي تولّده.", "You keep full rights to the videos you create. You are free to use, modify, distribute, and monetize them, subject to the License and Terms of Use. Albarza does not claim ownership of your generated content.") },
+  { q: l("هل تُستخدم مخرجاتي لتدريب نماذج الذكاء الاصطناعي؟", "Are my video outputs used to train AI models?"), a: l("لا. لا تستخدم البرزة أوصافك أو ملفاتك المرفوعة أو فيديوهاتك المُولَّدة لتدريب النماذج، وجميع المخرجات خاصة ومحمية وفق معايير أمنية صارمة وقانون حماية البيانات الشخصية الإماراتي.", "No. Albarza does not use your prompts, uploads, or generated videos to train AI models. All outputs are private and protected under strict security standards and the UAE PDPL.") },
+  { q: l("ما نماذج الفيديو المتاحة؟", "What AI video models are available?"), a: l("تشمل قائمة النماذج حالياً Seedance وVeo وKling وWan وSora وغيرها. قارن المدة والدقة ودعم الصوت وتكلفة الأرصدة، ثم جرّب الوصف نفسه في نموذجين.", "The model picker includes Seedance, Veo, Kling, Wan, Sora, and others. Compare duration, resolution, audio support, and credit cost, then test the same brief in two models.") },
+  { q: l("كيف أكتب وصفاً لفيديو بالذكاء الاصطناعي؟", "How do I write a prompt for an AI video?"), a: l("صِف الموضوع والحركة والمكان وحجم اللقطة وحركة الكاميرا والإضاءة. مثال: «دراجة حمراء تسير على طريق ساحلي عند الشروق، لقطة جانبية متتبّعة، ضوء ذهبي ناعم». راجع المقطع وعدّل تفصيل الحركة أو التأطير الذي لم يطابق ما تريد.", "Describe the subject, action, setting, shot size, camera movement, and lighting. Example: “A red bicycle rolls along a coastal road at sunrise; steady side-tracking shot, soft golden light.” Review the clip and revise the detail that missed your intent.") },
+  { q: l("هل يمكنني تحويل صورة إلى فيديو؟", "Can I turn a photo into an AI video?"), a: l("نعم. أضف الصورة كإطار بداية في مساحة الفيديو، وصِف حركة العنصر واتجاه الكاميرا، واختر النموذج. راجع المعاينة والإعدادات قبل الإنشاء ثم افحص المقطع بحثاً عن تغييرات في العنصر.", "Yes. Add the photo as Start Image in the Video workspace, describe the subject's movement and camera direction, and choose a model. Review the preview and settings before generating.") },
+  { q: l("كيف تُحتسب تكلفة التوليد؟", "How are AI video generations charged?"), a: l("تعرض البرزة تكلفة الأرصدة قبل الإنشاء. اختر النموذج والإعدادات، وراجع المبلغ المعروض، ثم أكّد قبل إرسال الطلب. الأسعار بالدرهم الإماراتي شاملة ضريبة القيمة المضافة.", "Albarza shows the credit cost before you generate. Select the model and settings, review the displayed amount, and confirm. Prices are in AED, inclusive of VAT.") },
+  { q: l("كيف أختار بين نماذج الفيديو؟", "How do I choose between AI video models?"), a: l("استخدم الوصف والنسبة والصورة المصدر نفسها في نموذجين وقارن جودة الحركة وثبات العنصر ودعم الصوت والمدة والدقة والتكلفة. اختر المخرج المناسب للقناة النهائية لا الأطول في المواصفات.", "Use the same short prompt, aspect ratio, and source image in two models. Compare motion quality, subject consistency, audio support, duration, resolution, and cost. Choose the output that fits the final channel.") },
+];
+
+// Sample copy only: replace with real, consented customer quotes before launch (UAE consumer-protection law).
+export const testimonials = [
+  { n: l("صانع محتوى", "Content creator"), t: l("أفضل مولّد فيديو أستخدمه", "The only AI video generator I still use"), d: l("جرّبت معظم الأدوات، وهذه التي بقيت. يفهم الوصف كما أتخيّله، والحركة سلسة دون اهتزاز غريب.", "I've tested nearly every text-to-video tool, and this one stuck. Prompts are interpreted the way I imagine them and motion looks smooth.") },
+  { n: l("مصمم منتجات", "Product designer"), t: l("نتائج صورة إلى فيديو سينمائية فعلاً", "Image-to-video results that look cinematic"), d: l("أحرّك صور المنتجات والمفاهيم، والكاميرا تتحرك بدقة تقريباً كل مرة، والتوليد سريع.", "I animate product shots and concept art, and camera movement lands almost every time. Rendering is fast.") },
+  { n: l("مدير تواصل اجتماعي", "Social media manager"), t: l("من الفكرة إلى المقطع في دقائق", "From idea to finished clip in minutes"), d: l("أحتاج فيديوهات قصيرة يومياً، وقد قلّص هذا المولّد وقت الإنتاج كثيراً.", "I need short-form video daily, and this cut my production time seriously.") },
+  { n: l("مخرج إعلانات", "Ad director"), t: l("أخيراً أداة يوافق عليها عملائي", "An AI video tool my clients approve"), d: l("نكتب السيناريو ونولّد ونرفع الدقة لإعلانات كاملة دون كاميرا.", "We storyboard, generate and upscale entire video ads without touching a camera.") },
+  { n: l("صانعة أفلام", "Filmmaker"), t: l("كل أحدث النماذج في مكان واحد", "All the newest video models in one place"), d: l("بدل ثلاثة اشتراكات أقارن مخرجات أحدث النماذج جنباً إلى جنب في مكان واحد.", "Instead of juggling three subscriptions, I compare outputs from the latest models side by side.") },
+  { n: l("مسوّقة رقمية", "Digital marketer"), t: l("قيمة ممتازة مقابل السعر", "Best value video generator"), d: l("حركة واقعية ومزامنة صوت نظيفة وتصدير حاد حتى على الشاشات الكبيرة.", "Realistic motion, clean audio sync, and exports that look sharp even on a big screen.") },
+];
+
+export const templateTitles: L[] = [
+  l("ليلة دبي", "Dubai Night"), l("رقصة النيون", "Neon Dance"), l("لقطة سينمائية", "Cinematic Shot"), l("صحراء ذهبية", "Golden Desert"),
+  l("مطاردة", "Chase Scene"), l("بورتريه", "Portrait"), l("إعلان منتج", "Product Ad"), l("شروق الشمس", "Sunrise"),
+  l("سباق سيارات", "Car Race"), l("أزياء", "Fashion"), l("طبيعة", "Nature"), l("مستقبل", "Future City"),
+];
+
+export const toolTitles = {
+  video: l("الفيديو", "Video"), image: l("الصور", "Image"), "lip-sync": l("مزامنة الشفاه", "Lip-sync"), upscale: l("رفع الدقة", "Upscale"),
+  "text-to-voice": l("نص إلى صوت", "Text to Voice"), "voice-changer": l("تغيير الصوت", "Voice Changer"),
+} as const;
