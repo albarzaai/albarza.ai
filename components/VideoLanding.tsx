@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { pic } from "@/lib/media";
+import { heroPoster, pic } from "@/lib/media";
 import { Icon } from "./Icon";
 import { FontReveal } from "./FontReveal";
 import { preload } from "react-dom";
-import { HeroVideo, heroPoster } from "./HeroVideo";
+import { HeroVideo } from "./HeroVideo";
 import { StepCards } from "./StepCards";
 import { Carousel } from "./Carousel";
 import { features } from "@/lib/content";

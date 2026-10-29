@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { preload } from "react-dom";
-import { HeroVideo, heroPoster } from "./HeroVideo";
+import { HeroVideo } from "./HeroVideo";
+import { heroPoster } from "@/lib/media";
 import { FontReveal } from "./FontReveal";
 import { Icon } from "./Icon";
 import { t } from "@/lib/dict";

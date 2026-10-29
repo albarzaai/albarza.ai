@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import lqip from "@/lib/lqip.json";
+import { heroPoster } from "@/lib/media";
 
 export const HERO_POSTER = "/media/hero-abudhabi.jpg";
-export const heroPoster = (slug: string) => `/media/${slug}.jpg`;
 
 // Three layers fade in one after another, never to black: an inlined blurred colour wash (instant, part of the HTML),
 // the full poster (the video's own first frame) and finally the video once it is actually playing.
