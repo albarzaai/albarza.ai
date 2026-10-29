@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HERO_LIGHT, gallery } from "@/lib/media";
+import { StepCards } from "./StepCards";
 import { ModelShowcase } from "./ModelShowcase";
 import { Icon } from "./Icon";
 import { faqs, features, testimonials, toolTitles } from "@/lib/content";
@@ -30,16 +31,7 @@ export function HowTo({ locale }: { locale: Locale }) {
       <H2>{d.howTitle}</H2>
       <p className="mt-4 max-w-3xl text-muted">{d.howSub}</p>
       <div className="mt-6"><Start locale={locale} /></div>
-      <div className="mt-12 grid gap-8 md:grid-cols-3">
-        {steps.map(([title, text], i) => (
-          <div key={title}>
-            <h3 className="font-semibold"><span className="text-gold">{i + 1}.</span> {title}</h3>
-            <p className="mt-2 text-sm leading-6 text-muted">{text}</p>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={img(i + 2)} alt="" width={400} height={300} loading="lazy" className="mt-5 h-60 w-full rounded-2xl border border-line object-cover" />
-          </div>
-        ))}
-      </div>
+      <div className="mt-12"><StepCards locale={locale} items={steps.map(([title, desc]) => ({ title, desc }))} /></div>
     </section>
   );
 }

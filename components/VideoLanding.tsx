@@ -3,6 +3,7 @@ import { HERO_LIGHT, gallery } from "@/lib/media";
 import { Icon } from "./Icon";
 import { FontReveal } from "./FontReveal";
 import { HeroVideo } from "./HeroVideo";
+import { StepCards } from "./StepCards";
 import { Carousel } from "./Carousel";
 import { features } from "@/lib/content";
 import { t } from "@/lib/dict";
@@ -55,42 +56,12 @@ export function VideoHero({ locale }: { locale: Locale }) {
   );
 }
 
-const Mock = ({ children }: { children: React.ReactNode }) => <div className="relative grid aspect-[1.13] place-items-center overflow-hidden rounded-2xl border border-line bg-surface-2 p-5">{children}</div>;
-
 export function VideoSteps({ locale }: { locale: Locale }) {
-  const cols: [string, string, React.ReactNode][] = [
-    [c("s1", locale), c("s1d", locale), (
-      <Mock key="1">
-        <div className="w-[64%] rounded-2xl border border-line bg-white/60 p-4 text-center">
-          <div className="grid aspect-[1.3] place-items-center rounded-xl border border-dashed border-ink/20"><Icon n="plus" size={26} className="text-ink/40" /></div>
-          <p className="mt-3 text-xs font-medium">{c("yourImage", locale)}</p>
-        </div>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={gallery(3)} alt="" width={90} height={90} loading="lazy" className="absolute start-[12%] top-[34%] h-[90px] w-[90px] -rotate-6 rounded-lg border-4 border-white object-cover shadow-lg" />
-      </Mock>)],
-    [c("s2", locale), c("s2d", locale), <Mock key="2"><p className="text-[19px] font-semibold leading-snug text-ink/45">{c("prompt", locale)}</p></Mock>],
-    [c("s3", locale), c("s3d", locale), (
-      <Mock key="3">
-        <div className="flex h-full w-full flex-col items-center justify-between gap-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={gallery(5)} alt="" width={300} height={200} loading="lazy" className="h-[68%] w-full rounded-xl object-cover" />
-          <div className="flex gap-3 rounded-xl bg-ink/5 px-4 py-2 text-ink/70"><Icon n="download" size={16} /><Icon n="spark" size={16} /><Icon n="heart" size={16} /><Icon n="trash" size={16} /></div>
-        </div>
-      </Mock>)],
-  ];
+  const items = [["s1", "s1d"], ["s2", "s2d"], ["s3", "s3d"]].map(([k, d]) => ({ title: c(k as keyof typeof copy, locale), desc: c(d as keyof typeof copy, locale) }));
   return (
-    <section className="mx-auto max-w-[1300px] px-5 py-20">
+    <section className="mx-auto max-w-[1440px] px-4 py-20 lg:px-[90px]">
       <h2 className="text-center text-2xl font-bold uppercase tracking-tight text-ink/85 md:text-4xl">{c("steps", locale)}</h2>
-      <div className="mt-10 grid gap-4 md:grid-cols-3">
-        {cols.map(([title, text, mock], i) => (
-          <div key={title} className="text-center">
-            {mock}
-            <span className="mt-7 inline-block rounded-full bg-ink/10 px-3 py-1 text-[11px] font-semibold uppercase">{c("step", locale)} {i + 1}</span>
-            <h3 className="mt-3 text-[17px] font-bold uppercase">{title}</h3>
-            <p className="mx-auto mt-2 max-w-[300px] text-xs leading-5 text-muted">{text}</p>
-          </div>
-        ))}
-      </div>
+      <div className="mt-12"><StepCards locale={locale} items={items} /></div>
     </section>
   );
 }
