@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { HERO } from "@/lib/media";
 import { useState } from "react";
 import { models } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
@@ -12,7 +13,7 @@ export function ModelShowcase({ locale }: { locale: Locale }) {
   return (
     <div className="relative mt-12 min-h-[520px] overflow-hidden rounded-3xl border border-line text-start">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/media/hero.svg" alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={HERO} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
       <div className="glass relative m-5 max-w-sm rounded-2xl p-6">
         <p className="mb-4 text-sm font-semibold">{d.navAiVideo}</p>
         <ul className="space-y-1">

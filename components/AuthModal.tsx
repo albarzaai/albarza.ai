@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { gallery } from "@/lib/media";
 import { useActionState, useState } from "react";
 import { Icon } from "./Icon";
 import { loginAction, signupAction, type FormState } from "@/lib/auth-actions";
@@ -23,7 +24,7 @@ export function AuthModal({ locale, initial }: { locale: Locale; initial: "login
         <Link href={`/${locale}`} aria-label="close" className="absolute end-5 top-5 z-10 grid h-9 w-9 place-items-center rounded-full bg-white/10 hover:bg-white/20"><Icon n="close" size={14} /></Link>
         <div className="relative m-6 hidden overflow-hidden rounded-2xl md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/media/gallery-1.svg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <img src={gallery(1)} alt="" className="absolute inset-0 h-full w-full object-cover" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/logo.svg" alt="" width={56} height={70} className="absolute start-6 top-6" />
         </div>

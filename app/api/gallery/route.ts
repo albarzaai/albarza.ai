@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { gallery } from "@/lib/media";
 import { z } from "zod";
 import { templateTitles } from "@/lib/content";
 
@@ -18,7 +19,7 @@ export async function GET(req: NextRequest) {
   const items = Array.from({ length: PAGE }, (_, i) => {
     const n = cursor + i;
     const title = templateTitles[n % templateTitles.length][locale];
-    return { id: n, kind: kinds[n % 4], src: `/media/gallery-${(n % 12) + 1}.svg`, tall: n % 3 !== 1, title };
+    return { id: n, kind: kinds[n % 4], src: gallery(n + 1), tall: n % 3 !== 1, title };
   }).filter((it) => type === "all" || type === "template" || type === "motion" || it.kind === type);
   const next = cursor + PAGE < 240 ? cursor + PAGE : null;
   return NextResponse.json({ items, next }, { headers: { "Cache-Control": "private, max-age=30" } });

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HERO } from "@/lib/media";
 import { Icon } from "./Icon";
 import { t } from "@/lib/dict";
 import type { Locale } from "@/lib/i18n";
@@ -9,7 +10,7 @@ export function Hero({ locale }: { locale: Locale }) {
   return (
     <section className="relative flex min-h-[100svh] items-end justify-center overflow-hidden">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/media/hero.svg" alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={HERO} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/70" />
       <nav aria-label="breadcrumb" className="absolute start-10 top-[112px] z-10 hidden text-sm text-white/80 md:block">
         <Link href={`/${locale}`}>{d.home}</Link> <span className="px-1">/</span> <span className="text-white">{d.videoGenerator}</span>

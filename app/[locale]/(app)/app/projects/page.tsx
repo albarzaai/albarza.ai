@@ -1,4 +1,5 @@
 import { t } from "@/lib/dict";
+import { gallery } from "@/lib/media";
 import type { Locale } from "@/lib/i18n";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
@@ -16,7 +17,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
         {[1, 2, 3].map((n) => (
           <div key={n} className="card overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`/media/gallery-${n + 6}.svg`} alt="" width={400} height={300} loading="lazy" className="h-36 w-full object-cover" />
+            <img src={gallery(n + 6)} alt="" width={400} height={300} loading="lazy" className="h-36 w-full object-cover" />
             <div className="p-4"><h2 className="font-semibold">{d.newProject} {n}</h2><p className="text-xs text-muted">{d.recent}</p></div>
           </div>
         ))}

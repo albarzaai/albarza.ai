@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HERO, gallery } from "@/lib/media";
 import { ModelShowcase } from "./ModelShowcase";
 import { Icon } from "./Icon";
 import { faqs, features, testimonials, toolTitles } from "@/lib/content";
@@ -6,7 +7,7 @@ import { plans, planName, t } from "@/lib/dict";
 import { aed, type Locale } from "@/lib/i18n";
 
 const Start = ({ locale, label }: { locale: Locale; label?: string }) => <Link href={`/${locale}/signup`} className="btn btn-gold">{label ?? t(locale).startCreating}</Link>;
-const img = (n: number) => `/media/gallery-${((n - 1) % 12) + 1}.svg`;
+const img = gallery;
 const H2 = ({ children }: { children: React.ReactNode }) => <h2 className="text-3xl font-semibold leading-tight md:text-[40px]">{children}</h2>;
 
 export function Models({ locale }: { locale: Locale }) {
@@ -84,7 +85,7 @@ export function TryModel({ locale }: { locale: Locale }) {
     <section className="section pt-0">
       <div className="relative overflow-hidden rounded-3xl border border-line px-6 py-20 text-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/media/hero.svg" alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-70" />
+        <img src={HERO} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-70" />
         <div className="relative"><H2>{d.tryModelTitle}</H2><p className="mx-auto mt-4 max-w-xl text-white/80">{d.tryModelSub}</p><div className="mt-6"><Start locale={locale} /></div></div>
       </div>
     </section>
@@ -197,7 +198,7 @@ export function Cta({ locale }: { locale: Locale }) {
   return (
     <section className="relative overflow-hidden py-28 text-center">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/media/hero.svg" alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-60" />
+      <img src={HERO} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-60" />
       <div className="relative"><H2>{d.designTitle}</H2><p className="mt-3 text-white/80">{d.designSub}</p><div className="mt-8"><Start locale={locale} label={d.signupBtn} /></div></div>
     </section>
   );

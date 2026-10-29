@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { gallery } from "@/lib/media";
 import { Composer } from "@/components/Composer";
 import { Feed } from "@/components/Feed";
 import { Icon } from "@/components/Icon";
@@ -28,7 +29,7 @@ export default async function ToolPage({ params, searchParams }: { params: Promi
               {[[d.tut1, d.tut1d], [d.tut2, d.tut2d], [d.tut3, d.tut3d], [d.tut4, d.tut4d]].map(([title, text], i) => (
                 <article key={title} className="card overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={`/media/gallery-${i + 3}.svg`} alt="" width={400} height={300} loading="lazy" className="aspect-video w-full object-cover" />
+                  <img src={gallery(i + 3)} alt="" width={400} height={300} loading="lazy" className="aspect-video w-full object-cover" />
                   <div className="p-4"><h2 className="font-semibold">{title}</h2><p className="mt-1 text-sm text-muted">{text}</p></div>
                 </article>
               ))}
