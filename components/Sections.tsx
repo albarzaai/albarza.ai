@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HERO_LIGHT, gallery } from "@/lib/media";
+import { gallery, pic } from "@/lib/media";
 import { Carousel } from "./Carousel";
 import { StepCards } from "./StepCards";
 import { ModelShowcase } from "./ModelShowcase";
@@ -44,7 +44,7 @@ export function Features({ locale }: { locale: Locale }) {
         {features.map((f, i) => (
           <article key={f.t.en} className="card flex overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={img(i + 6)} alt="" width={400} height={300} loading="lazy" className="hidden h-auto w-40 shrink-0 object-cover sm:block" />
+            <img src={gallery(i + 1)} alt="" width={400} height={300} loading="lazy" className="hidden h-auto w-40 shrink-0 object-cover sm:block" />
             <div className="p-6"><h3 className="font-semibold">{f.t[locale]}</h3><p className="mt-2 text-sm leading-6 text-muted">{f.d[locale]}</p></div>
           </article>
         ))}
@@ -78,7 +78,7 @@ export function TryModel({ locale }: { locale: Locale }) {
     <section className="section pt-0">
       <div className="relative overflow-hidden rounded-3xl border border-line px-6 py-20 text-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={HERO_LIGHT} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-70" />
+        <img src={pic("bg", "cta")} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-70" />
         <div className="relative"><H2>{d.tryModelTitle}</H2><p className="mx-auto mt-4 max-w-xl text-ink/80">{d.tryModelSub}</p><div className="mt-6"><Start locale={locale} /></div></div>
       </div>
     </section>
@@ -95,7 +95,7 @@ export function Toolkit({ locale }: { locale: Locale }) {
         {tools.map((name, i) => (
           <article key={name.en} className="relative h-[440px] w-[78vw] max-w-[640px] shrink-0 snap-center overflow-hidden rounded-3xl border border-line">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={img(i + 1)} alt="" width={400} height={500} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+            <img src={pic("card", (i % 6) + 1)} alt="" width={400} height={500} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
             <div className="glass absolute inset-x-4 bottom-4 flex items-center justify-between rounded-2xl p-4">
               <h3 className="font-semibold">{name[locale]}</h3>
               <Link href={`/${locale}/signup`} className="btn btn-white !py-1.5">{d.tryTool}</Link>
@@ -194,7 +194,7 @@ export function Cta({ locale }: { locale: Locale }) {
   return (
     <section className="relative overflow-hidden py-28 text-center">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={HERO_LIGHT} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-60" />
+      <img src={pic("bg", "feature")} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-60" />
       <div className="relative px-5"><h2 className="text-balance text-[32px] font-bold leading-tight tracking-tight md:text-5xl">{d.designTitle}</h2><p className="mx-auto mt-4 max-w-xl text-base text-ink/80">{d.designSub}</p><div className="mt-8"><Start locale={locale} label={d.signupBtn} /></div></div>
     </section>
   );

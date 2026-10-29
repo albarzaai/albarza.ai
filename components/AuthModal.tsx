@@ -24,9 +24,9 @@ export function AuthModal({ locale, initial }: { locale: Locale; initial: "login
         <Link href={`/${locale}`} aria-label="close" className="absolute end-5 top-5 z-10 grid h-9 w-9 place-items-center rounded-full bg-ink/10 hover:bg-ink/20"><Icon n="close" size={14} /></Link>
         <div className="relative m-6 hidden overflow-hidden rounded-2xl md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={gallery(1)} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <video src="/media/login-dubai-sm.mp4" poster="/media/login-dubai.jpg" autoPlay muted loop playsInline preload="auto" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/logo.svg" alt="" width={56} height={70} className="absolute start-6 top-6" />
+          <img src="/brand/logo-light.png" alt="" width={42} height={56} className="absolute start-6 top-6" />
         </div>
         <div className="flex flex-col justify-center px-8 py-14 md:px-12">
           <h1 className="text-center text-3xl font-semibold">{d.authTitle}</h1>

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Cta, Faq, Features, HowTo } from "@/components/Sections";
 import { models } from "@/lib/content";
 import { t } from "@/lib/dict";
-import { gallery, HERO_LIGHT } from "@/lib/media";
+import { gallery, pic } from "@/lib/media";
 import type { Locale } from "@/lib/i18n";
 
 export const generateStaticParams = () => models.map((m) => ({ model: m.id }));
@@ -18,7 +18,7 @@ export default async function ModelPage({ params }: { params: Promise<{ locale: 
     <main>
       <section className="relative flex min-h-[78svh] items-end overflow-hidden bg-[#fdf8ec]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={HERO_LIGHT} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={gallery(7)} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/80" />
         <nav aria-label="breadcrumb" className="absolute start-10 top-[112px] z-10 hidden text-sm text-ink/80 md:block">
           <Link href={`/${locale}`}>{d.home}</Link> / <Link href={`/${locale}/video-generator`}>{d.videoGenerator}</Link> / <span className="text-ink">{m.name}</span>
@@ -35,7 +35,7 @@ export default async function ModelPage({ params }: { params: Promise<{ locale: 
           {[d.best1, d.best2, d.best3].map((b, i) => (
             <article key={b} className="card overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={gallery(i + 4)} alt="" width={400} height={300} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+              <img src={pic("model", i + 1)} alt="" width={400} height={300} loading="lazy" className="aspect-[4/3] w-full object-cover" />
               <div className="p-5"><p className="text-xs text-gold-hi">{d.modelBest}</p><h3 className="mt-1 font-semibold">{b}</h3></div>
             </article>
           ))}
