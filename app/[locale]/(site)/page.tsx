@@ -1,23 +1,21 @@
-import { Hero } from "@/components/Hero";
-import { AppPromo, Community, Cta, Faq, Features, HowTo, Models, Takeaways, Toolkit, TryModel, Why } from "@/components/Sections";
+import { Channels, Collage, FeaturedModels, GoApp, HomeCta, HomeFaq, HomeHero, Plans, Suite, WhyChoose } from "@/components/HomeSections";
 import type { Locale } from "@/lib/i18n";
 
+// Mirrors the Davinci home page: platform hero, collage, featured models, suite tabs, channels, app, why, plans, FAQ, CTA.
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const locale = (await params).locale as Locale;
   return (
     <main>
-      <Hero locale={locale} />
-      <Models locale={locale} />
-      <HowTo locale={locale} />
-      <Features locale={locale} />
-      <Why locale={locale} />
-      <TryModel locale={locale} />
-      <Toolkit locale={locale} />
-      <Community locale={locale} />
-      <AppPromo locale={locale} />
-      <Takeaways locale={locale} />
-      <Faq locale={locale} />
-      <Cta locale={locale} />
+      <HomeHero locale={locale} />
+      <Collage locale={locale} />
+      <FeaturedModels locale={locale} />
+      <Suite locale={locale} />
+      <Channels locale={locale} />
+      <GoApp locale={locale} />
+      <WhyChoose locale={locale} />
+      <Plans locale={locale} />
+      <HomeFaq locale={locale} />
+      <HomeCta locale={locale} />
     </main>
   );
 }

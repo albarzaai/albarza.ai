@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { preload } from "react-dom";
-import { HeroVideo, HERO_POSTER } from "./HeroVideo";
+import { HeroVideo, heroPoster } from "./HeroVideo";
 import { FontReveal } from "./FontReveal";
 import { Icon } from "./Icon";
 import { t } from "@/lib/dict";
@@ -9,10 +9,10 @@ import type { Locale } from "@/lib/i18n";
 // The prompt bar is a plain form posting to signup; all validation happens on the server.
 export function Hero({ locale, variant = "video" }: { locale: Locale; variant?: "video" | "image" }) {
   const d = t(locale);
-  preload(HERO_POSTER, { as: "image", fetchPriority: "high" });
+  preload(heroPoster(variant === "image" ? "ig-hero" : "hero-abudhabi"), { as: "image", fetchPriority: "high" });
   return (
     <section className="relative flex min-h-[100svh] items-end justify-center overflow-hidden bg-[#3a3028]">
-      <HeroVideo />
+      <HeroVideo slug={variant === "image" ? "ig-hero" : "hero-abudhabi"} />
       <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-black/10" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(8,6,3,0.62),rgba(8,6,3,0.4)_55%,transparent_80%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[220px] bg-gradient-to-b from-transparent via-[#fdf8ec]/55 to-[var(--color-bg)]" />

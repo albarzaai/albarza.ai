@@ -21,7 +21,7 @@ export function ModelShowcase({ locale }: { locale: Locale }) {
   const video = (
     <video poster="/media/showcase-gulf.jpg" autoPlay muted loop playsInline preload="metadata" aria-hidden className="absolute inset-0 size-full object-cover object-center">
       <source src="/media/showcase-gulf-sm.mp4" type="video/mp4" media="(max-width: 767px)" />
-      <source src="/media/showcase-gulf-hd.mp4" type="video/mp4" media="(min-width: 1280px)" />
+      <source src="/media/showcase-gulf-hd.mp4" type="video/mp4" media="(min-width: 1920px)" />
       <source src="/media/showcase-gulf.mp4" type="video/mp4" />
     </video>
   );
