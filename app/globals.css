@@ -72,3 +72,5 @@ input[type="range"].rng { accent-color: var(--color-gold); }
 .step-caret { animation: stepBlink 1s steps(1) infinite; }
 .step-pulse { animation: stepPulse 2.4s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .step-float, .step-caret, .step-pulse { animation: none; } }
+
+@keyframes cutZoom { from { transform: scale(1.14); } to { transform: scale(1); } }
