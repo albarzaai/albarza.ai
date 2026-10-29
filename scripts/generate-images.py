@@ -59,6 +59,28 @@ S = {
     "card-4": ("Portrait of a falconer's hand and falcon in profile, dramatic warm light.", "3:4"),
     "card-5": ("Portrait of a boy in a traditional white kandura laughing in sunlit courtyard.", "3:4"),
     "card-6": ("Portrait of a calligrapher at work with brush and golden ink, close up.", "3:4"),
+    # Home page (Davinci home structure)
+    "home-collage-1": ("Low-angle cinematic shot of a young Emirati woman in a flowing cream cape standing on top of a huge golden dune, sun flare, wind-blown sand, wide.", "16:9"),
+    "home-collage-2": ("Editorial close-up of a woman wearing gold-rimmed sunglasses reflecting desert dunes, warm light.", "4:3"),
+    "home-collage-3": ("Portrait of a laughing man in a white ghutra against a sunlit sandstone wall, warm documentary light.", "4:3"),
+    "home-collage-4": ("A woman lying on a cream sand dune in a wide straw hat, aerial view, soft shadows.", "4:3"),
+    "home-collage-5": ("Studio portrait of a girl with a delicate golden butterfly headpiece, cream backdrop.", "4:3"),
+    "feat-1": ("Expressive high-fidelity portrait of a woman in a blue and gold embroidered abaya against a bright sky, editorial.", "3:4"),
+    "feat-2": ("A hand holding a smartphone capturing a golden desert sunset, creative editorial, shallow depth of field.", "3:4"),
+    "feat-3": ("A teenager in sneakers kicking a football on a rooftop at golden hour, motion blur, dynamic.", "3:4"),
+    "feat-4": ("Extreme macro of a camel's eye with long lashes, razor sharp detail.", "3:4"),
+    "feat-5": ("Luxury perfume bottle on white marble with a splash of liquid gold, studio, cinematic.", "3:4"),
+    "feat-6": ("A dancer in flowing gold fabric twirling on a dune at sunrise, motion, graceful.", "3:4"),
+    "suite-1": ("Editorial fashion shot of a model in a cream suit with gold accessories against a terracotta wall, wide.", "16:9"),
+    "suite-2": ("A product photo of an ornate brass lantern on a dark velvet table with dramatic side light, wide.", "16:9"),
+    "suite-3": ("Film still of a lone rider on a camel at dusk, silhouette against a huge orange sun, widescreen.", "16:9"),
+    "suite-4": ("Film strip frames of a driving shot through desert dunes laid on a dark editing desk, warm light, wide.", "16:9"),
+    "suite-5": ("A traditional oud on a velvet cushion in warm candle light, wide, musical mood.", "16:9"),
+    "channel-1": ("A model holding a gold perfume bottle in a sunlit studio, social ad style.", "3:4"),
+    "channel-2": ("A golden watch emerging from a splash of water, dynamic commercial product shot.", "3:4"),
+    "channel-3": ("Macro of a human eye with long lashes and golden eyeshadow, super detailed.", "3:4"),
+    "channel-4": ("A small street cafe at dusk with warm lamps and a coffee cup on a table, cozy.", "3:4"),
+    "home-cta": ("Wide panorama of a field of wild desert flowers blooming after rain in the UAE, pink and gold, fisheye perspective, dramatic sky.", "16:9"),
 }
 
 def find_models():
@@ -108,7 +130,9 @@ def one(model, slug, prompt, ratio):
 # Pick the first model that works on a probe.
 model = None
 for m in CANDIDATES:
-    p, err = one(m, "gallery-1", *S["gallery-1"])
+    p, err = one(m, "probe", *S["gallery-1"])
+    if p:
+        os.remove(p)
     print("probe", m, "->", p or err)
     if p:
         model = m
@@ -119,7 +143,7 @@ if not model:
 
 def job(item):
     slug, (prompt, ratio) = item
-    if os.path.exists(f"{OUT}/{slug}.webp") and slug == "gallery-1":
+    if os.path.exists(f"{OUT}/{slug}.webp"):
         return slug, "ok"
     for _ in range(2):
         p, err = one(model, slug, prompt, ratio)

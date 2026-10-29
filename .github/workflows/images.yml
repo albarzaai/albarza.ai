@@ -29,3 +29,4 @@ jobs:
           git commit -m "Add generated site images (Atlas Cloud)"
           git pull --rebase origin "$GITHUB_REF_NAME"
           git push
+# run 2: home page images
