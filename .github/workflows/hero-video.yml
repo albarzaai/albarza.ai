@@ -28,8 +28,8 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add public/media/hero-abudhabi.mp4 public/media/hero-abudhabi.jpg
+          git add public/media/hero-abudhabi*.mp4 public/media/hero-abudhabi.jpg
           git commit -m "Add Abu Dhabi hero video (Veo)"
           git push
 
-# retry 9
+# retry 10: 1080p

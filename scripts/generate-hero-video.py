@@ -49,12 +49,16 @@ def atlas_video():
         except ValueError:
             return r.status_code, {"error": r.text[:300]}
 
-    code, d = a("POST", "https://api.atlascloud.ai/api/v1/model/generateVideo", {
-        "model": "bytedance/seedance-2.0-mini/text-to-video", "prompt": PROMPT, "duration": 10, "resolution": "720p",
-        "ratio": "16:9", "generate_audio": False, "watermark": False})
-    print("atlas submit", code)
-    if code != 200 or "data" not in d:
-        errors.append(f"atlas: {code} {json.dumps(d)[:300]}")
+    # Ask for 1080p first; fall back to 720p if the model does not offer it.
+    for res in ("1080p", "720p"):
+        code, d = a("POST", "https://api.atlascloud.ai/api/v1/model/generateVideo", {
+            "model": "bytedance/seedance-2.0-mini/text-to-video", "prompt": PROMPT, "duration": 10, "resolution": res,
+            "ratio": "16:9", "generate_audio": False, "watermark": False})
+        print("atlas submit", res, code)
+        if code == 200 and "data" in d:
+            break
+        errors.append(f"atlas {res}: {code} {json.dumps(d)[:300]}")
+    else:
         return None
     pid = d["data"]["id"]
     for _ in range(90):
@@ -93,8 +97,14 @@ if not data:
 
 os.makedirs("public/media", exist_ok=True)
 open("/tmp/raw.mp4", "wb").write(data)
-# Muted, web-sized loop plus a poster frame.
-subprocess.run(["ffmpeg", "-y", "-i", "/tmp/raw.mp4", "-an", "-vf", "scale=1280:-2,fps=24", "-c:v", "libx264", "-crf", "30", "-preset", "slow",
-                "-movflags", "+faststart", "-pix_fmt", "yuv420p", "public/media/hero-abudhabi.mp4"], check=True)
-subprocess.run(["ffmpeg", "-y", "-i", "/tmp/raw.mp4", "-frames:v", "1", "-vf", "scale=1280:-2", "-q:v", "4", "public/media/hero-abudhabi.jpg"], check=True)
-print("done", os.path.getsize("public/media/hero-abudhabi.mp4"), "bytes")
+# Muted loop in three sizes (desktop HD, laptop, phone) plus a full-size poster frame (the first frame, so the swap is seamless).
+def enc(out, width, crf, maxrate):
+    subprocess.run(["ffmpeg", "-y", "-i", "/tmp/raw.mp4", "-an", "-vf", f"scale='min({width},iw)':-2:flags=lanczos,fps=24", "-c:v", "libx264", "-crf", str(crf),
+                    "-preset", "slow", "-maxrate", maxrate, "-bufsize", "2M", "-profile:v", "high", "-movflags", "+faststart", "-pix_fmt", "yuv420p", out], check=True)
+enc("public/media/hero-abudhabi-hd.mp4", 1920, 23, "3M")
+enc("public/media/hero-abudhabi.mp4", 1280, 24, "1.6M")
+enc("public/media/hero-abudhabi-sm.mp4", 720, 26, "0.8M")
+subprocess.run(["ffmpeg", "-y", "-i", "/tmp/raw.mp4", "-frames:v", "1", "-vf", "scale='min(1920,iw)':-2:flags=lanczos", "-q:v", "3", "public/media/hero-abudhabi.jpg"], check=True)
+for f in ("hd", "", "sm"):
+    n = "public/media/hero-abudhabi" + ("-" + f if f else "") + ".mp4"
+    print(n, os.path.getsize(n), "bytes")
