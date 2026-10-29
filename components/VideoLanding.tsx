@@ -2,7 +2,8 @@ import Link from "next/link";
 import { HERO_LIGHT, gallery } from "@/lib/media";
 import { Icon } from "./Icon";
 import { FontReveal } from "./FontReveal";
-import { HeroVideo } from "./HeroVideo";
+import { preload } from "react-dom";
+import { HeroVideo, HERO_POSTER } from "./HeroVideo";
 import { StepCards } from "./StepCards";
 import { Carousel } from "./Carousel";
 import { features } from "@/lib/content";
@@ -31,10 +32,11 @@ const copy = {
 const c = (k: keyof typeof copy, l: Locale) => copy[k][l];
 
 export function VideoHero({ locale }: { locale: Locale }) {
+  preload(HERO_POSTER, { as: "image", fetchPriority: "high" });
   const d = t(locale);
   const pill = "inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-ink/5 px-3.5 py-2 text-xs font-medium hover:bg-ink/10";
   return (
-    <section className="relative flex min-h-[620px] items-center justify-center overflow-hidden bg-black md:h-[760px]">
+    <section className="relative flex min-h-[620px] items-center justify-center overflow-hidden bg-[#3a3028] md:h-[760px]">
       <HeroVideo />
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/10" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_45%,rgba(8,6,3,0.62),rgba(8,6,3,0.4)_55%,transparent_80%)]" />
