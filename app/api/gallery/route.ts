@@ -5,7 +5,7 @@ import { templateTitles } from "@/lib/content";
 
 const query = z.object({
   cursor: z.coerce.number().int().min(0).max(100000).default(0),
-  type: z.enum(["all", "image", "video", "audio", "template", "motion"]).default("all"),
+  type: z.enum(["all", "image", "video", "audio", "template", "motion", "explore", "reshoot", "dance"]).default("all"),
   locale: z.enum(["ar", "en"]).default("ar"),
   q: z.string().trim().max(60).default(""),
   sort: z.enum(["new", "old"]).default("new"),
@@ -21,8 +21,9 @@ export async function GET(req: NextRequest) {
   const items = Array.from({ length: PAGE }, (_, i) => {
     const n = sort === "new" ? cursor + i : 239 - (cursor + i);
     const title = templateTitles[n % templateTitles.length][locale];
-    return { id: n, kind: kinds[n % 4], src: gallery(n + 1), tall: n % 3 !== 1, title };
-  }).filter((it) => !term || it.title.toLowerCase().includes(term.toLowerCase())).filter((it) => type === "all" || type === "template" || type === "motion" || it.kind === type);
+    const video = ["template", "motion", "dance"].includes(type) || kinds[n % 4] === "video";
+    return { id: n, kind: (video ? "video" : kinds[n % 4]) as "image" | "video" | "audio", src: gallery(n + 1), tall: n % 3 !== 1, title };
+  }).filter((it) => !term || it.title.toLowerCase().includes(term.toLowerCase())).filter((it) => !["image", "video", "audio"].includes(type) || it.kind === type);
   const next = cursor + PAGE < 240 ? cursor + PAGE : null;
   return NextResponse.json({ items, next }, { headers: { "Cache-Control": "private, max-age=30" } });
 }

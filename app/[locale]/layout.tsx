@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const d = t(locale);
-  return { title: `${d.brand} — ${d.heroTitle}`, description: d.heroSub, icons: { icon: "/brand/logo.svg" } };
+  return { title: `${d.brand} — ${d.heroTitle}`, description: d.heroSub, icons: { icon: "/brand/favicon.svg" } };
 }
 
 export default async function RootLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {

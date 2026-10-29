@@ -20,7 +20,7 @@ export function SiteHeader({ locale, overlay = true }: { locale: Locale; overlay
           </nav>
         </div>
         <div className="flex items-center gap-5 text-sm font-medium">
-          <Link href={`/${other}`} prefetch={false} hrefLang={other} className="text-white/80 hover:text-white">{other === "ar" ? "العربية" : "English"}</Link>
+          <Link href={`/${other}`} prefetch={false} hrefLang={other} className="text-ink/80 hover:text-ink">{other === "ar" ? "العربية" : "English"}</Link>
           <Link href={`/${locale}/pricing`} className="hidden hover:text-gold-hi sm:block">{d.pricing}</Link>
           <Link href={`/${locale}/login`} className="hover:text-gold-hi">{d.signin}</Link>
           <Link href={`/${locale}/signup`} className="btn btn-gold !px-6">{d.signupBtn}</Link>

@@ -4,9 +4,9 @@ import type { Locale } from "@/lib/i18n";
 export default async function AppLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
   const locale = (await params).locale as Locale;
   return (
-    <div className="min-h-dvh md:grid md:grid-cols-[232px_1fr]">
-      <AppSidebar locale={locale} />
-      <div className="min-w-0">{children}</div>
+    <div className="app-bg min-h-dvh md:flex">
+      <div className="md:shrink-0 md:w-[calc(var(--sb)+20px)] md:transition-[width]"><AppSidebar locale={locale} /></div>
+      <div className="min-w-0 flex-1">{children}</div>
     </div>
   );
 }

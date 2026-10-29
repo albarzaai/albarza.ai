@@ -22,7 +22,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
             <div key={title}>
               <h4 className="mb-4 text-sm font-semibold">{title}</h4>
               <ul className="space-y-2.5 text-sm text-muted">
-                {links.map(([label, href]) => <li key={label}><Link href={href} className="hover:text-white">{label}</Link></li>)}
+                {links.map(([label, href]) => <li key={label}><Link href={href} className="hover:text-ink">{label}</Link></li>)}
               </ul>
             </div>
           ))}

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Cta, Faq, Features, HowTo } from "@/components/Sections";
 import { models } from "@/lib/content";
 import { t } from "@/lib/dict";
-import { gallery, HERO } from "@/lib/media";
+import { gallery, HERO_LIGHT } from "@/lib/media";
 import type { Locale } from "@/lib/i18n";
 
 export const generateStaticParams = () => models.map((m) => ({ model: m.id }));
@@ -18,14 +18,14 @@ export default async function ModelPage({ params }: { params: Promise<{ locale: 
     <main>
       <section className="relative flex min-h-[78svh] items-end overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={HERO} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/80" />
-        <nav aria-label="breadcrumb" className="absolute start-10 top-[112px] z-10 hidden text-sm text-white/80 md:block">
-          <Link href={`/${locale}`}>{d.home}</Link> / <Link href={`/${locale}`}>{d.videoGenerator}</Link> / <span className="text-white">{m.name}</span>
+        <img src={HERO_LIGHT} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/80" />
+        <nav aria-label="breadcrumb" className="absolute start-10 top-[112px] z-10 hidden text-sm text-ink/80 md:block">
+          <Link href={`/${locale}`}>{d.home}</Link> / <Link href={`/${locale}`}>{d.videoGenerator}</Link> / <span className="text-ink">{m.name}</span>
         </nav>
         <div className="relative z-10 mx-auto w-full max-w-[1000px] px-5 pb-20 text-center">
           <h1 className="text-4xl font-semibold md:text-5xl">{m.name}</h1>
-          <p className="mx-auto mt-5 max-w-2xl leading-8 text-white/90">{m.desc[locale]}</p>
+          <p className="mx-auto mt-5 max-w-2xl leading-8 text-ink/90">{m.desc[locale]}</p>
           <Link href={`/${locale}/signup`} className="btn btn-gold mt-8">{d.tryModelBtn} {m.name}</Link>
         </div>
       </section>

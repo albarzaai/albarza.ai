@@ -1,7 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 80" fill="none">
-  <path d="M6 70V32C6 18 16 8 31 3c-3 2-3 5-1 7-9 4-14 10-14 18 0 3 1 5 3 8-2 3-3 6-3 9v28H6Z" fill="#BD9B5F"/>
-  <path d="M33 3c16 4 25 17 25 31v36h-9V40c0-3-1-6-3-9 1-2 1-4 1-6 0-9-6-16-15-20 2-2 1-4 1-2Z" fill="#BD9B5F"/>
-  <path d="M26 66V44c0-6 6-12 14-16 6 2 11 8 11 14v24H26Z" stroke="#BD9B5F" stroke-width="4" fill="none"/>
-  <path d="M30 36v14l12-7-12-7Z" fill="#BD9B5F"/>
-  <path d="M20 66h26" stroke="#BD9B5F" stroke-width="3" stroke-dasharray="3 2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="190 70 700 945" fill="none" stroke="#BB9A5E" stroke-linejoin="round">
+  <defs>
+    <pattern id="lat" width="52" height="52" patternUnits="userSpaceOnUse" patternTransform="translate(350 912)">
+      <path d="M0 26L26 0l26 26-26 26zM13 26l13-13 13 13-13 13z" stroke-width="5"/>
+    </pattern>
+    <clipPath id="band"><rect x="350" y="912" width="380" height="76"/></clipPath>
+  </defs>
+  <!-- outer arch with U-shaped feet -->
+  <path d="M224 977H316M224 1000V440C224 270 330 150 530 88" stroke-width="46" stroke-linecap="butt"/>
+  <path d="M856 977H764M856 1000V440C856 270 760 160 584 100" stroke-width="46"/>
+  <!-- inner ogee arch -->
+  <path d="M314 940V570C314 528 336 506 366 490C334 446 320 400 320 352C320 262 410 206 522 156" stroke-width="46"/>
+  <path d="M766 940V570C766 528 750 508 726 494C756 450 762 410 762 360C762 270 690 214 578 168" stroke-width="46"/>
+  <path d="M314 1000V940M766 1000V940" stroke-width="46"/>
+  <!-- play -->
+  <path d="M492 440L636 524 492 608z" fill="#BB9A5E" stroke-width="30"/>
+  <!-- ornament band -->
+  <path d="M350 902H730M350 996H730" stroke-width="9"/>
+  <g clip-path="url(#band)"><rect x="350" y="912" width="380" height="76" fill="url(#lat)" stroke="none"/></g>
 </svg>

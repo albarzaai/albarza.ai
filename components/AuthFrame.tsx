@@ -8,7 +8,7 @@ export function AuthFrame({ locale, children, art = 1 }: { locale: Locale; child
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4 backdrop-blur-sm">
       <div className="relative grid max-h-[92dvh] w-full max-w-[1000px] overflow-auto rounded-3xl border border-line bg-surface md:min-h-[640px] md:grid-cols-2">
-        <Link href={`/${locale}`} aria-label="close" className="absolute end-5 top-5 z-10 grid h-9 w-9 place-items-center rounded-full bg-white/10 hover:bg-white/20"><Icon n="close" size={14} /></Link>
+        <Link href={`/${locale}`} aria-label="close" className="absolute end-5 top-5 z-10 grid h-9 w-9 place-items-center rounded-full bg-ink/10 hover:bg-ink/20"><Icon n="close" size={14} /></Link>
         <div className="relative m-6 hidden overflow-hidden rounded-2xl md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={gallery(art)} alt="" className="absolute inset-0 h-full w-full object-cover" />

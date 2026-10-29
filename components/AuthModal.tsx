@@ -17,11 +17,11 @@ export function AuthModal({ locale, initial }: { locale: Locale; initial: "login
   const [mode, setMode] = useState<"login" | "signup">(initial);
   const [state, action, pending] = useActionState<FormState, FormData>(mode === "login" ? loginAction : signupAction, null);
   const err = (k: string) => state?.errors?.[k] && <p className="mt-1 text-xs text-red-400">{locale === "ar" ? "قيمة غير صالحة" : "Invalid value"}</p>;
-  const row = "flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-surface-2 text-sm font-medium transition hover:bg-white/10";
+  const row = "flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-surface-2 text-sm font-medium transition hover:bg-ink/10";
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4 backdrop-blur-sm">
       <div className="relative grid max-h-[92dvh] w-full max-w-[1000px] overflow-auto rounded-3xl border border-line bg-surface md:min-h-[700px] md:grid-cols-2">
-        <Link href={`/${locale}`} aria-label="close" className="absolute end-5 top-5 z-10 grid h-9 w-9 place-items-center rounded-full bg-white/10 hover:bg-white/20"><Icon n="close" size={14} /></Link>
+        <Link href={`/${locale}`} aria-label="close" className="absolute end-5 top-5 z-10 grid h-9 w-9 place-items-center rounded-full bg-ink/10 hover:bg-ink/20"><Icon n="close" size={14} /></Link>
         <div className="relative m-6 hidden overflow-hidden rounded-2xl md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={gallery(1)} alt="" className="absolute inset-0 h-full w-full object-cover" />
@@ -30,7 +30,7 @@ export function AuthModal({ locale, initial }: { locale: Locale; initial: "login
         </div>
         <div className="flex flex-col justify-center px-8 py-14 md:px-12">
           <h1 className="text-center text-3xl font-semibold">{d.authTitle}</h1>
-          <p className="mt-2 text-center text-sm text-white/80">{d.authSub}</p>
+          <p className="mt-2 text-center text-sm text-ink/80">{d.authSub}</p>
           {step === "choose" ? (
             <div className="mt-7 space-y-3">
               <button type="button" className="flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-white text-sm font-semibold text-black hover:bg-gold-hi"><G />{d.google}</button>
@@ -45,12 +45,12 @@ export function AuthModal({ locale, initial }: { locale: Locale; initial: "login
               {mode === "login" && <Link href={`/${locale}/forgot-password`} className="block text-xs text-gold-hi">{d.forgot}</Link>}
               <button disabled={pending} className="btn btn-gold w-full !py-3">{mode === "login" ? d.login : d.signup}</button>
               <div className="flex justify-between text-xs text-muted">
-                <button type="button" onClick={() => setStep("choose")} className="hover:text-white">‹ {d.back}</button>
-                <button type="button" onClick={() => setMode(mode === "login" ? "signup" : "login")} className="hover:text-white">{mode === "login" ? d.noAcct + " " + d.signup : d.haveAcct + " " + d.login}</button>
+                <button type="button" onClick={() => setStep("choose")} className="hover:text-ink">‹ {d.back}</button>
+                <button type="button" onClick={() => setMode(mode === "login" ? "signup" : "login")} className="hover:text-ink">{mode === "login" ? d.noAcct + " " + d.signup : d.haveAcct + " " + d.login}</button>
               </div>
             </form>
           )}
-          <p className="mt-6 flex items-center justify-center gap-2 text-xs text-white/80"><Icon n="lock" size={13} />{d.safe}</p>
+          <p className="mt-6 flex items-center justify-center gap-2 text-xs text-ink/80"><Icon n="lock" size={13} />{d.safe}</p>
           <p className="mt-3 text-center text-xs leading-6 text-muted">{d.authAgree} <Link href={`/${locale}/terms`} className="underline">{d.terms}</Link> {d.and} <Link href={`/${locale}/privacy`} className="underline">{d.privacy}</Link>، {d.authPromos}</p>
         </div>
       </div>

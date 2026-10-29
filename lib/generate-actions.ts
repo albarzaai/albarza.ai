@@ -2,25 +2,23 @@
 
 import { z } from "zod";
 
-export type GenState = { ok: boolean; error?: string } | null;
+export type GenState = { ok: boolean; error?: string; at?: number } | null;
 
+const s = (n: number) => z.string().trim().max(n).optional();
 const schema = z.object({
-  tool: z.enum(["video", "image", "lip-sync", "upscale", "text-to-voice", "voice-changer"]),
+  cat: z.enum(["image", "video", "audio"]),
+  mode: z.enum(["createImage", "createArtwork", "createVideo", "editVideo", "extendVideo", "motionControl", "voiceover", "musicGenerator", "voiceChanger"]),
   prompt: z.string().trim().max(2000).optional(),
-  model: z.string().max(60).optional(),
-  ratio: z.string().max(10).optional(),
-  duration: z.string().max(10).optional(),
-  quality: z.string().max(20).optional(),
-  count: z.string().max(2).optional(),
-  voice: z.string().max(60).optional(),
-  language: z.string().max(20).optional(),
+  model: s(60), aspect: s(10), outputs: s(2), resolution: s(10), duration: s(10), audio: s(5), enhance: s(5),
+  voice: s(60), language: s(20), lyrics: s(20), genre: s(30), length: s(10), creativity: s(10), moodboard: s(80),
 });
+const needsPrompt = new Set(["createImage", "createArtwork", "createVideo", "editVideo", "extendVideo", "voiceover", "musicGenerator"]);
 
-// Validation lives on the server. Enqueueing to the Hono/Queues backend is wired in a later phase.
+// All validation is server-side. Enqueueing to the Hono/Queues backend is wired in a later phase.
 export async function generateAction(_: GenState, form: FormData): Promise<GenState> {
   const data = Object.fromEntries([...form.entries()].filter(([, v]) => typeof v === "string"));
   const r = schema.safeParse(data);
-  if (!r.success) return { ok: false, error: "invalid" };
-  if (["video", "image", "text-to-voice"].includes(r.data.tool) && !r.data.prompt) return { ok: false, error: "prompt" };
-  return { ok: true };
+  if (!r.success) return { ok: false, error: "invalid", at: Date.now() };
+  if (needsPrompt.has(r.data.mode) && !r.data.prompt) return { ok: false, error: "prompt", at: Date.now() };
+  return { ok: true, at: Date.now() };
 }

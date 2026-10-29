@@ -6,3 +6,4 @@ const EXT = "svg";
 export const HERO = `/media/hero.${EXT}`;
 export const GALLERY_COUNT = 12;
 export const gallery = (n: number) => `/media/gallery-${((n - 1) % GALLERY_COUNT) + 1}.${EXT}`;
+export const HERO_LIGHT = `/media/hero-light.${EXT}`;

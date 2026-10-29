@@ -23,11 +23,11 @@ body { background: var(--color-bg); color: var(--color-ink); -webkit-font-smooth
 .btn-gold:hover { background: var(--color-gold-hi); }
 .btn-white { background: #fff; color: #050505; }
 .btn-white:hover { background: var(--color-gold-hi); }
-.btn-ghost { border-color: var(--color-line); color: #fff; }
+.btn-ghost { border-color: var(--color-line); color: var(--color-ink); }
 .btn-ghost:hover { border-color: var(--color-gold); }
 .card { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 1rem; transition: border-color .15s; }
 a.card:hover, article.card:hover { border-color: var(--color-gold); }
-.input { width: 100%; background: var(--color-surface-2); border: 1px solid var(--color-line); border-radius: .75rem; padding: .7rem .9rem; color: #fff; outline: none; }
+.input { width: 100%; background: var(--color-surface-2); border: 1px solid var(--color-line); border-radius: .75rem; padding: .7rem .9rem; color: var(--color-ink); outline: none; }
 .input:focus { border-color: var(--color-gold); }
 .label { font-size: .8rem; color: var(--color-muted); margin-bottom: .35rem; display: block; }
 .section { max-width: 1200px; margin-inline: auto; padding: 5rem 1.25rem; }
@@ -35,3 +35,30 @@ a.card:hover, article.card:hover { border-color: var(--color-gold); }
 .glass { background: rgba(20,17,10,.55); backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,.1); }
 .skeleton { background: var(--color-surface-2); }
 .noscroll { scrollbar-width: none; } .noscroll::-webkit-scrollbar { display: none; }
+
+:root { --sb: 220px; }
+.app-bg { background: #050505; }
+.sheet { background: #0b0b0b; border: 1px solid #1f1f1f; border-radius: 1.5rem; }
+.dock { background: rgba(38,38,38,.72); backdrop-filter: blur(22px); border: 1px solid rgba(255,255,255,.08); border-radius: 1.5rem; }
+.pill { display: inline-flex; align-items: center; gap: .45rem; border-radius: 9999px; padding: .5rem .9rem; font-size: .8rem; font-weight: 500; background: rgba(255,255,255,.07); transition: background .15s; white-space: nowrap; }
+.pill:hover { background: rgba(255,255,255,.12); }
+.pill-on { background: rgba(255,255,255,.14); color: #fff; }
+.pill-white { background: #fff; color: #000; }
+.gbtn { display: inline-flex; align-items: center; gap: .5rem; border-radius: 9999px; padding: .65rem 1.2rem; font-weight: 600; font-size: .85rem; background: var(--color-gold); color: #120d03; transition: background .15s, opacity .15s; }
+.gbtn:hover { background: var(--color-gold-hi); }
+.gbtn[aria-disabled="true"] { background: rgba(189,155,95,.35); color: rgba(255,255,255,.55); }
+.upgrade { background: linear-gradient(110deg, #8a6a2a, #bd9b5f 55%, #e2c88d); color: #1a1409; }
+.menu { background: #1a1a1a; border: 1px solid rgba(255,255,255,.1); border-radius: 1rem; box-shadow: 0 20px 50px rgba(0,0,0,.6); }
+.dots { background-image: radial-gradient(rgba(255,255,255,.12) 1px, transparent 1px); background-size: 22px 22px; }
+.rail { height: 4px; border-radius: 9999px; background: rgba(255,255,255,.14); }
+input[type="range"].rng { accent-color: var(--color-gold); }
+
+/* Marketing + auth surfaces: white background, ink text, same gold accent. The logged-in app stays dark. */
+.light { --color-bg: #ffffff; --color-surface: #fbf6ea; --color-surface-2: #f5ebd3; --color-line: #e9dcc0; --color-ink: #16120a; --color-muted: #6a5e46; --color-gold-hi: #8a6a2a; --color-gold-deep: #7d5f22;
+  background: var(--color-bg); color: var(--color-ink); min-height: 100dvh; }
+.light .glass { background: rgba(255,255,255,.78); border-color: rgba(22,18,10,.08); box-shadow: 0 10px 40px rgba(120,90,30,.12); }
+.light .btn-white { background: var(--color-ink); color: #fff; }
+.light .btn-white:hover { background: var(--color-gold); color: #16120a; }
+.light .btn-gold:hover { background: #16120a; color: #fff; }
+.light .sheet { background: #fff; border-color: var(--color-line); }
+.light .menu { background: #fff; }
