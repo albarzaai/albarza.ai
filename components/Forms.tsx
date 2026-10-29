@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { contactAction, forgotAction, resendAction, resetAction, type FormState } from "@/lib/auth-actions";
 import { t } from "@/lib/dict";
+import { formMessage } from "@/lib/form-messages";
 import type { Locale } from "@/lib/i18n";
 
 const bad = (s: FormState, k: string, l: Locale) => s?.errors?.[k] && <p className="mt-1 text-xs text-red-400">{l === "ar" ? "قيمة غير صالحة" : "Invalid value"}</p>;
@@ -16,6 +17,7 @@ export function ForgotForm({ locale }: { locale: Locale }) {
       <h1 className="text-center text-3xl font-semibold">{d.forgotTitle}</h1>
       <p className="mt-2 text-center text-sm text-ink/80">{d.forgotSub}</p>
       <form action={action} noValidate className="mt-7 space-y-3">
+        <input type="hidden" name="locale" value={locale} />
         <div><label className="label" htmlFor="email">{d.email}</label><input id="email" name="email" type="email" dir="ltr" className="input" autoComplete="email" />{bad(s, "email", locale)}</div>
         <button disabled={pending} className="btn btn-gold w-full !py-3">{d.sendLink}</button>
         {s?.ok && <p role="status" className="text-center text-xs text-gold-hi">{d.linkSent}</p>}
@@ -25,7 +27,7 @@ export function ForgotForm({ locale }: { locale: Locale }) {
   );
 }
 
-export function ResetForm({ locale }: { locale: Locale }) {
+export function ResetForm({ locale, token }: { locale: Locale; token: string }) {
   const d = t(locale);
   const [s, action, pending] = useActionState<FormState, FormData>(resetAction, null);
   return (
@@ -33,6 +35,8 @@ export function ResetForm({ locale }: { locale: Locale }) {
       <h1 className="text-center text-3xl font-semibold">{d.resetTitle}</h1>
       <p className="mt-2 text-center text-sm text-ink/80">{d.resetSub}</p>
       <form action={action} noValidate className="mt-7 space-y-3">
+        <input type="hidden" name="locale" value={locale} /><input type="hidden" name="token" value={token} />
+        {formMessage(s?.message, locale) && <p role="alert" className="rounded-xl bg-red-500/10 p-3 text-xs text-red-500">{formMessage(s?.message, locale)}</p>}
         <div><label className="label" htmlFor="password">{d.newPassword}</label><input id="password" name="password" type="password" dir="ltr" className="input" autoComplete="new-password" />{bad(s, "password", locale)}</div>
         <div><label className="label" htmlFor="confirm">{d.confirmPassword}</label><input id="confirm" name="confirm" type="password" dir="ltr" className="input" autoComplete="new-password" />{bad(s, "confirm", locale)}</div>
         <button disabled={pending} className="btn btn-gold w-full !py-3">{d.resetBtn}</button>

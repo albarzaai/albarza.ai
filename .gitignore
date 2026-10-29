@@ -7,3 +7,6 @@ next-env.d.ts
 .wrangler
 api/node_modules
 api/.wrangler
+
+.dev.vars
+.wrangler

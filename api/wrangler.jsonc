@@ -8,10 +8,14 @@
   "preview_urls": false,
   "observability": { "enabled": true },
   "routes": [{ "pattern": "api.albarza.ai", "custom_domain": true }],
-  "vars": { "ALLOWED_ORIGINS": "https://albarza.ai,https://www.albarza.ai" },
-  // Secrets, set with `wrangler secret put`: GEMINI_API_KEY, INTERNAL_AUTH_SECRET.
+  "vars": { "ALLOWED_ORIGINS": "https://albarza.ai,https://www.albarza.ai", "SITE_URL": "https://albarza.ai", "PBKDF2_ITERATIONS": "210000" },
+  // D1 database created by the deploy workflow; its id is filled in at deploy time.
+  "d1_databases": [{ "binding": "DB", "database_name": "albarza-db", "database_id": "__D1_ID__", "migrations_dir": "migrations" }],
+  // Secrets, set with `wrangler secret put`: GEMINI_API_KEY, INTERNAL_AUTH_SECRET; optional: RESEND_API_KEY, EMAIL_FROM, TURNSTILE_SECRET.
   "ratelimits": [
     { "name": "GENERATE_LIMIT", "namespace_id": "2001", "simple": { "limit": 10, "period": 60 } },
-    { "name": "GLOBAL_LIMIT", "namespace_id": "2002", "simple": { "limit": 100, "period": 60 } }
+    { "name": "GLOBAL_LIMIT", "namespace_id": "2002", "simple": { "limit": 100, "period": 60 } },
+    { "name": "AUTH_LIMIT", "namespace_id": "2003", "simple": { "limit": 20, "period": 60 } },
+    { "name": "EMAIL_LIMIT", "namespace_id": "2004", "simple": { "limit": 5, "period": 60 } }
   ]
 }

@@ -3,11 +3,11 @@ import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
 import { bodyLimit } from "hono/body-limit";
 import { z } from "zod";
+import { auth, type Env as AuthEnv } from "./auth";
 
 type Limiter = { limit(o: { key: string }): Promise<{ success: boolean }> };
-type Bindings = {
+type Bindings = AuthEnv & {
   GEMINI_API_KEY?: string;
-  INTERNAL_AUTH_SECRET?: string;
   ALLOWED_ORIGINS: string;
   GENERATE_LIMIT: Limiter;
   GLOBAL_LIMIT: Limiter;
@@ -32,8 +32,8 @@ app.use("*", async (c, next) => {
 app.use("*", (c, next) =>
   cors({
     origin: (origin) => (c.env.ALLOWED_ORIGINS.split(",").includes(origin) ? origin : null),
-    allowMethods: ["GET", "POST", "OPTIONS"],
-    allowHeaders: ["content-type"],
+    allowMethods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    allowHeaders: ["content-type", "authorization"],
     maxAge: 600,
   })(c, next),
 );
@@ -103,6 +103,8 @@ app.post("/v1/generate/image", bodyLimit({ maxSize: 8 * 1024, onError: (c) => c.
   if (!data || !mime || !/^image\/(png|jpeg|webp)$/.test(mime) || data.length > 8_000_000) return c.json({ error: "blocked" }, 422);
   return c.json({ image: `data:${mime};base64,${data}` });
 });
+
+app.route("/v1", auth);
 
 app.notFound((c) => c.json({ error: "not_found" }, 404));
 app.onError((_, c) => c.json({ error: "internal" }, 500));

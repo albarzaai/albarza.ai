@@ -35,6 +35,8 @@ jobs:
       - run: npm run typecheck
       - run: npm run typecheck
         working-directory: api
+      - name: Prepare accounts database (D1)
+        run: bash scripts/ci-d1.sh
       - name: Deploy API (api.albarza.ai)
         working-directory: api
         run: npx wrangler deploy
@@ -42,11 +44,19 @@ jobs:
         working-directory: api
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          TURNSTILE_SECRET: ${{ secrets.TURNSTILE_SECRET }}
         run: |
           INTERNAL_AUTH_SECRET=$(openssl rand -hex 32)
           echo "::add-mask::$INTERNAL_AUTH_SECRET"
           printf '%s' "$GEMINI_API_KEY" | npx wrangler secret put GEMINI_API_KEY
           printf '%s' "$INTERNAL_AUTH_SECRET" | npx wrangler secret put INTERNAL_AUTH_SECRET
+          # Stable pepper (derived, never stored) so pseudonymised audit entries stay consistent across deploys.
+          HASH_PEPPER=$(printf 'albarza-pepper:%s' "$CLOUDFLARE_API_TOKEN" | sha256sum | cut -d' ' -f1)
+          echo "::add-mask::$HASH_PEPPER"
+          printf '%s' "$HASH_PEPPER" | npx wrangler secret put HASH_PEPPER
+          for K in RESEND_API_KEY EMAIL_FROM TURNSTILE_SECRET; do V="${!K:-}"; [ -n "$V" ] && printf '%s' "$V" | npx wrangler secret put "$K"; done
           echo "INTERNAL_AUTH_SECRET=$INTERNAL_AUTH_SECRET" >> "$GITHUB_ENV"
       - name: Build and deploy frontend (albarza.ai)
         run: |

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Icon } from "./Icon";
 import { Pop } from "./Pop";
 import { ta } from "@/lib/app-dict";
+import { logoutAction } from "@/lib/auth-actions";
 import type { Locale } from "@/lib/i18n";
 
 const main = [["", "home", "home"], ["explore", "explore", "explore"], ["templates", "templates", "cards"], ["reshoot", "reshoot", "reshoot"]] as const;
@@ -61,7 +62,7 @@ export function AppSidebar({ locale }: { locale: Locale }) {
               <Link href={`/${locale}/help`} className={mi}><Icon n="lifebuoy" size={16} />{a.helpCenter}</Link>
               <Link href={`/${locale === "ar" ? "en" : "ar"}/app`} prefetch={false} className={mi}><Icon n="language" size={16} />{locale === "ar" ? "English" : "العربية"}</Link>
               <div className="my-1 border-t border-white/10" />
-              <Link href={`/${locale}/login`} className={mi}><Icon n="logout" size={16} />{a.signOut}</Link>
+              <form action={logoutAction}><input type="hidden" name="locale" value={locale} /><button className={mi}><Icon n="logout" size={16} />{a.signOut}</button></form>
             </div>
           )}
         </Pop>

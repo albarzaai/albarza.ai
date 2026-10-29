@@ -5,7 +5,18 @@ import openNext from "./.open-next/worker.js";
 export * from "./.open-next/worker.js";
 
 type Ctx = { waitUntil(p: Promise<unknown>): void };
-type Env = { CF_VERSION?: { id: string } };
+type Env = { CF_VERSION?: { id: string }; API?: { fetch(url: string, init?: RequestInit): Promise<Response> }; INTERNAL_AUTH_SECRET?: string };
+
+const SESSION_COOKIE = "__Host-albarza_session";
+const APP_PATH = /^\/(ar|en)\/app(\/|$)/;
+
+// The signed-in area is closed to everyone without a valid session. The check happens here, before any page code runs.
+async function hasSession(req: Request, env: Env): Promise<boolean> {
+  const m = new RegExp(`(?:^|;\\s*)${SESSION_COOKIE}=([A-Za-z0-9_-]{32,64})`).exec(req.headers.get("cookie") ?? "");
+  if (!m || !env.API || !env.INTERNAL_AUTH_SECRET) return false;
+  const r = await env.API.fetch("https://api.albarza.ai/v1/me", { headers: { "x-internal-auth": env.INTERNAL_AUTH_SECRET, authorization: `Bearer ${m[1]}` } }).catch(() => null);
+  return !!r?.ok;
+}
 
 const TTL = 3600;
 
@@ -19,6 +30,13 @@ function cacheable(req: Request): boolean {
 
 export default {
   async fetch(req: Request, env: Env, ctx: Ctx): Promise<Response> {
+    const url = new URL(req.url);
+    const app = APP_PATH.exec(url.pathname);
+    if (app && !(await hasSession(req, env))) {
+      if (req.method !== "GET" && req.method !== "HEAD") return new Response("unauthorized", { status: 401, headers: { "cache-control": "no-store" } });
+      const next = encodeURIComponent(url.pathname);
+      return new Response(null, { status: 302, headers: { location: `${url.origin}/${app[1]}/login?next=${next}`, "cache-control": "no-store" } });
+    }
     if (!cacheable(req)) return openNext.fetch(req, env, ctx);
 
     const cache = (caches as unknown as { default: Cache }).default;
