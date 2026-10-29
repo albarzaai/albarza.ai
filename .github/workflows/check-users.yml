@@ -1,5 +1,8 @@
 name: check-users
-on: workflow_dispatch
+on:
+  push:
+    branches: [claude/serene-carson-k64lwr]
+    paths: [.github/workflows/check-users.yml]
 jobs:
   check:
     runs-on: ubuntu-latest
