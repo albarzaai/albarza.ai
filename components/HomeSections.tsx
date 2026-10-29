@@ -37,13 +37,13 @@ export function Collage({ locale }: { locale: Locale }) {
   return (
     <section className="pb-8 pt-4">
       <Wrap>
-        <div className="relative mx-auto aspect-[1.9] max-w-[1180px]">
+        <div className="relative mx-auto aspect-[1.3] max-w-[1180px] md:aspect-[1.9]">
           {/* eslint-disable @next/next/no-img-element */}
-          <div className={`${tile} start-[5%] top-[2%] h-[36%] w-[24%]`}><img src={im(2)} alt="" loading="lazy" className="size-full object-cover" /></div>
-          <div className={`${tile} end-[3%] top-[18%] h-[28%] w-[14%]`}><img src={im(3)} alt="" loading="lazy" className="size-full object-cover" /></div>
-          <div className={`${tile} start-[8%] bottom-[8%] h-[26%] w-[12%]`}><img src={im(4)} alt="" loading="lazy" className="size-full object-cover" /></div>
-          <div className={`${tile} end-[1%] bottom-[10%] h-[20%] w-[13%]`}><img src={im(5)} alt="" loading="lazy" className="size-full object-cover" /></div>
-          <div className={`${tile} inset-x-[20%] top-[12%] bottom-0 z-10 !rounded-[22px]`}><img src={im(1)} alt="" loading="lazy" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block start-[5%] top-[2%] h-[36%] w-[24%]`}><img src={im(2)} alt="" loading="lazy" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block end-[3%] top-[18%] h-[28%] w-[14%]`}><img src={im(3)} alt="" loading="lazy" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block start-[8%] bottom-[8%] h-[26%] w-[12%]`}><img src={im(4)} alt="" loading="lazy" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block end-[1%] bottom-[10%] h-[20%] w-[13%]`}><img src={im(5)} alt="" loading="lazy" className="size-full object-cover" /></div>
+          <div className={`${tile} inset-x-[3%] top-0 bottom-0 z-10 md:inset-x-[20%] md:top-[12%] !rounded-[22px]`}><img src={im(1)} alt="" loading="lazy" className="size-full object-cover" /></div>
           {/* eslint-enable @next/next/no-img-element */}
         </div>
         <div className="mx-auto mt-14 max-w-[760px] text-center">
