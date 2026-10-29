@@ -13,6 +13,7 @@ export function Hero({ locale, variant = "video" }: { locale: Locale; variant?: 
     <section className="relative flex min-h-[100svh] items-end justify-center overflow-hidden bg-[#fdf8ec]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={HERO_LIGHT} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
+      <video src="/media/hero-abudhabi.mp4" poster={HERO_LIGHT} autoPlay muted loop playsInline preload="auto" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/70" />
       <nav aria-label="breadcrumb" className="absolute start-10 top-[112px] z-10 hidden text-sm text-ink/80 md:block">
         <Link href={`/${locale}`}>{d.home}</Link> <span className="px-1">/</span> <span className="text-ink">{variant === "image" ? d.navAiImage : d.videoGenerator}</span>
