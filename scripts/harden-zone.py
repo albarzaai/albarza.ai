@@ -59,7 +59,8 @@ for key, value in {
 
 step("HSTS", call("PATCH", f"/zones/{zid}/settings/security_header", {"value": {"strict_transport_security": {
     "enabled": True, "max_age": 31536000, "include_subdomains": True, "preload": True, "nosniff": True}}}))
-step("DNSSEC", call("PATCH", f"/zones/{zid}/dnssec", {"status": "active"}))
+r = call("PATCH", f"/zones/{zid}/dnssec", {"status": "active"})
+print("ok   DNSSEC (add the DS record at your registrar)" if r.get("success") else "warn DNSSEC skipped: " + "; ".join(e.get("message", "") for e in r.get("errors", [])))
 step("Bot Fight Mode", call("PUT", f"/zones/{zid}/bot_management", {"fight_mode": True, "enable_js": True}))
 
 # WAF custom rules: block scanners and unusual methods.
@@ -68,8 +69,8 @@ waf = [
      "expression": '(http.request.uri.path contains "/.env") or (http.request.uri.path contains "/.git") or (http.request.uri.path contains "/wp-admin") or (http.request.uri.path contains "/wp-login") or (http.request.uri.path contains "/xmlrpc.php") or (http.request.uri.path contains "phpmyadmin") or (http.request.uri.path contains "/.aws")'},
     {"description": "Block unexpected HTTP methods", "action": "block", "enabled": True,
      "expression": 'not http.request.method in {"GET" "HEAD" "POST" "OPTIONS"}'},
-    {"description": "Challenge known bad bots and high threat scores", "action": "managed_challenge", "enabled": True,
-     "expression": "(cf.threat_score gt 30) or (cf.client.bot and not cf.bot_management.verified_bot)"},
+    {"description": "Challenge high threat scores", "action": "managed_challenge", "enabled": True,
+     "expression": "cf.threat_score gt 30"},
 ]
 step("WAF custom rules", call("PUT", f"/zones/{zid}/rulesets/phases/http_request_firewall_custom/entrypoint", {"rules": waf}))
 
