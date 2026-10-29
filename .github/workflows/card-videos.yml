@@ -1,0 +1,33 @@
+name: Generate app home videos
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/serene-carson-k64lwr]
+    paths: [".github/workflows/card-videos.yml", "scripts/generate-card-videos.py"]
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install requests and ffmpeg
+        run: |
+          python3 -m pip install --quiet requests
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Animate banner and cards with Atlas Cloud Seedance 2.0 Mini
+        env:
+          ATLASCLOUD_API_KEY: ${{ secrets.ATLASCLOUD_API_KEY }}
+        run: python3 scripts/generate-card-videos.py
+      - name: Commit videos
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add public/media/home-*.mp4
+          git commit -m "Add Seedance 2.0 Mini videos for the app home banner and cards" || exit 0
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push
