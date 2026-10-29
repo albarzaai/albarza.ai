@@ -139,3 +139,19 @@ export const planName: Record<string, T> = {
   creator: { ar: "العضوية الذهبية", en: "Golden" },
   studio: { ar: "العضوية الماسية", en: "Diamond" },
 };
+
+// What each pack includes, shown on the pricing cards (home and /pricing).
+export const planFeatures: Record<string, { ar: string[]; en: string[] }> = {
+  starter: {
+    ar: ["٥٠ رصيداً مجانياً عند التسجيل", "توليد الصور والفيديو بالنماذج الأساسية", "مكتبة أعمالك والمشاريع على حسابك", "جودة قياسية ومعاينة سريعة", "بدون بطاقة دفع"],
+    en: ["50 free credits on sign-up", "Image and video generation with core models", "Your creations library and projects on your account", "Standard quality with quick previews", "No payment card needed"],
+  },
+  creator: {
+    ar: ["١٬٠٠٠ رصيد شهرياً", "جميع نماذج الصور والفيديو", "جودة عالية HD", "أولوية في الطابور وتوليد أسرع", "استخدام تجاري لأعمالك", "مشاريع أفلام: شخصيات ولوحة قصة وتنزيل"],
+    en: ["1,000 credits every month", "All image and video models", "HD quality output", "Priority queue and faster generation", "Commercial use of your work", "Movie projects: characters, storyboard and download"],
+  },
+  studio: {
+    ar: ["٣٬٥٠٠ رصيد شهرياً", "كل ما في العضوية الذهبية", "أعلى جودة حتى 4K", "أولوية قصوى وتوليد متوازٍ لعدة أعمال", "وصول مبكر للنماذج والميزات الجديدة", "دعم أولوية"],
+    en: ["3,500 credits every month", "Everything in Golden", "Highest quality up to 4K", "Top priority and several generations at once", "Early access to new models and features", "Priority support"],
+  },
+};

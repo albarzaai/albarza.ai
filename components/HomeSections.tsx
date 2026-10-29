@@ -6,7 +6,7 @@ import { SuiteTabs } from "./SuiteTabs";
 import { Icon } from "./Icon";
 import { H, channels, featured, homeFaqs, modelNames, whyCards } from "@/lib/home-copy";
 import { gallery, pic } from "@/lib/media";
-import { plans, planName, t } from "@/lib/dict";
+import { plans, planName, planFeatures, t } from "@/lib/dict";
 import { aed, type Locale } from "@/lib/i18n";
 
 const btnGold = "btn btn-gold";
@@ -194,6 +194,7 @@ export function Plans({ locale }: { locale: Locale }) {
                 <p className="mt-5 text-4xl font-bold">{aed(p.price, locale)} <span className="text-sm font-normal text-muted">{d.perMonth}</span></p>
                 <Link href={`/${locale}/signup`} className={`mt-6 block rounded-full py-3 text-center text-sm font-medium transition ${pop ? "bg-ink text-white hover:bg-ink/85" : "bg-white text-ink ring-1 ring-line hover:bg-ink/5"}`}>{d.choose}</Link>
                 <p className="mt-5 flex items-center gap-2 border-t border-line pt-4 text-sm"><Icon n="coins" size={16} className="text-gold-hi" />{p.credits.toLocaleString(locale === "ar" ? "ar-AE" : "en-AE")} {d.credits}</p>
+                <ul className="mt-4 space-y-2.5 text-sm">{planFeatures[p.id][locale].map((f) => <li key={f} className="flex items-start gap-2"><span className="mt-0.5 text-gold">✓</span><span>{f}</span></li>)}</ul>
               </div>
             );
           })}

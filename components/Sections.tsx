@@ -5,7 +5,7 @@ import { StepCards } from "./StepCards";
 import { ModelShowcase } from "./ModelShowcase";
 import { Icon } from "./Icon";
 import { faqs, features, testimonials, toolTitles } from "@/lib/content";
-import { plans, planName, t } from "@/lib/dict";
+import { plans, planName, planFeatures, t } from "@/lib/dict";
 import { aed, type Locale } from "@/lib/i18n";
 
 const Start = ({ locale, label }: { locale: Locale; label?: string }) => <Link href={`/${locale}/signup`} className="btn btn-gold">{label ?? t(locale).startCreating}</Link>;
@@ -191,6 +191,7 @@ export function Pricing({ locale }: { locale: Locale }) {
             <p className="mt-4 text-4xl font-bold">{aed(p.price, locale)} <span className="text-sm font-normal text-muted">{d.perMonth}</span></p>
             <p className="mt-2 text-sm text-muted">{p.credits.toLocaleString(locale === "ar" ? "ar-AE" : "en-AE")} {d.credits}</p>
             <Link href={`/${locale}/signup`} className={`btn mt-6 w-full ${"popular" in p ? "btn-gold" : "btn-ghost"}`}>{d.choose}</Link>
+            <ul className="mt-4 space-y-2.5 text-sm">{planFeatures[p.id][locale].map((f) => <li key={f} className="flex items-start gap-2"><span className="mt-0.5 text-gold">✓</span><span>{f}</span></li>)}</ul>
           </div>
         ))}
       </div>
