@@ -1,0 +1,31 @@
+name: Generate site images
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/serene-carson-k64lwr]
+    paths: [".github/workflows/images.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: python3 -m pip install --quiet requests pillow
+      - name: Generate images with Atlas Cloud
+        env:
+          ATLASCLOUD_API_KEY: ${{ secrets.ATLASCLOUD_API_KEY }}
+        run: python3 scripts/generate-images.py
+      - name: Commit images
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add public/media/g
+          git commit -m "Add generated site images (Atlas Cloud)"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push
