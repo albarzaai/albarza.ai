@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { zipSync } from "fflate";
 import { Icon } from "./Icon";
 import { ProjectSkeleton } from "./AppSkeletons";
 import { SHOTS, delBlob, getBlob, getProject, newScene, putBlob, saveProject, uid, type Asset, type Character, type Project, type Scene } from "@/lib/projects";
@@ -111,6 +110,7 @@ export function ProjectWorkspace({ locale, id }: { locale: Locale; id: string })
     for (const a of p.assets) put(`library/${slug(a.name.replace(/\.[^.]+$/, ""))}-${a.id.slice(0, 4)}.${ext(a)}`, await bytesOf(a));
     for (const c of p.characters) { const a = c.assetId ? asset(c.assetId) : undefined; if (a) put(`characters/${slug(c.name)}.${ext(a)}`, await bytesOf(a)); }
     for (const [i, s] of p.scenes.entries()) for (const [k, aid] of s.assetIds.entries()) { const a = asset(aid); if (a) put(`scenes/${String(i + 1).padStart(2, "0")}-${slug(s.title || "scene")}/${String(k + 1).padStart(2, "0")}-${slug(a.name.replace(/\.[^.]+$/, ""))}.${ext(a)}`, await bytesOf(a)); }
+    const { zipSync } = await import("fflate"); // loaded only when someone downloads
     const blob = new Blob([zipSync(files as never) as BlobPart], { type: "application/zip" });
     const u = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = u; link.download = `${slug(p.title)}.zip`; link.click(); setTimeout(() => URL.revokeObjectURL(u), 4000);
   };
