@@ -20,10 +20,10 @@ export function SiteHeader({ locale, overlay = true }: { locale: Locale; overlay
           </nav>
         </div>
         <div className="flex items-center gap-5 text-sm font-medium">
-          <Link href={`/${other}`} prefetch={false} hrefLang={other} className="text-ink/80 hover:text-ink">{other === "ar" ? "العربية" : "English"}</Link>
-          <Link href={`/${locale}/pricing`} className="hidden hover:text-gold-hi sm:block">{d.pricing}</Link>
+          <Link href={`/${locale}/pricing`} className="hover:text-gold-hi">{d.pricing}</Link>
           <Link href={`/${locale}/login`} className="hover:text-gold-hi">{d.signin}</Link>
           <Link href={`/${locale}/signup`} className="btn btn-gold !px-6">{d.signupBtn}</Link>
+          <Link href={`/${other}`} prefetch={false} hrefLang={other} lang={other} aria-label={other === "ar" ? "العربية" : "English"} title={other === "ar" ? "العربية" : "English"} className="grid h-10 w-10 place-items-center rounded-full text-ink/80 hover:bg-ink/10 hover:text-ink"><Icon n="globe" size={20} /></Link>
         </div>
       </div>
     </header>

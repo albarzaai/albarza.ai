@@ -13,6 +13,7 @@ const P: Record<string, string> = {
   filter: "M3 6h18M6 12h12M10 18h4",
   grid: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z",
   chev: "M6 9l6 6 6-6",
+  globe: "M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9s1-6.5 3.5-9z",
   plus: "M12 5v14M5 12h14",
   up: "M12 16V5M7 10l5-5 5 5M5 19h14",
   spark: "M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2zM19 3v4M17 5h4",
