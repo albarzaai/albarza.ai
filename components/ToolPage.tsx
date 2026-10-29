@@ -16,7 +16,7 @@ export function ToolPage({ locale, title, fields, cost }: { locale: Locale; titl
         {fields.map((f, i) =>
           f.kind === "upload" ? (
             <label key={i} className="flex h-36 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-line text-sm text-muted hover:border-gold">
-              <span className="text-2xl text-gold">＋</span>{d.upload}<input type="file" name="file" className="sr-only" />
+              <span className="text-2xl text-gold-deep">＋</span>{d.upload}<input type="file" name="file" className="sr-only" />
             </label>
           ) : f.kind === "text" ? (
             <div key={i}><label className="label">{d[f.label]}</label><textarea name={String(f.label)} rows={f.rows ?? 4} maxLength={2000} className="input resize-none" /></div>
@@ -25,7 +25,7 @@ export function ToolPage({ locale, title, fields, cost }: { locale: Locale; titl
           ),
         )}
         <div className="flex items-center justify-between pt-2">
-          <span className="text-sm text-muted">{d.cost}: <b className="text-cream">{cost} {d.credits}</b></span>
+          <span className="text-sm text-muted">{d.cost}: <b className="text-ink">{cost} {d.credits}</b></span>
           <button className="btn btn-gold">{d.generate}</button>
         </div>
       </form>

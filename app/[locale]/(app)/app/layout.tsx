@@ -15,11 +15,11 @@ export default async function AppLayout({ children, params }: { children: React.
       </aside>
       <div>
         <header className="flex h-16 items-center justify-between border-b border-line px-5">
-          <span className="text-sm text-muted">{d.credits}: <b className="text-cream">50</b></span>
+          <span className="text-sm text-muted">{d.credits}: <b className="text-ink">50</b></span>
           <div className="flex items-center gap-3">
             <Link href={`/${locale}/app/billing`} className="btn btn-gold !py-1.5">{d.upgrade}</Link>
             <Link href={`/${locale === "ar" ? "en" : "ar"}/app`} className="text-sm text-muted">{locale === "ar" ? "EN" : "ع"}</Link>
-            <Link href={`/${locale}/login`} className="text-sm text-muted hover:text-cream">{d.logout}</Link>
+            <Link href={`/${locale}/login`} className="text-sm text-muted hover:text-ink">{d.logout}</Link>
           </div>
         </header>
         <main className="p-5 md:p-8">{children}</main>

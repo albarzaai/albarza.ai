@@ -13,8 +13,8 @@ export function SiteFooter({ locale }: { locale: Locale }) {
           <p className="text-sm text-muted">{d.uae}</p>
         </div>
         <div className="flex gap-6 text-sm text-muted">
-          <Link href={`/${locale}/terms`} className="hover:text-cream">{d.terms}</Link>
-          <Link href={`/${locale}/privacy`} className="hover:text-cream">{d.privacy}</Link>
+          <Link href={`/${locale}/terms`} className="hover:text-gold-deep">{d.terms}</Link>
+          <Link href={`/${locale}/privacy`} className="hover:text-gold-deep">{d.privacy}</Link>
         </div>
       </div>
       <div className="border-t border-line py-4 text-center text-xs text-muted">© {new Date().getFullYear()} {d.brand}. {d.rights}.</div>

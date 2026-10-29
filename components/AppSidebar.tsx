@@ -22,7 +22,7 @@ export function AppSidebar({ locale }: { locale: Locale }) {
         const href = seg ? `${base}/${seg}` : base;
         const active = path === href;
         return (
-          <Link key={key} href={href} className={`flex shrink-0 items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${active ? "bg-surface-2 text-gold" : "text-muted hover:bg-surface-2 hover:text-cream"}`}>
+          <Link key={key} href={href} className={`flex shrink-0 items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${active ? "bg-surface-2 text-gold-deep" : "text-muted hover:bg-surface-2 hover:text-gold-deep"}`}>
             <span aria-hidden className="w-5 text-center">{icon}</span>{d[key]}
           </Link>
         );

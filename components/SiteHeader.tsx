@@ -12,13 +12,13 @@ export function SiteHeader({ locale }: { locale: Locale }) {
         <div className="flex items-center gap-8">
           <Logo locale={locale} />
           <nav className="hidden items-center gap-6 text-sm text-muted md:flex">
-            <Link href={`/${locale}#models`} className="hover:text-cream">{d.navVideo}</Link>
-            <Link href={`/${locale}#tools`} className="hover:text-cream">{d.toolsTitle}</Link>
-            <Link href={`/${locale}#pricing`} className="hover:text-cream">{d.navPricing}</Link>
+            <Link href={`/${locale}#models`} className="hover:text-gold-deep">{d.navVideo}</Link>
+            <Link href={`/${locale}#tools`} className="hover:text-gold-deep">{d.toolsTitle}</Link>
+            <Link href={`/${locale}#pricing`} className="hover:text-gold-deep">{d.navPricing}</Link>
           </nav>
         </div>
         <div className="flex items-center gap-3">
-          <Link href={`/${other}`} className="text-sm text-muted hover:text-cream" hrefLang={other}>{other === "ar" ? "العربية" : "English"}</Link>
+          <Link href={`/${other}`} className="text-sm text-muted hover:text-gold-deep" hrefLang={other}>{other === "ar" ? "العربية" : "English"}</Link>
           <Link href={`/${locale}/login`} className="btn btn-ghost hidden sm:inline-flex">{d.login}</Link>
           <Link href={`/${locale}/signup`} className="btn btn-gold">{d.signup}</Link>
         </div>
