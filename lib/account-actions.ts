@@ -74,10 +74,10 @@ export async function membershipAction(form: FormData) {
 }
 
 export async function deleteAccountAction(_: FormState, form: FormData): Promise<FormState> {
-  const r = z.object({ confirm: z.string().max(20), password: z.string().max(128).optional(), email: z.string().max(254).optional(), locale: loc }).safeParse(raw(form));
+  const r = z.object({ confirmDelete: z.string().max(20), password: z.string().max(128).optional(), email: z.string().max(254).optional(), locale: loc }).safeParse(raw(form));
   if (!r.success) return { ok: false, errors: flatten(r.error) };
   const out = await authed(r.data.locale, async (token) => {
-    const res = await api("/me/delete", { token, body: { confirm: r.data.confirm, password: r.data.password, email: r.data.email } });
+    const res = await api("/me/delete", { token, body: { confirm: r.data.confirmDelete, password: r.data.password, email: r.data.email } });
     return res.ok ? null : fail(res);
   });
   if (out) return out;

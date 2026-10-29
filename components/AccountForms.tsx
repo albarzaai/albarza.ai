@@ -85,7 +85,7 @@ export function DeleteForm({ locale, hasPassword }: { locale: Locale; hasPasswor
     <form action={act} className="space-y-3">
       <input type="hidden" name="locale" value={locale} />
       <p className="text-sm text-white/60">{t.deleteText}</p>
-      <label className="block text-xs text-white/55">{t.typeDelete}<input name="confirm" autoComplete="off" className={`${inp} mt-1`} placeholder="DELETE" /><Err s={s} k="confirm" l={locale} /></label>
+      <label className="block text-xs text-white/55">{t.typeDelete}<input name="confirmDelete" autoComplete="off" className={`${inp} mt-1`} placeholder="DELETE" /><Err s={s} k="confirm" l={locale} /></label>
       {hasPassword
         ? <label className="block text-xs text-white/55">{t.current}<input name="password" type="password" dir="ltr" autoComplete="current-password" className={`${inp} mt-1`} /><Err s={s} k="password" l={locale} /></label>
         : <label className="block text-xs text-white/55">{t.yourEmail}<input name="email" type="email" dir="ltr" className={`${inp} mt-1`} /><Err s={s} k="email" l={locale} /></label>}
