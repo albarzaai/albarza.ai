@@ -18,6 +18,7 @@ jobs:
       - name: Generate with Veo
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ATLASCLOUD_API_KEY: ${{ secrets.ATLASCLOUD_API_KEY }}
         run: python3 scripts/generate-hero-video.py
       - name: Commit video
         run: |
@@ -27,4 +28,4 @@ jobs:
           git commit -m "Add Abu Dhabi hero video (Veo)"
           git push
 
-# retry 5
+# retry 6

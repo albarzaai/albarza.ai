@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Generate the Abu Dhabi hero loop with Gemini Omni (Interactions API). Needs GEMINI_API_KEY and ffmpeg."""
+"""Generate the Abu Dhabi hero loop. Tries Atlas Cloud Seedance 2.0 Mini (ATLASCLOUD_API_KEY), then Gemini Omni (GEMINI_API_KEY). Needs ffmpeg."""
 import base64, json, os, subprocess, sys, time, urllib.request, urllib.error
 
-KEY = os.environ["GEMINI_API_KEY"]
+KEY = os.environ.get("GEMINI_API_KEY", "")
+ATLAS = os.environ.get("ATLASCLOUD_API_KEY", "")
 BASE = "https://generativelanguage.googleapis.com/v1beta"
 MODELS = ["gemini-omni-1.1-flash", "gemini-omni-flash-preview"]
 PROMPT = (
@@ -10,6 +11,9 @@ PROMPT = (
     "reflecting in still water, then gliding along the Corniche skyline with glass towers glowing in warm gold and cream light. "
     "Smooth, steady camera motion, soft haze, elegant and luxurious mood, photorealistic, no text, no logos, no people in close-up."
 )
+
+
+errors = []
 
 
 def call(method, path, body=None, timeout=600):
@@ -30,8 +34,46 @@ def video_of(d):
     return None
 
 
-data, errors = None, []
-for m in MODELS:
+def atlas_video():
+    """Seedance 2.0 Mini text-to-video on Atlas Cloud. Returns mp4 bytes or None."""
+    if not ATLAS:
+        errors.append("atlas: ATLASCLOUD_API_KEY secret is not set")
+        return None
+    h = {"Authorization": f"Bearer {ATLAS}", "Content-Type": "application/json"}
+
+    def a(method, url, body=None):
+        r = urllib.request.Request(url, method=method, data=json.dumps(body).encode() if body is not None else None, headers=h)
+        try:
+            with urllib.request.urlopen(r, timeout=120) as resp:
+                return resp.status, json.loads(resp.read())
+        except urllib.error.HTTPError as e:
+            return e.code, {"error": e.read()[:300].decode(errors="replace")}
+
+    code, d = a("POST", "https://api.atlascloud.ai/api/v1/model/generateVideo", {
+        "model": "bytedance/seedance-2.0-mini/text-to-video", "prompt": PROMPT, "duration": 10, "resolution": "720p",
+        "ratio": "16:9", "generate_audio": False, "watermark": False})
+    print("atlas submit", code)
+    if code != 200 or "data" not in d:
+        errors.append(f"atlas: {code} {json.dumps(d)[:300]}")
+        return None
+    pid = d["data"]["id"]
+    for _ in range(90):
+        time.sleep(5)
+        code, d = a("GET", f"https://api.atlascloud.ai/api/v1/model/prediction/{pid}")
+        st = d.get("data", {}).get("status")
+        if st in ("completed", "succeeded"):
+            url = d["data"]["outputs"][0]
+            subprocess.run(["curl", "-sSL", "-o", "/tmp/atlas.mp4", url], check=True)
+            return open("/tmp/atlas.mp4", "rb").read()
+        if st == "failed":
+            errors.append("atlas: generation failed " + str(d["data"].get("error"))[:200])
+            return None
+    errors.append("atlas: timed out")
+    return None
+
+
+data = atlas_video()
+for m in (MODELS if (not data and KEY) else []):
     code, d = call("POST", "/interactions", {"model": m, "input": PROMPT, "response_format": {"type": "video", "aspect_ratio": "16:9", "resolution": "1080p"}})
     print(m, code, d.get("status"))
     for _ in range(60):  # in case the interaction is still running
