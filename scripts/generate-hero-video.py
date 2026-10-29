@@ -23,6 +23,7 @@ def req(method, url, body=None):
 
 
 op = None
+errors = []
 for m in MODELS:
     code, raw = req("POST", f"{BASE}/models/{m}:predictLongRunning",
                     {"instances": [{"prompt": PROMPT}], "parameters": {"aspectRatio": "16:9"}})
@@ -30,8 +31,10 @@ for m in MODELS:
     if code == 200:
         op = json.loads(raw)["name"]
         break
+    errors.append(f"{m}: {code} {raw[:160].decode(errors='replace')}")
 if not op:
-    print("::error title=hero-video::no Veo model accepted the request (is billing / Veo access enabled for this key?)")
+    for e in errors:
+        print("::error title=hero-video::" + e.replace("\n", " "))
     sys.exit(1)
 
 for _ in range(60):
