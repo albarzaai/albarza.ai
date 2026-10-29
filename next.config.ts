@@ -16,6 +16,13 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  // Arabic is the default locale: anything without a locale prefix redirects to /ar.
+  async redirects() {
+    return [
+      { source: "/", destination: "/ar", permanent: false },
+      { source: "/:path((?!ar(?:/|$)|en(?:/|$)|api|_next|media|brand|favicon\\.ico).+)", destination: "/ar/:path", permanent: false },
+    ];
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

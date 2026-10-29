@@ -9,7 +9,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   const locale = (await params).locale as Locale;
   const d = t(locale);
   const n = (x: number) => x.toLocaleString(locale === "ar" ? "ar-AE" : "en-AE");
-  const feats = [d.f1, d.f2, d.f3, d.f4, d.f5];
+  const feats = [d.pf1, d.pf2, d.pf3, d.pf4, d.pf5];
   return (
     <div className="mx-auto max-w-6xl space-y-10 p-5 md:p-8">
       <h1 className="text-xl font-semibold">{d.billing}</h1>
