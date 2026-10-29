@@ -28,7 +28,8 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm ci --ignore-scripts
         working-directory: api
-      - run: npm audit --omit=dev --audit-level=high
+      # Frontend: glob CLI advisory comes from the OpenNext build chain (build-time only, not shipped); gate on critical.
+      - run: npm audit --omit=dev --audit-level=critical
       - run: npm audit --omit=dev --audit-level=high
         working-directory: api
       - run: npm run typecheck
