@@ -107,6 +107,6 @@ app.post("/v1/generate/image", bodyLimit({ maxSize: 8 * 1024, onError: (c) => c.
 app.route("/v1", auth);
 
 app.notFound((c) => c.json({ error: "not_found" }, 404));
-app.onError((_, c) => c.json({ error: "internal" }, 500));
+app.onError((err, c) => { console.error("api error", err instanceof Error ? err.message : String(err)); return c.json({ error: "internal" }, 500); });
 
 export default app;
