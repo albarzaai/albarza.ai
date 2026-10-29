@@ -1,7 +1,7 @@
 type T = Record<string, string>;
 export const arMore: T = {
   home: "الرئيسية", videoGenerator: "مولّد الفيديو", tools: "الأدوات",
-  navAiImage: "صور الذكاء الاصطناعي", navAiVideo: "فيديو الذكاء الاصطناعي", navEditor: "المحرر", navExplore: "استكشف", navTemplates: "القوالب", signin: "تسجيل الدخول", signupBtn: "إنشاء حساب",
+  navAiImage: "صور", navAiVideo: "فيديو", navEditor: "المحرر", navExplore: "استكشف", navTemplates: "القوالب", signin: "تسجيل الدخول", signupBtn: "إنشاء حساب",
   heroTitle: "أفضل مولّد فيديو بالذكاء الاصطناعي للمبدعين",
   heroLong: "سواء أردت تحويل وصف نصي إلى مشهد سينمائي، أو إحياء صورة ثابتة بالحركة، أو توجيه لقطة إطاراً بإطار، فالبرزة هي مولّد الفيديو المصمم لذلك. تجمع أحدث نماذج الفيديو، ومنها Veo 3.1 وKling وSeedance، في مساحة عمل واحدة ليطابق المبدعون النموذج المناسب مع كل لقطة وينتجوا حركة بمستوى احترافي دون التنقل بين أدوات متفرقة. صِف مشهدك، وأضف توجيهاً بصرياً، وأنشئ فيديوهات وفية لرؤيتك.",
   promptPh: "صِف الفيديو الذي تريده", generate: "إنشاء", startCreating: "ابدأ الإبداع",
@@ -50,7 +50,7 @@ export const arMore: T = {
 };
 export const enMore: T = {
   home: "Home", videoGenerator: "Video Generator", tools: "Tools",
-  navAiImage: "AI Image", navAiVideo: "AI Video", navEditor: "AI Editor", navExplore: "Explore", navTemplates: "Templates", signin: "Sign in", signupBtn: "Sign Up",
+  navAiImage: "Image", navAiVideo: "Video", navEditor: "Editor", navExplore: "Explore", navTemplates: "Templates", signin: "Sign in", signupBtn: "Sign Up",
   heroTitle: "The best AI video generator for creators",
   heroLong: "Whether you want to turn a text prompt into a cinematic scene, bring a still photo to life with motion, or direct a shot frame by frame, Albarza is the video generator made for it. It puts the newest video models, including Veo 3.1, Kling, and Seedance, in a single workspace, so creators can match the right model to each shot and produce professional-grade motion without piecing together separate tools. Describe your scene, add visual guidance, and generate videos that stay true to your creative vision.",
   promptPh: "Describe your video", generate: "Generate", startCreating: "Start Creating",
