@@ -10,7 +10,7 @@ export function SiteHeader({ locale, overlay = true }: { locale: Locale; overlay
   const nav: [string, boolean, string][] = [[d.navAiImage, true, "/image-generator"], [d.navAiVideo, true, "/video-generator"], [d.navEditor, false, "/signup"], [d.navExplore, false, "/signup"], [d.navTemplates, false, "/signup"]];
   return (
     <header className={`${overlay ? "absolute" : "relative"} inset-x-0 top-0 z-40`}>
-      <div className="flex h-[76px] items-center justify-between px-5 md:px-10">
+      <div className="mx-auto flex h-[76px] w-full max-w-[1400px] items-center justify-between px-5 md:px-10">
         <div className="flex items-center gap-12">
           <Logo locale={locale} />
           <nav className="hidden items-center gap-8 text-sm font-medium lg:flex">
