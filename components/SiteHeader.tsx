@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "./Logo";
 import { HeaderShell } from "./HeaderShell";
 import { Icon } from "./Icon";
+import { MobileMenu } from "./MobileMenu";
 import { t } from "@/lib/dict";
 import type { Locale } from "@/lib/i18n";
 
@@ -20,10 +21,11 @@ export function SiteHeader({ locale }: { locale: Locale }) {
             ))}
           </nav>
         </div>
-        <div className="flex items-center gap-5 text-sm font-medium">
-          <Link href={`/${locale}/login`} className="hover:opacity-70">{d.signin}</Link>
-          <Link href={`/${locale}/signup`} className="btn btn-gold !px-6">{d.signupBtn}</Link>
+        <div className="flex items-center gap-2 text-sm font-medium sm:gap-5">
+          <Link href={`/${locale}/login`} className="hidden hover:opacity-70 lg:block">{d.signin}</Link>
+          <Link href={`/${locale}/signup`} className="btn btn-gold hidden !px-6 sm:inline-flex">{d.signupBtn}</Link>
           <Link href={`/${other}`} prefetch={false} hrefLang={other} lang={other} aria-label={other === "ar" ? "العربية" : "English"} title={other === "ar" ? "العربية" : "English"} className="grid h-10 w-10 place-items-center rounded-full text-current hover:bg-black/10 group-data-[top=true]:hover:bg-white/15"><Icon n="globe" size={20} /></Link>
+        <MobileMenu locale={locale} label={locale === "ar" ? "القائمة" : "Menu"} items={nav.map(([label, , href]) => ({ label, href }))} signin={d.signin} signup={d.signupBtn} langLabel={other === "ar" ? "العربية" : "English"} langHref={`/${other}`} />
         </div>
       </div>
     </HeaderShell>

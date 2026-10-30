@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "./Icon";
 import { Pop } from "./Pop";
 import { ta } from "@/lib/app-dict";
@@ -17,29 +17,39 @@ export function AppSidebar({ locale }: { locale: Locale }) {
   const path = usePathname();
   const base = `/${locale}/app`;
   const [collapsed, setCollapsed] = useState(false);
+  const [drawer, setDrawer] = useState(false);
+  useEffect(() => setDrawer(false), [path]);
   const toggle = () => { const c = !collapsed; setCollapsed(c); document.documentElement.style.setProperty("--sb", c ? "64px" : "260px"); };
   const Item = ({ seg, k, icon }: { seg: string; k: string; icon: string }) => {
     const href = seg ? `${base}/${seg}` : base;
     const active = seg ? path === href || path.startsWith(href + "/") : path === base;
     return (
-      <Link href={href} title={a[k]} className={`flex shrink-0 items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${active ? "bg-white/10 text-white" : "text-white/70 hover:bg-white/5 hover:text-white"}`}>
+      <Link href={href} title={a[k]} onClick={() => setDrawer(false)} className={`flex shrink-0 items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${active ? "bg-white/10 text-white" : "text-white/70 hover:bg-white/5 hover:text-white"}`}>
         <Icon n={icon} size={18} />{!collapsed && a[k]}
       </Link>
     );
   };
   const mi = "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-white/5";
   return (
-    <aside className="z-30 flex flex-col overflow-hidden border-b border-white/10 md:border-b-0 bg-[#0b0b0b] md:sticky md:top-0 md:h-dvh md:[border-inline-end-width:1px]">
+    <>
+      <div className="h-14 md:hidden" />
+      <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between border-b border-white/10 bg-[#0b0b0b]/90 px-4 backdrop-blur md:hidden">
+        <Link href={base} className="flex items-center gap-2"><img src="/brand/logo.svg" alt="" width={20} height={26} /><span className="text-base font-bold tracking-wide">{a.myAccount === "حسابي" ? "البرزة" : "ALBARZA"}</span></Link>
+        <button type="button" aria-label="menu" aria-expanded={drawer} onClick={() => setDrawer(true)} className="grid size-10 place-items-center rounded-full hover:bg-white/10"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
+      </div>
+      {drawer && <div className="fixed inset-0 z-40 bg-black/60 md:hidden" onClick={() => setDrawer(false)} aria-hidden />}
+      <aside className={`z-50 flex flex-col overflow-hidden border-white/10 bg-[#0b0b0b] transition-transform duration-200 max-md:fixed max-md:inset-y-0 max-md:start-0 max-md:w-[290px] max-md:border-e ${drawer ? "" : "max-md:ltr:-translate-x-full max-md:rtl:translate-x-full"} md:sticky md:top-0 md:z-30 md:h-dvh md:[border-inline-end-width:1px]`}>
       <div className="flex h-16 items-center justify-between px-4">
         {!collapsed && <Link href={base} className="flex items-center gap-2"><img src="/brand/logo.svg" alt="" width={22} height={28} /><span className="text-lg font-bold tracking-wide">{a.myAccount === "حسابي" ? "البرزة" : "ALBARZA"}</span></Link>}
         <button onClick={toggle} aria-label={a.collapse} className="hidden text-white/50 hover:text-white md:block"><Icon n="panel" size={16} /></button>
+        <button type="button" onClick={() => setDrawer(false)} aria-label="close" className="grid size-9 place-items-center rounded-full text-white/70 hover:bg-white/10 md:hidden"><Icon n="close" size={16} /></button>
       </div>
-      <nav className="noscroll flex gap-1 overflow-x-auto px-2 md:flex-1 md:flex-col md:overflow-y-auto">
+      <nav className="noscroll flex flex-1 flex-col gap-1 overflow-y-auto px-2">
         {main.map(([s, k, i]) => <Item key={k} seg={s} k={k} icon={i} />)}
-        {!collapsed && <p className="hidden px-3 pb-1 pt-5 text-sm text-white/40 md:block">{a.tools}</p>}
+        {!collapsed && <p className="px-3 pb-1 pt-5 text-sm text-white/40">{a.tools}</p>}
         {tools.map(([s, k, i]) => <Item key={k} seg={s} k={k} icon={i} />)}
       </nav>
-      <div className="hidden space-y-3 p-3 md:block">
+      <div className="space-y-3 p-3">
         {!collapsed && (
           <Link href={`${base}/pricing`} className="upgrade flex items-center justify-between rounded-full px-4 py-3 text-sm font-semibold">
             <span className="flex items-center gap-1">{a.upgradeCta} <Icon n="arrow" size={13} /></span><span className="rounded-full bg-black/25 px-2 py-0.5 text-xs text-white">50</span>
@@ -68,5 +78,6 @@ export function AppSidebar({ locale }: { locale: Locale }) {
         </Pop>
       </div>
     </aside>
+    </>
   );
 }

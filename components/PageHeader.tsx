@@ -12,7 +12,7 @@ export function PageHeader({ locale, title, crumb, tabs, active, basePath, toolb
 }) {
   const a = ta(locale);
   return (
-    <header className="sticky top-0 z-30 grid min-h-[76px] grid-cols-[1fr_auto_1fr] items-center gap-3 bg-gradient-to-b from-[#050505] via-[#050505]/95 to-transparent px-5 py-3 md:px-8">
+    <header className="sticky top-14 z-30 grid md:top-0 min-h-[76px] grid-cols-[1fr_auto_1fr] items-center gap-3 bg-gradient-to-b from-[#050505] via-[#050505]/95 to-transparent px-5 py-3 md:px-8">
       <div className="flex min-w-0 items-center gap-2 text-sm">
         {crumb ? (<><span className="text-white/45">{a.tools}</span><Icon n={locale === "ar" ? "chevL" : "chevR"} size={13} className="text-white/30" /><span className="text-base font-semibold">{crumb}</span></>) : <span className="text-base font-semibold">{title}</span>}
       </div>
