@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { PENDING } from "./pending";
 import { api, clearSession, getToken, safeNext, setSession } from "./session";
 
 export type FormState = { ok: boolean; errors?: Record<string, string>; message?: string } | null;
@@ -70,7 +71,6 @@ export async function logoutAction(form: FormData) {
   redirect(`/${loc.parse(form.get("locale"))}/login`);
 }
 
-const PENDING = process.env.NODE_ENV === "production" ? "__Host-albarza_pending" : "albarza_pending";
 export async function resendAction(_: FormState, form: FormData): Promise<FormState> {
   const em = email.safeParse((await cookies()).get(PENDING)?.value);
   if (!em.success) return { ok: false, message: "unavailable" };

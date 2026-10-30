@@ -13,9 +13,9 @@ import type { Locale } from "@/lib/i18n";
 const G = () => (<svg width="18" height="18" viewBox="0 0 48 48" aria-hidden><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 12-2.1 16-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.5 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>);
 
 // Davinci-style centered modal: art panel + "Sign up or log in". Validation runs in server actions.
-export function AuthModal({ locale, initial, next, reset, error }: { locale: Locale; initial: "login" | "signup"; next?: string; reset?: boolean; error?: string }) {
+export function AuthModal({ locale, initial, next, reset, verified, error }: { locale: Locale; initial: "login" | "signup"; next?: string; reset?: boolean; verified?: boolean; error?: string }) {
   const d = t(locale);
-  const [step, setStep] = useState<"choose" | "email">("choose");
+  const [step, setStep] = useState<"choose" | "email">(verified ? "email" : "choose");
   const [mode, setMode] = useState<"login" | "signup">(initial);
   const [state, action, pending] = useActionState<FormState, FormData>(mode === "login" ? loginAction : signupAction, null);
   const err = (k: string) => state?.errors?.[k] && <p className="mt-1 text-xs text-red-400">{locale === "ar" ? "قيمة غير صالحة" : "Invalid value"}</p>;
@@ -44,6 +44,7 @@ export function AuthModal({ locale, initial, next, reset, error }: { locale: Loc
           ) : (
             <form action={action} noValidate className="mt-7 space-y-3">
               <input type="hidden" name="locale" value={locale} />{next && <input type="hidden" name="next" value={next} />}
+              {verified && <p role="status" className="rounded-xl bg-gold/15 p-3 text-xs">{locale === "ar" ? "تم تأكيد بريدك الإلكتروني. سجّل الدخول للمتابعة." : "Email confirmed. Sign in to continue."}</p>}
               {reset && <p role="status" className="rounded-xl bg-gold/15 p-3 text-xs">{locale === "ar" ? "تم تغيير كلمة المرور. سجّل الدخول." : "Password changed. Please sign in."}</p>}
               {error && <p role="alert" className="rounded-xl bg-red-500/10 p-3 text-xs text-red-500">{formMessage(error, locale) ?? formMessage("unavailable", locale)}</p>}
               {formMessage(state?.message, locale) && <p role="alert" className="rounded-xl bg-red-500/10 p-3 text-xs text-red-500">{formMessage(state?.message, locale)}</p>}

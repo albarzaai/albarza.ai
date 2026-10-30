@@ -139,6 +139,13 @@ auth.post("/auth/resend-verification", async (c) => {
   return c.json({ ok: true });
 });
 
+// Whether this address has confirmed. The site only asks about the address kept in the visitor's own HttpOnly cookie from sign-up.
+auth.post("/auth/verification-status", async (c) => {
+  const b = await body(c, v.forgot); if ("error" in b) return b.error;
+  const u = await c.env.DB!.prepare("SELECT email_verified FROM users WHERE email=?").bind(b.data.email).first<{ email_verified: number }>();
+  return c.json({ verified: !!u?.email_verified });
+});
+
 auth.post("/auth/login", async (c) => {
   const b = await body(c, v.login); if ("error" in b) return b.error;
   const d = b.data;
