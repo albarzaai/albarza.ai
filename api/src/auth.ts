@@ -97,11 +97,15 @@ auth.post("/auth/signup", async (c) => {
   const d = b.data;
   if (await limited(c, d.email)) return c.json({ error: "rate_limited" }, 429);
   if (!(await captchaOk(c, d.captcha))) return bad(c, { form: "captcha" });
-  const exists = await c.env.DB!.prepare("SELECT id FROM users WHERE email=?").bind(d.email).first();
+  const exists = await c.env.DB!.prepare("SELECT id, email_verified FROM users WHERE email=?").bind(d.email).first<{ id: string; email_verified: number }>();
   const id = crypto.randomUUID(), now = Date.now();
   const hash = await hashPassword(d.password, ITER(c));
   if (exists) {
     // Same response as a fresh sign-up so the form cannot be used to discover registered emails.
+    // An account that never confirmed gets a fresh link (at most one a minute), so retrying the sign-up also works.
+    if (c.env.RESEND_API_KEY && !exists.email_verified && !(await c.env.DB!.prepare("SELECT 1 FROM tokens WHERE user_id=? AND kind='verify_email' AND expires_at>?").bind(exists.id, Date.now() + DAY - 60_000).first())) {
+      await sendEmail(c.env, d.email, ...tpl("verify", d.locale, link(c, "/verify-email", await issueToken(c, exists.id, "verify_email", DAY), d.locale)));
+    }
     return c.json({ ok: true, verify: !!c.env.RESEND_API_KEY });
   }
   await c.env.DB!.prepare("INSERT INTO users (id,email,password_hash,name,locale,marketing_opt_in,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?)").bind(id, d.email, hash, d.name, d.locale, d.marketing ? 1 : 0, now, now).run();
@@ -113,6 +117,24 @@ auth.post("/auth/signup", async (c) => {
   }
   // Email is not configured yet: sign the user straight in (they can verify later).
   return c.json({ ok: true, verify: false, ...(await createSession(c, id)) });
+});
+
+// Sends the confirmation link again. Same answer whether or not the address exists; at most one new link a minute per account.
+auth.post("/auth/resend-verification", async (c) => {
+  const b = await body(c, v.forgot); if ("error" in b) return b.error;
+  const d = b.data;
+  if (await limited(c, d.email)) return c.json({ error: "rate_limited" }, 429);
+  if (c.env.RESEND_API_KEY) {
+    const u = await c.env.DB!.prepare("SELECT id, email_verified FROM users WHERE email=?").bind(d.email).first<{ id: string; email_verified: number }>();
+    if (u && !u.email_verified) {
+      const recent = await c.env.DB!.prepare("SELECT 1 FROM tokens WHERE user_id=? AND kind='verify_email' AND expires_at>?").bind(u.id, Date.now() + DAY - 60_000).first();
+      if (!recent) {
+        const t = await issueToken(c, u.id, "verify_email", DAY);
+        await sendEmail(c.env, d.email, ...tpl("verify", d.locale, link(c, "/verify-email", t, d.locale)));
+      }
+    }
+  }
+  return c.json({ ok: true });
 });
 
 auth.post("/auth/login", async (c) => {

@@ -51,8 +51,10 @@ export function ResendButton({ locale }: { locale: Locale }) {
   const [s, action, pending] = useActionState<FormState, FormData>(resendAction, null);
   return (
     <form action={action} className="mt-6 text-center">
+      <input type="hidden" name="locale" value={locale} />
       <button disabled={pending} className="btn btn-ghost w-full">{d.resend}</button>
       {s?.ok && <p role="status" className="mt-3 text-xs text-gold-hi">✓</p>}
+      {s && !s.ok && formMessage(s.message, locale) && <p role="alert" className="mt-3 text-xs text-red-500">{formMessage(s.message, locale)}</p>}
       <p className="mt-3 text-xs text-muted">{d.checkSpam}</p>
     </form>
   );

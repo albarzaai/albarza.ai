@@ -1,5 +1,6 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { api, clearSession, getToken, safeNext, setSession } from "./session";
@@ -42,6 +43,7 @@ export async function signupAction(_: FormState, form: FormData): Promise<FormSt
   const res = await api<{ verify?: boolean; sessionToken?: string; expiresAt?: number }>("/auth/signup", { body: { name: r.data.name, email: r.data.email, password: r.data.password, locale: r.data.locale, marketing: r.data.marketing === "on", captcha: form.get("cf-turnstile-response") ?? undefined } });
   if (!res.ok) return apiErrors(res.data);
   if (res.data.sessionToken) { await setSession(res.data.sessionToken, res.data.expiresAt!); redirect(`/${r.data.locale}/app/welcome`); }
+  (await cookies()).set(PENDING, r.data.email, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 1800 });
   redirect(`/${r.data.locale}/verify-email`);
 }
 
@@ -68,7 +70,14 @@ export async function logoutAction(form: FormData) {
   redirect(`/${loc.parse(form.get("locale"))}/login`);
 }
 
-export async function resendAction(): Promise<FormState> { return { ok: true, message: "resent" }; }
+const PENDING = process.env.NODE_ENV === "production" ? "__Host-albarza_pending" : "albarza_pending";
+export async function resendAction(_: FormState, form: FormData): Promise<FormState> {
+  const em = email.safeParse((await cookies()).get(PENDING)?.value);
+  if (!em.success) return { ok: false, message: "unavailable" };
+  const res = await api("/auth/resend-verification", { body: { email: em.data, locale: form.get("locale") === "en" ? "en" : "ar" } });
+  if (res.status === 429) return { ok: false, message: "rate_limited" };
+  return res.ok ? { ok: true, message: "resent" } : { ok: false, message: "unavailable" };
+}
 export async function contactAction(_: FormState, form: FormData): Promise<FormState> {
   const r = contactSchema.safeParse(raw(form));
   if (!r.success) return { ok: false, errors: flatten(r.error) };
