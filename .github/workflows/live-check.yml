@@ -1,0 +1,33 @@
+name: Live check
+
+on:
+  workflow_run:
+    workflows: [Deploy]
+    types: [completed]
+  schedule:
+    - cron: "17,47 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [claude/serene-carson-k64lwr]
+    paths: ["scripts/e2e-live.js", ".github/workflows/live-check.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    # After a deploy, only when it succeeded; the schedule and manual runs always go.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install a browser
+        run: |
+          npm install --no-save --no-audit --no-fund playwright
+          npx playwright install --with-deps chromium
+      - name: Check the live site
+        run: node scripts/e2e-live.js

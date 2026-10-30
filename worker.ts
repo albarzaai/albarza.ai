@@ -28,8 +28,35 @@ function cacheable(req: Request): boolean {
   return !["cookie", "authorization", "rsc", "next-action", "next-router-prefetch"].some((h) => req.headers.has(h));
 }
 
+const errorPage = (lang: string) => new Response(
+  `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Albarza</title><body style="margin:0;display:grid;place-items:center;min-height:100vh;background:#0b0b0b;color:#fff;font-family:system-ui,sans-serif;text-align:center"><div><h1 style="font-size:22px">${lang === "ar" ? "حدث خطأ مؤقت" : "Something went wrong"}</h1><p style="opacity:.7">${lang === "ar" ? "أعد تحميل الصفحة وحاول مرة أخرى." : "Reload the page and try again."}</p><a href="" style="color:#bd9b5f">${lang === "ar" ? "إعادة التحميل" : "Reload"}</a></div></body>`,
+  { status: 500, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
+
+// Logs every failed page or action request (visible in the Worker logs) and replaces an empty or crashed answer with a readable page.
+async function guarded(run: () => Promise<Response>, req: Request): Promise<Response> {
+  const path = new URL(req.url).pathname;
+  const lang = path.startsWith("/en") ? "en" : "ar";
+  try {
+    const res = await run();
+    if (res.status >= 500) {
+      console.error("server-error", req.method, path, res.status);
+      if (!res.body && req.headers.get("accept")?.includes("text/html")) return errorPage(lang);
+    }
+    return res;
+  } catch (e) {
+    console.error("server-exception", req.method, path, e instanceof Error ? e.message : String(e));
+    return errorPage(lang);
+  }
+}
+
 export default {
   async fetch(req: Request, env: Env, ctx: Ctx): Promise<Response> {
+    return guarded(() => handle(req, env, ctx), req);
+  },
+};
+
+async function handle(req: Request, env: Env, ctx: Ctx): Promise<Response> {
+  {
     const url = new URL(req.url);
     const app = APP_PATH.exec(url.pathname);
     if (app && !(await hasSession(req, env))) {
@@ -62,5 +89,5 @@ export default {
       return out;
     }
     return res;
-  },
-};
+  }
+}

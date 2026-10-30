@@ -3,6 +3,7 @@ import { Inter, Noto_Kufi_Arabic } from "next/font/google";
 import { notFound } from "next/navigation";
 import { dirOf, isLocale, locales } from "@/lib/i18n";
 import { t } from "@/lib/dict";
+import { ErrorBeacon } from "@/components/ErrorBeacon";
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "block", preload: true });
@@ -22,7 +23,7 @@ export default async function RootLayout({ children, params }: { children: React
   if (!isLocale(locale)) notFound();
   return (
     <html lang={locale} dir={dirOf(locale)} className={`${inter.variable} ${kufi.variable}`}>
-      <body>{children}</body>
+      <body>{children}<ErrorBeacon /></body>
     </html>
   );
 }
