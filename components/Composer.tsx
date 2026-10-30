@@ -59,10 +59,12 @@ export function Composer({ locale, initialMode = "createImage", count = 1 }: { l
   useEffect(() => {
     if (!state) return;
     window.dispatchEvent(new CustomEvent("albarza:generate-done", { detail: { id: genId.current, ok: state.ok, images: state.images } }));
+    if (typeof state.credits === "number") window.dispatchEvent(new CustomEvent("albarza:credits", { detail: state.credits }));
   }, [state]);
 
   const pill = "pill";
-  const price = cost[mode] * (mode === "createImage" ? outputs : 1);
+  const isImg = mode === "createImage" || mode === "createArtwork";
+  const price = isImg ? outputs * (model[mode]?.includes("Pro") ? 10 : 5) : cost[mode];
   const num = (n: number) => n.toLocaleString(locale === "ar" ? "ar-AE" : "en-AE");
   const settingsLabel = mode === "createImage" ? `${aspect === "Auto" ? a.auto : aspect} · ${outputs} ${locale === "ar" ? "صورة" : outputs > 1 ? "Images" : "Image"} · ${res}` : `${aspect === "Auto" ? a.auto : aspect} · ${dur} ${locale === "ar" ? "ث" : "Sec"} · ${vres}`;
   const ModelPick = ({ list, up = true }: { list: string[]; up?: boolean }) => (
@@ -154,7 +156,7 @@ export function Composer({ locale, initialMode = "createImage", count = 1 }: { l
             </div>
           )}
         </div>
-        {state && !state.ok && <p role="alert" className="mt-2 text-center text-xs text-red-400">{state.error === "rate" ? (locale === "ar" ? "طلبات كثيرة، حاول بعد قليل" : "Too many requests, try again shortly") : state.error === "unavailable" || state.error === "blocked" ? (locale === "ar" ? "تعذّر إنشاء الصورة الآن، حاول مرة أخرى" : "Couldn't generate the image, please try again") : locale === "ar" ? "أدخل وصفاً صالحاً للمتابعة" : "Enter a valid prompt to continue"}</p>}
+        {state && !state.ok && <p role="alert" className="mt-2 text-center text-xs text-red-400">{state.error === "credits" ? (locale === "ar" ? "رصيدك لا يكفي. اختر خطة أو اشحن رصيدك." : "Not enough credits. Choose a plan or top up.") : state.error === "rate" ? (locale === "ar" ? "طلبات كثيرة، حاول بعد قليل" : "Too many requests, try again shortly") : state.error === "unavailable" || state.error === "blocked" ? (locale === "ar" ? "تعذّر إنشاء الصورة الآن، حاول مرة أخرى" : "Couldn't generate the image, please try again") : locale === "ar" ? "أدخل وصفاً صالحاً للمتابعة" : "Enter a valid prompt to continue"}</p>}
       </div>
     </form>
   );

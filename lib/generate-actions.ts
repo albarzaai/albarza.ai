@@ -1,9 +1,9 @@
 "use server";
 
 import { z } from "zod";
-import { generateImage } from "@/lib/gemini";
+import { api, getToken } from "@/lib/session";
 
-export type GenState = { ok: boolean; error?: "invalid" | "prompt" | "rate" | "unavailable" | "blocked"; images?: string[]; at?: number } | null;
+export type GenState = { ok: boolean; error?: "invalid" | "prompt" | "rate" | "unavailable" | "blocked" | "credits"; images?: string[]; credits?: number; at?: number } | null;
 
 const s = (n: number) => z.string().trim().max(n).optional();
 const schema = z.object({
@@ -15,7 +15,7 @@ const schema = z.object({
 });
 const needsPrompt = new Set(["createImage", "createArtwork", "createVideo", "editVideo", "extendVideo", "voiceover", "musicGenerator"]);
 
-// All validation is server-side. Images go to Gemini; other modes are enqueued by the backend in a later phase.
+// All validation is server-side (here, then again in the API). Images are generated and charged by the API; other modes come in a later phase.
 export async function generateAction(_: GenState, form: FormData): Promise<GenState> {
   const data = Object.fromEntries([...form.entries()].filter(([, v]) => typeof v === "string"));
   const r = schema.safeParse(data);
@@ -25,13 +25,11 @@ export async function generateAction(_: GenState, form: FormData): Promise<GenSt
     const n = Math.min(4, Math.max(1, Number(r.data.outputs) || 1));
     const aspect = r.data.aspect && r.data.aspect !== "Auto" ? r.data.aspect : undefined;
     const quality = r.data.model?.includes("Pro") ? "pro" : "flash";
-    const results = await Promise.all(Array.from({ length: n }, () => generateImage(r.data.prompt!, aspect, quality)));
-    const images = results.flatMap((x) => (x.ok ? [x.image] : []));
-    if (!images.length) {
-      const first = results.find((x) => !x.ok);
-      return { ok: false, error: first && !first.ok ? first.error : "unavailable", at: Date.now() };
-    }
-    return { ok: true, images, at: Date.now() };
+    // Sign-in, credit check and charge all happen in the API Worker; this only forwards the request with the visitor's own session.
+    const res = await api<{ images?: string[]; credits?: number; error?: string }>("/me/generate/image", { token: await getToken(), body: { prompt: r.data.prompt, aspect, quality, n } });
+    if (res.ok && res.data.images?.length) return { ok: true, images: res.data.images, credits: res.data.credits, at: Date.now() };
+    const error = res.status === 402 ? "credits" : res.status === 429 ? "rate" : res.status === 422 ? "blocked" : "unavailable";
+    return { ok: false, error, credits: res.data.credits, at: Date.now() };
   }
   return { ok: true, at: Date.now() };
 }

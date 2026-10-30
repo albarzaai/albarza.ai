@@ -30,3 +30,5 @@ export function fieldErrors(err: z.ZodError) {
 const nextPath = z.string().regex(/^\/(ar|en)\/app(\/[\w\-/]*)?$/).max(200);
 export const googleStart = z.object({ next: nextPath, locale }).strict();
 export const googleCallback = z.object({ code: z.string().min(10).max(2048), state: token, stateCookie: token }).strict();
+
+export const generateImage = z.object({ prompt: z.string().trim().min(1).max(2000), aspect: z.string().regex(/^\d{1,2}:\d{1,2}$/).optional(), quality: z.enum(["flash", "pro"]).default("flash"), n: z.number().int().min(1).max(4).default(1) }).strict();

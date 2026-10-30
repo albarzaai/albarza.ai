@@ -3,6 +3,7 @@ import { bodyLimit } from "hono/body-limit";
 import type { ZodType } from "zod";
 import { hashPassword, randomToken, safeEqual, sha256, verifyPassword } from "./lib/crypto";
 import * as v from "./lib/validate";
+import { generateImageData } from "./lib/gemini";
 import { sendEmail, tpl } from "./lib/email";
 
 type Limiter = { limit(o: { key: string }): Promise<{ success: boolean }> };
@@ -16,6 +17,8 @@ export type Env = {
   EMAIL_FROM?: string;
   TURNSTILE_SECRET?: string;
   SITE_URL: string;
+  GEMINI_API_KEY?: string;
+  GENERATE_LIMIT: { limit(o: { key: string }): Promise<{ success: boolean }> };
   PBKDF2_ITERATIONS?: string;
   GOOGLE_CLIENT_ID?: string;
   GOOGLE_CLIENT_SECRET?: string;
@@ -285,8 +288,41 @@ const session = async (c: C, next: () => Promise<void>) => {
   c.set("uid", row.user_id); c.set("sid", sid);
   await next();
 };
+// Credits per image. A generation is charged up front, in one atomic step, and refunded for any image that fails.
+const IMAGE_COST = { flash: 5, pro: 10 } as const;
 const me = new Hono<{ Bindings: Env; Variables: { uid?: string; sid?: string } }>();
 me.use("*", session as never);
+
+me.post("/generate/image", async (c) => {
+  const b = await body(c, v.generateImage); if ("error" in b) return b.error;
+  const { prompt, aspect, quality, n } = b.data;
+  const uid = String(c.get("uid"));
+  if (!(await c.env.GENERATE_LIMIT.limit({ key: uid })).success) return c.json({ error: "rate_limited" }, 429);
+  if (!c.env.GEMINI_API_KEY) return c.json({ error: "unavailable" }, 503);
+  const unit = IMAGE_COST[quality], total = unit * n, now = Date.now();
+  // Charge first; the condition makes it impossible to go below zero even with parallel requests.
+  const charged = await c.env.DB!.prepare("UPDATE users SET credits=credits-?, updated_at=? WHERE id=? AND credits>=?").bind(total, now, uid, total).run();
+  if (!charged.meta.changes) {
+    const u = await c.env.DB!.prepare("SELECT credits FROM users WHERE id=?").bind(uid).first<{ credits: number }>();
+    return c.json({ error: "credits", credits: u?.credits ?? 0, needed: total }, 402);
+  }
+  await c.env.DB!.prepare("INSERT INTO credit_ledger (id,user_id,delta,reason,created_at) VALUES (?,?,?,?,?)").bind(crypto.randomUUID(), uid, -total, `image:${quality}x${n}`, now).run();
+  const results = await Promise.all(Array.from({ length: n }, () => generateImageData(c.env.GEMINI_API_KEY!, prompt, aspect, quality)));
+  const images = results.flatMap((r) => (r.ok ? [r.image] : []));
+  const failed = n - images.length;
+  if (failed) {
+    await c.env.DB!.batch([
+      c.env.DB!.prepare("UPDATE users SET credits=credits+?, updated_at=? WHERE id=?").bind(failed * unit, Date.now(), uid),
+      c.env.DB!.prepare("INSERT INTO credit_ledger (id,user_id,delta,reason,created_at) VALUES (?,?,?,?,?)").bind(crypto.randomUUID(), uid, failed * unit, "refund:image", Date.now()),
+    ]);
+  }
+  const left = await c.env.DB!.prepare("SELECT credits FROM users WHERE id=?").bind(uid).first<{ credits: number }>();
+  if (!images.length) {
+    const first = results.find((r) => !r.ok);
+    return c.json({ error: first && !first.ok ? first.reason : "unavailable", credits: left?.credits ?? 0 }, first && !first.ok && first.reason === "blocked" ? 422 : 502);
+  }
+  return c.json({ images, credits: left?.credits ?? 0 });
+});
 const getUser = (c: C) => c.env.DB!.prepare("SELECT * FROM users WHERE id=?").bind(c.get("uid")).first<Record<string, unknown>>();
 
 me.get("/", async (c) => { const u = await getUser(c); return u ? c.json({ user: publicUser(u) }) : c.json({ error: "unauthenticated" }, 401); });

@@ -12,12 +12,19 @@ import type { Locale } from "@/lib/i18n";
 const main = [["", "home", "home"], ["explore", "explore", "explore"], ["templates", "templates", "cards"], ["reshoot", "reshoot", "reshoot"]] as const;
 const tools = [["image", "image", "image"], ["video", "video", "video"], ["music", "music", "note"], ["voice", "voice", "wave"], ["artwork", "artwork", "palette"], ["enhancer", "enhancer", "enhance"], ["editor", "editor", "pen"], ["projects", "projects", "folder"]] as const;
 
-export function AppSidebar({ locale }: { locale: Locale }) {
+export function AppSidebar({ locale, credits: initialCredits = 0 }: { locale: Locale; credits?: number }) {
   const a = ta(locale);
   const path = usePathname();
   const base = `/${locale}/app`;
   const [collapsed, setCollapsed] = useState(false);
   const [drawer, setDrawer] = useState(false);
+  const [credits, setCredits] = useState(initialCredits);
+  useEffect(() => setCredits(initialCredits), [initialCredits]);
+  useEffect(() => {
+    const on = (e: Event) => setCredits((e as CustomEvent<number>).detail);
+    window.addEventListener("albarza:credits", on);
+    return () => window.removeEventListener("albarza:credits", on);
+  }, []);
   useEffect(() => setDrawer(false), [path]);
   const toggle = () => { const c = !collapsed; setCollapsed(c); document.documentElement.style.setProperty("--sb", c ? "64px" : "260px"); };
   const Item = ({ seg, k, icon }: { seg: string; k: string; icon: string }) => {
@@ -52,7 +59,7 @@ export function AppSidebar({ locale }: { locale: Locale }) {
       <div className="space-y-3 p-3">
         {!collapsed && (
           <Link href={`${base}/pricing`} className="upgrade flex items-center justify-between rounded-full px-4 py-3 text-sm font-semibold">
-            <span className="flex items-center gap-1">{a.upgradeCta} <Icon n="arrow" size={13} /></span><span className="rounded-full bg-black/25 px-2 py-0.5 text-xs text-white">50</span>
+            <span className="flex items-center gap-1">{a.upgradeCta} <Icon n="arrow" size={13} /></span><span className="rounded-full bg-black/25 px-2 py-0.5 text-xs text-white">{credits.toLocaleString(locale === "ar" ? "ar-AE" : "en-AE")}</span>
           </Link>
         )}
         <Pop up align="start" panelClass="w-[250px] p-2 -ms-[-8px]" trigger={
@@ -62,8 +69,8 @@ export function AppSidebar({ locale }: { locale: Locale }) {
             <div onClick={close}>
               <div className="flex items-center gap-3 p-2"><span className="grid h-10 w-10 place-items-center rounded-full bg-gold font-bold text-black">A</span><div><p className="text-sm font-semibold">{a.myAccount}</p><p className="text-xs text-white/50">{a.proPlan}</p></div></div>
               <div className="mb-2 rounded-xl bg-white/5 p-3 text-xs">
-                <div className="flex justify-between"><span>{locale === "ar" ? "الأرصدة" : "Credits"}</span><span>50 {a.creditsLeft}</span></div>
-                <div className="mt-2 flex gap-[2px]">{Array.from({ length: 24 }, (_, i) => <i key={i} className={`h-3 flex-1 rounded-sm ${i < 3 ? "bg-gold" : "bg-white/15"}`} />)}</div>
+                <div className="flex justify-between"><span>{locale === "ar" ? "الأرصدة" : "Credits"}</span><span>{credits.toLocaleString(locale === "ar" ? "ar-AE" : "en-AE")} {a.creditsLeft}</span></div>
+                <div className="mt-2 flex gap-[2px]">{Array.from({ length: 24 }, (_, i) => <i key={i} className={`h-3 flex-1 rounded-sm ${i < Math.min(24, Math.ceil((credits / 50) * 24)) ? "bg-gold" : "bg-white/15"}`} />)}</div>
                 <Link href={`${base}/pricing?tab=topup`} className="mt-3 flex items-center justify-between"><span className="flex items-center gap-2"><Icon n="coins" size={15} />{a.topUp}</span><span className="rounded-full bg-gold px-3 py-0.5 font-semibold text-black">{a.get}</span></Link>
               </div>
               <Link href={`${base}/profile`} className={mi}><Icon n="user" size={16} />{a.viewProfile}</Link>
