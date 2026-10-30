@@ -15,14 +15,19 @@ export function TurnstileBox({ locale }: { locale: string }) {
     const el = box.current;
     if (!KEY || !el) return;
     let id = "";
-    const draw = () => { if (window.turnstile && !id) id = window.turnstile.render(el, { sitekey: KEY, language: locale === "ar" ? "ar" : "en", theme: "light", appearance: "interaction-only" }); };
+    // The submit button waits for the token (it arrives in a moment); if the check cannot load at all it is released after 8 s and the server answers.
+    const btn = el.closest("form")?.querySelector<HTMLButtonElement>("button.btn-gold");
+    const hold = (on: boolean) => { if (btn) btn.disabled = on; };
+    hold(true);
+    const release = setTimeout(() => hold(false), 8000);
+    const draw = () => { if (window.turnstile && !id) id = window.turnstile.render(el, { sitekey: KEY, language: locale === "ar" ? "ar" : "en", theme: "light", appearance: "interaction-only", callback: () => { clearTimeout(release); hold(false); }, "expired-callback": () => hold(true), "error-callback": () => { clearTimeout(release); hold(false); } }); };
     if (window.turnstile) draw();
     else {
       let s = document.querySelector<HTMLScriptElement>(`script[src="${SRC}"]`);
       if (!s) { s = document.createElement("script"); s.src = SRC; s.async = true; document.head.appendChild(s); }
       s.addEventListener("load", draw);
     }
-    return () => { if (id) window.turnstile?.remove(id); };
+    return () => { clearTimeout(release); hold(false); if (id) window.turnstile?.remove(id); };
   }, [locale]);
   return KEY ? <div ref={box} className="flex justify-center" /> : null;
 }
