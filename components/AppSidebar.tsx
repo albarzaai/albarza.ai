@@ -26,12 +26,12 @@ export function AppSidebar({ locale, credits: initialCredits = 0 }: { locale: Lo
     return () => window.removeEventListener("albarza:credits", on);
   }, []);
   useEffect(() => setDrawer(false), [path]);
-  const toggle = () => { const c = !collapsed; setCollapsed(c); document.documentElement.style.setProperty("--sb", c ? "64px" : "260px"); };
+  const toggle = () => { const c = !collapsed; setCollapsed(c); document.documentElement.style.setProperty("--sb", c ? "64px" : "300px"); };
   const Item = ({ seg, k, icon }: { seg: string; k: string; icon: string }) => {
     const href = seg ? `${base}/${seg}` : base;
     const active = seg ? path === href || path.startsWith(href + "/") : path === base;
     return (
-      <Link href={href} title={a[k]} onClick={() => setDrawer(false)} className={`flex shrink-0 items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${active ? "bg-white/10 text-white" : "text-white/70 hover:bg-white/5 hover:text-white"}`}>
+      <Link href={href} title={a[k]} onClick={() => setDrawer(false)} className={`flex shrink-0 items-center gap-4 border-s-[3px] px-6 py-2.5 text-[15px] transition ${active ? "border-gold bg-white/[.07] text-white" : "border-transparent text-white/70 hover:bg-white/5 hover:text-white"}`}>
         <Icon n={icon} size={18} />{!collapsed && a[k]}
       </Link>
     );
@@ -46,24 +46,24 @@ export function AppSidebar({ locale, credits: initialCredits = 0 }: { locale: Lo
       </div>
       {drawer && <div className="fixed inset-0 z-40 bg-black/60 md:hidden" onClick={() => setDrawer(false)} aria-hidden />}
       <aside className={`z-50 flex flex-col overflow-hidden border-white/10 bg-[#0b0b0b] transition-transform duration-200 max-md:fixed max-md:inset-y-0 max-md:start-0 max-md:w-[290px] max-md:border-e ${drawer ? "" : "max-md:ltr:-translate-x-full max-md:rtl:translate-x-full"} md:sticky md:top-0 md:z-30 md:h-dvh md:[border-inline-end-width:1px]`}>
-      <div className="flex h-16 items-center justify-between px-4">
+      <div className="flex h-16 items-center justify-between px-6">
         {!collapsed && <Link href={base} className="flex items-center gap-2"><img src="/brand/logo.svg" alt="" width={22} height={28} /><span className="text-lg font-bold tracking-wide">{a.myAccount === "حسابي" ? "البرزة" : "ALBARZA"}</span></Link>}
         <button onClick={toggle} aria-label={a.collapse} className="hidden text-white/50 hover:text-white md:block"><Icon n="panel" size={16} /></button>
         <button type="button" onClick={() => setDrawer(false)} aria-label="close" className="grid size-9 place-items-center rounded-full text-white/70 hover:bg-white/10 md:hidden"><Icon n="close" size={16} /></button>
       </div>
-      <nav className="noscroll flex flex-1 flex-col gap-1 overflow-y-auto px-2">
+      <nav className="noscroll flex flex-1 flex-col overflow-y-auto">
         {main.map(([s, k, i]) => <Item key={k} seg={s} k={k} icon={i} />)}
-        {!collapsed && <p className="px-3 pb-1 pt-5 text-sm text-white/40">{a.tools}</p>}
+        {!collapsed && <p className="px-6 pb-1 pt-6 text-sm text-white/40">{a.tools}</p>}
         {tools.map(([s, k, i]) => <Item key={k} seg={s} k={k} icon={i} />)}
       </nav>
-      <div className="space-y-3 p-3">
+      <div className="border-t border-white/10">
         {!collapsed && (
-          <Link href={`${base}/pricing`} className="upgrade flex items-center justify-between rounded-full px-4 py-3 text-sm font-semibold">
+          <Link href={`${base}/pricing`} className="upgrade flex items-center justify-between px-6 py-3.5 text-sm font-semibold">
             <span className="flex items-center gap-1">{a.upgradeCta} <Icon n="arrow" size={13} /></span><span className="rounded-full bg-black/25 px-2 py-0.5 text-xs text-white">{credits.toLocaleString(locale === "ar" ? "ar-AE" : "en-AE")}</span>
           </Link>
         )}
         <Pop up align="start" panelClass="w-[250px] p-2 -ms-[-8px]" trigger={
-          <span className="flex w-full items-center justify-between rounded-full bg-white/5 px-2 py-2 text-sm"><span className="flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-full bg-gold font-bold text-black">A</span>{!collapsed && a.myAccount}</span>{!collapsed && <Icon n={locale === "ar" ? "chevL" : "chevR"} size={14} />}</span>
+          <span className="flex w-full items-center justify-between px-6 py-3.5 text-sm hover:bg-white/5"><span className="flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-full bg-gold font-bold text-black">A</span>{!collapsed && a.myAccount}</span>{!collapsed && <Icon n={locale === "ar" ? "chevL" : "chevR"} size={14} />}</span>
         }>
           {(close) => (
             <div onClick={close}>
