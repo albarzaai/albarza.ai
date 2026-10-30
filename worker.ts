@@ -59,9 +59,19 @@ export default {
   },
 };
 
+// Pasted links often carry a trailing newline or a doubled language ("/ar/ar%0A"); send those to the page that was meant.
+function tidyPath(url: URL): string | null {
+  let decoded: string;
+  try { decoded = decodeURIComponent(url.pathname); } catch { return null; }
+  const fixed = decoded.replace(/[\s\u0000-\u001f]+$/, "").replace(/^\/(ar|en)\/(ar|en)(?=\/|$)/, "/$1");
+  return fixed !== decoded && fixed.startsWith("/") ? url.origin + encodeURI(fixed) + url.search : null;
+}
+
 async function handle(req: Request, env: Env, ctx: Ctx): Promise<Response> {
   {
     const url = new URL(req.url);
+    const tidy = req.method === "GET" || req.method === "HEAD" ? tidyPath(url) : null;
+    if (tidy) return new Response(null, { status: 308, headers: { location: tidy, "cache-control": "no-store" } });
     const app = APP_PATH.exec(url.pathname);
     if (app && !(await hasSession(req, env))) {
       if (req.method !== "GET" && req.method !== "HEAD") return new Response("unauthorized", { status: 401, headers: { "cache-control": "no-store" } });
