@@ -7,6 +7,9 @@ on:
   schedule:
     - cron: "17,47 * * * *"
   workflow_dispatch:
+  push:
+    branches: [claude/serene-carson-k64lwr]
+    paths: [".github/workflows/live-check.yml"]
 
 permissions:
   contents: read
@@ -27,4 +30,22 @@ jobs:
           npm install --no-save --no-audit --no-fund playwright
           npx playwright install --with-deps chromium
       - name: Check the live site
-        run: node scripts/e2e-live.js
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          # Both values are derived (never stored): the firewall pass header, and the stand-in for the human check on throwaway addresses.
+          INTERNAL=$(printf 'albarza-internal:%s' "$CLOUDFLARE_API_TOKEN" | sha256sum | cut -d' ' -f1)
+          export LIVE_CHECK_HEADER=$(printf 'live-check:%s' "$CLOUDFLARE_API_TOKEN" | sha256sum | cut -d' ' -f1)
+          export CI_CAPTCHA="ci-$(printf 'ci-captcha:%s' "$INTERNAL" | sha256sum | cut -d' ' -f1)"
+          echo "::add-mask::$LIVE_CHECK_HEADER"; echo "::add-mask::$CI_CAPTCHA"
+          node scripts/e2e-live.js
+      - name: Delete the throwaway accounts
+        if: always()
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npm ci --ignore-scripts --prefix api --no-audit --no-fund
+          bash scripts/ci-d1.sh
+          cd api && npx wrangler d1 execute albarza-db --remote --command "DELETE FROM users WHERE email LIKE 'ci-live-%@example.com'"

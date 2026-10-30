@@ -55,10 +55,12 @@ async function limited(c: C, key?: string) {
   if (key && !(await c.env.EMAIL_LIMIT.limit({ key })).success) return true;
   return false;
 }
-async function captchaOk(c: C, tokenValue?: string) {
+async function captchaOk(c: C, tokenValue?: string, emailAddr?: string) {
   const secret = c.env.TURNSTILE_SECRET;
   if (!secret) return true; // not configured yet
   if (!tokenValue) return false;
+  // Live end-to-end check (CI): a token only the holder of the internal secret can compute, accepted only for its own throwaway addresses.
+  if (tokenValue.startsWith("ci-") && emailAddr && /^ci-live-[a-z0-9-]{4,40}@example\.com$/.test(emailAddr) && c.env.INTERNAL_AUTH_SECRET && (await safeEqual(tokenValue, "ci-" + (await sha256(`ci-captcha:${c.env.INTERNAL_AUTH_SECRET}`))))) return true;
   const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: new URLSearchParams({ secret, response: tokenValue, remoteip: ip(c) }), signal: AbortSignal.timeout(8000) }).catch(() => null);
   const j = (await r?.json().catch(() => null)) as { success?: boolean } | null;
   return !!j?.success;
@@ -96,7 +98,7 @@ auth.post("/auth/signup", async (c) => {
   const b = await body(c, v.signup); if ("error" in b) return b.error;
   const d = b.data;
   if (await limited(c, d.email)) return c.json({ error: "rate_limited" }, 429);
-  if (!(await captchaOk(c, d.captcha))) return bad(c, { form: "captcha" });
+  if (!(await captchaOk(c, d.captcha, d.email))) return bad(c, { form: "captcha" });
   const exists = await c.env.DB!.prepare("SELECT id, email_verified FROM users WHERE email=?").bind(d.email).first<{ id: string; email_verified: number }>();
   const id = crypto.randomUUID(), now = Date.now();
   const hash = await hashPassword(d.password, ITER(c));
@@ -141,7 +143,7 @@ auth.post("/auth/login", async (c) => {
   const b = await body(c, v.login); if ("error" in b) return b.error;
   const d = b.data;
   if (await limited(c, d.email)) return c.json({ error: "rate_limited" }, 429);
-  if (!(await captchaOk(c, d.captcha))) return bad(c, { form: "captcha" });
+  if (!(await captchaOk(c, d.captcha, d.email))) return bad(c, { form: "captcha" });
   const u = await c.env.DB!.prepare("SELECT * FROM users WHERE email=?").bind(d.email).first<Record<string, unknown>>();
   const now = Date.now();
   if (u && Number(u.locked_until) > now) { await verifyPassword(d.password, null); return c.json({ error: "locked", retryAfter: Math.ceil((Number(u.locked_until) - now) / 1000) }, 423); }
@@ -175,7 +177,7 @@ auth.post("/auth/verify-email", async (c) => {
 auth.post("/auth/forgot", async (c) => {
   const b = await body(c, v.forgot); if ("error" in b) return b.error;
   if (await limited(c, b.data.email)) return c.json({ error: "rate_limited" }, 429);
-  if (!(await captchaOk(c, b.data.captcha))) return bad(c, { form: "captcha" });
+  if (!(await captchaOk(c, b.data.captcha, b.data.email))) return bad(c, { form: "captcha" });
   const u = await c.env.DB!.prepare("SELECT id, locale FROM users WHERE email=?").bind(b.data.email).first<{ id: string; locale: string }>();
   if (u && c.env.RESEND_API_KEY) {
     const t = await issueToken(c, u.id, "reset_password", 60 * 60_000);

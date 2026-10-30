@@ -3,6 +3,10 @@
 const { chromium } = require("playwright");
 
 const BASE = process.env.BASE_URL || "https://albarza.ai";
+const LIVE = process.env.LIVE_CHECK_HEADER || "";
+const CI_CAPTCHA = process.env.CI_CAPTCHA || "";
+const TEST_EMAIL = `ci-live-${Date.now().toString(36)}@example.com`;
+const TEST_PASSWORD = "CiLive-" + Math.random().toString(36).slice(2, 10) + "Aa1";
 const problems = [];
 const fail = (where, what) => { problems.push(`${where}: ${what}`); console.log(`::error title=live check::${where}: ${what}`); };
 
@@ -18,6 +22,8 @@ const step = async (name, fn) => { try { await fn(); } catch (e) { fail(name, e.
 (async () => {
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  // The pass header goes to our own site only, never to third parties.
+  if (LIVE) await ctx.route((u) => u.origin === BASE, (route) => route.continue({ headers: { ...route.request().headers(), "x-live-check": LIVE } }));
 
   // 1. Public pages open cleanly.
   for (const path of ["/ar", "/en", "/en/pricing", "/en/video-generator", "/en/image-generator", "/en/login", "/en/signup", "/ar/signup"]) {
@@ -65,6 +71,36 @@ const step = async (name, fn) => { try { await fn(); } catch (e) { fail(name, e.
     if (!asked) fail("signup", "bot check script was not requested");
     await page.close();
   }
+
+  // 4b. Sign-up, "Check your email", Resend, login of an unconfirmed account, forgot-password: the human check is replaced by the CI token.
+  await step("signup flow", async () => {
+    if (!CI_CAPTCHA) { console.log("no CI_CAPTCHA: skipping form flows"); return; }
+    const page = await ctx.newPage();
+    await watch(page, "signup flow");
+    const inject = () => page.evaluate((t) => { const f = document.querySelector("form"); let i = f.querySelector('input[name="cf-turnstile-response"]'); if (!i) { i = document.createElement("input"); i.type = "hidden"; i.name = "cf-turnstile-response"; f.appendChild(i); } i.value = t; document.querySelector("form button.btn-gold").disabled = false; }, CI_CAPTCHA);
+    await page.goto(BASE + "/en/signup", { waitUntil: "load", timeout: 60000 });
+    await page.click('button:has-text("email")');
+    await page.fill("#name", "Live Check"); await page.fill("#email", TEST_EMAIL); await page.fill("#password", TEST_PASSWORD);
+    await page.check('input[name=agree]');
+    await inject(); await page.click("form button.btn-gold");
+    await page.waitForURL(/verify-email/, { timeout: 20000 }).catch(() => fail("signup flow", `did not reach the confirm-email page (${page.url()})`));
+    sane(page, "signup flow");
+    await page.click('button:has-text("Resend")');
+    await page.waitForSelector('[role="status"]', { timeout: 15000 }).catch(() => fail("signup flow", "Resend gave no confirmation"));
+    // Logging in before confirming must answer cleanly, not crash.
+    await page.goto(BASE + "/en/login", { waitUntil: "load", timeout: 60000 });
+    await page.click('button:has-text("email")');
+    await page.fill("#email", TEST_EMAIL); await page.fill("#password", TEST_PASSWORD);
+    await inject(); await page.click("form button.btn-gold");
+    await page.waitForTimeout(4000);
+    sane(page, "login flow");
+    if (!/\/login/.test(page.url())) fail("login flow", `unexpected page ${page.url()}`);
+    // Forgot password.
+    await page.goto(BASE + "/en/forgot-password", { waitUntil: "load", timeout: 60000 });
+    await page.fill("#email", TEST_EMAIL); await inject(); await page.click("form button.btn-gold");
+    await page.waitForSelector('[role="status"]', { timeout: 15000 }).catch(() => fail("forgot flow", "no confirmation"));
+    await page.close();
+  });
 
   // 5. Backend health: API, database, Google sign-in.
   {

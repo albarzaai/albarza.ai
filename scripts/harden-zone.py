@@ -4,7 +4,7 @@
 Idempotent. Needs CLOUDFLARE_API_TOKEN with Zone Settings:Edit, Zone WAF:Edit and DNS:Edit.
 Each step reports on its own so one plan limit does not hide the rest.
 """
-import json, os, sys, urllib.request, urllib.error
+import hashlib, json, os, sys, urllib.request, urllib.error
 
 TOKEN = os.environ["CLOUDFLARE_API_TOKEN"]
 ZONE_NAME = os.environ.get("ZONE_NAME", "albarza.ai")
@@ -64,7 +64,12 @@ print("ok   DNSSEC (add the DS record at your registrar)" if r.get("success") el
 step("Bot Fight Mode", call("PUT", f"/zones/{zid}/bot_management", {"fight_mode": True, "enable_js": True}))
 
 # WAF custom rules: block scanners and unusual methods.
+# The live check (CI) proves it is ours with a header only someone holding the Cloudflare token can compute; the rule only skips the challenge layers.
+live = hashlib.sha256(("live-check:" + TOKEN).encode()).hexdigest()
 waf = [
+    {"description": "Live check (secret header)", "action": "skip", "enabled": True,
+     "expression": f'http.request.headers["x-live-check"][0] eq "{live}"',
+     "action_parameters": {"ruleset": "current", "products": ["bic", "securityLevel", "uaBlock", "rateLimit"]}},
     {"description": "Block common probe paths", "action": "block", "enabled": True,
      "expression": '(http.request.uri.path contains "/.env") or (http.request.uri.path contains "/.git") or (http.request.uri.path contains "/wp-admin") or (http.request.uri.path contains "/wp-login") or (http.request.uri.path contains "/xmlrpc.php") or (http.request.uri.path contains "phpmyadmin") or (http.request.uri.path contains "/.aws")'},
     {"description": "Block unexpected HTTP methods", "action": "block", "enabled": True,
