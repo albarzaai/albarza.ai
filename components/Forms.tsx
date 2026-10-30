@@ -60,7 +60,7 @@ export function ResendButton({ locale }: { locale: Locale }) {
   );
 }
 
-export function ContactForm({ locale }: { locale: Locale }) {
+export function ContactForm({ locale, defaultSubject }: { locale: Locale; defaultSubject?: string }) {
   const d = t(locale);
   const [s, action, pending] = useActionState<FormState, FormData>(contactAction, null);
   return (
@@ -69,7 +69,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
         <div><label className="label" htmlFor="c-name">{d.name}</label><input id="c-name" name="name" className="input" />{bad(s, "name", locale)}</div>
         <div><label className="label" htmlFor="c-email">{d.email}</label><input id="c-email" name="email" type="email" dir="ltr" className="input" />{bad(s, "email", locale)}</div>
       </div>
-      <div><label className="label" htmlFor="c-sub">{d.subject}</label><input id="c-sub" name="subject" className="input" />{bad(s, "subject", locale)}</div>
+      <div><label className="label" htmlFor="c-sub">{d.subject}</label><input id="c-sub" name="subject" defaultValue={defaultSubject} className="input" />{bad(s, "subject", locale)}</div>
       <div><label className="label" htmlFor="c-msg">{d.message}</label><textarea id="c-msg" name="message" rows={6} maxLength={2000} className="input resize-none" />{bad(s, "message", locale)}</div>
       <button disabled={pending} className="btn btn-gold">{d.send}</button>
       {s?.ok && <p role="status" className="text-sm text-gold-hi">{d.sent}</p>}
