@@ -1,3 +1,4 @@
+import { reportToSentry } from "./lib/sentry";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
@@ -107,6 +108,11 @@ app.post("/v1/generate/image", bodyLimit({ maxSize: 8 * 1024, onError: (c) => c.
 app.route("/v1", auth);
 
 app.notFound((c) => c.json({ error: "not_found" }, 404));
-app.onError((err, c) => { console.error("api error", err instanceof Error ? err.message : String(err)); return c.json({ error: "internal" }, 500); });
+app.onError((err, c) => {
+  console.error("api error", err instanceof Error ? err.message : String(err));
+  const path = new URL(c.req.url).pathname;
+  c.executionCtx.waitUntil(reportToSentry(err, { service: "api", path, method: c.req.method, tags: { kind: "api-error" } }));
+  return c.json({ error: "internal" }, 500);
+});
 
 export default app;

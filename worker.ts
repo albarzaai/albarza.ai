@@ -4,6 +4,8 @@ import openNext from "./.open-next/worker.js";
 // @ts-expect-error generated at build time by opennextjs-cloudflare
 export * from "./.open-next/worker.js";
 
+import { reportToSentry } from "./lib/sentry";
+
 type Ctx = { waitUntil(p: Promise<unknown>): void };
 type Env = { CF_VERSION?: { id: string }; API?: { fetch(url: string, init?: RequestInit): Promise<Response> }; INTERNAL_AUTH_SECRET?: string };
 
@@ -33,25 +35,27 @@ const errorPage = (lang: string) => new Response(
   { status: 500, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
 
 // Logs every failed page or action request (visible in the Worker logs) and replaces an empty or crashed answer with a readable page.
-async function guarded(run: () => Promise<Response>, req: Request): Promise<Response> {
+async function guarded(run: () => Promise<Response>, req: Request, ctx: Ctx): Promise<Response> {
   const path = new URL(req.url).pathname;
   const lang = path.startsWith("/en") ? "en" : "ar";
   try {
     const res = await run();
     if (res.status >= 500) {
       console.error("server-error", req.method, path, res.status);
+      ctx.waitUntil(reportToSentry(new Error(`HTTP ${res.status} ${req.method} ${path}`), { service: "web", path, method: req.method, tags: { kind: "server-error", status: String(res.status) } }));
       if (!res.body && req.headers.get("accept")?.includes("text/html")) return errorPage(lang);
     }
     return res;
   } catch (e) {
     console.error("server-exception", req.method, path, e instanceof Error ? e.message : String(e));
+    ctx.waitUntil(reportToSentry(e, { service: "web", path, method: req.method, tags: { kind: "server-exception" } }));
     return errorPage(lang);
   }
 }
 
 export default {
   async fetch(req: Request, env: Env, ctx: Ctx): Promise<Response> {
-    return guarded(() => handle(req, env, ctx), req);
+    return guarded(() => handle(req, env, ctx), req, ctx);
   },
 };
 
