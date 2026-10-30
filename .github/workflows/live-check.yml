@@ -49,3 +49,4 @@ jobs:
           npm ci --ignore-scripts --prefix api --no-audit --no-fund
           bash scripts/ci-d1.sh
           cd api && npx wrangler d1 execute albarza-db --remote --command "DELETE FROM users WHERE email LIKE 'ci-live-%@example.com'"
+# run 1793334343
