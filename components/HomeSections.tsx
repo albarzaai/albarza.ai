@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FontReveal } from "./FontReveal";
 import { HeroVideo } from "./HeroVideo";
 import { Carousel } from "./Carousel";
+import { ScrollDrift } from "./ScrollDrift";
 import { SuiteTabs } from "./SuiteTabs";
 import { Icon } from "./Icon";
 import { H, channels, featured, homeFaqs, modelNames, whyCards } from "@/lib/home-copy";
@@ -32,20 +33,20 @@ export function HomeHero({ locale }: { locale: Locale }) {
 }
 
 export function Collage({ locale }: { locale: Locale }) {
-  const tile = "absolute overflow-hidden rounded-2xl border border-line shadow-lg";
+  const tile = "absolute overflow-hidden rounded-2xl border border-line shadow-lg will-change-transform [transform:translate3d(0,calc((0.5-var(--p,0.5))*var(--dy,0px)),0)]";
   const im = (n: number) => pic("home-collage", n);
   return (
     <section className="pb-8 pt-4">
       <Wrap>
-        <div className="relative mx-auto aspect-[1.3] max-w-[1180px] md:aspect-[1.9]">
+        <ScrollDrift className="relative mx-auto aspect-[1.3] max-w-[1180px] md:aspect-[1.9]">
           {/* eslint-disable @next/next/no-img-element */}
-          <div className={`${tile} hidden md:block start-[5%] top-[2%] h-[36%] w-[24%]`}><img src={im(2)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
-          <div className={`${tile} hidden md:block end-[3%] top-[18%] h-[28%] w-[14%]`}><img src={im(3)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
-          <div className={`${tile} hidden md:block start-[8%] bottom-[8%] h-[26%] w-[12%]`}><img src={im(4)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
-          <div className={`${tile} hidden md:block end-[1%] bottom-[10%] h-[20%] w-[13%]`}><img src={im(5)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
-          <div className={`${tile} inset-x-[3%] top-0 bottom-0 z-10 md:inset-x-[20%] md:top-[12%] !rounded-[22px]`}><img src={im(1)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block start-[5%] top-[2%] h-[36%] w-[24%] [--dy:-150px]`}><img src={im(2)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block end-[3%] top-[18%] h-[28%] w-[14%] [--dy:210px]`}><img src={im(3)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block start-[8%] bottom-[8%] h-[26%] w-[12%] [--dy:260px]`}><img src={im(4)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
+          <div className={`${tile} hidden md:block end-[1%] bottom-[10%] h-[20%] w-[13%] [--dy:-190px]`}><img src={im(5)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
+          <div className={`${tile} inset-x-[3%] top-0 bottom-0 z-10 md:inset-x-[20%] md:top-[12%] !rounded-[22px] [--dy:60px] md:[transform:translate3d(0,calc((0.5-var(--p,0.5))*var(--dy)),0)_scale(calc(0.9+0.1*min(1,var(--p,0.5)*2.4)))]`}><img src={im(1)} alt="" loading="lazy" decoding="async" className="size-full object-cover" /></div>
           {/* eslint-enable @next/next/no-img-element */}
-        </div>
+        </ScrollDrift>
         <div className="mx-auto mt-14 max-w-[760px] text-center">
           <p className="text-2xl font-semibold md:text-[28px]">{H.tag1[locale]}</p>
           <p className="mt-2 text-lg text-muted md:text-xl">{H.tag2[locale]}</p>
