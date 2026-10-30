@@ -63,6 +63,7 @@ jobs:
           echo "INTERNAL_AUTH_SECRET=$INTERNAL_AUTH_SECRET" >> "$GITHUB_ENV"
       - name: Build and deploy frontend (albarza.ai)
         env:
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.TURNSTILE_SITE_KEY }}
           NEXT_PUBLIC_GOOGLE_ENABLED: ${{ secrets.GOOGLE_CLIENT_ID != '' && '1' || '0' }}
         run: |
           npx opennextjs-cloudflare build

@@ -1,5 +1,6 @@
 "use client";
 
+import { TurnstileBox } from "./TurnstileBox";
 import Link from "next/link";
 import { useActionState } from "react";
 import { contactAction, forgotAction, resendAction, resetAction, type FormState } from "@/lib/auth-actions";
@@ -19,7 +20,7 @@ export function ForgotForm({ locale }: { locale: Locale }) {
       <form action={action} noValidate className="mt-7 space-y-3">
         <input type="hidden" name="locale" value={locale} />
         <div><label className="label" htmlFor="email">{d.email}</label><input id="email" name="email" type="email" dir="ltr" className="input" autoComplete="email" />{bad(s, "email", locale)}</div>
-        <button disabled={pending} className="btn btn-gold w-full !py-3">{d.sendLink}</button>
+        <TurnstileBox locale={locale} /><button disabled={pending} className="btn btn-gold w-full !py-3">{d.sendLink}</button>
         {s?.ok && <p role="status" className="text-center text-xs text-gold-hi">{d.linkSent}</p>}
         <Link href={`/${locale}/login`} className="block text-center text-xs text-muted hover:text-ink">‹ {d.backToLogin}</Link>
       </form>

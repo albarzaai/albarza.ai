@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { gallery } from "@/lib/media";
 import { useActionState, useState } from "react";
+import { TurnstileBox } from "./TurnstileBox";
 import { Icon } from "./Icon";
 import { loginAction, signupAction, type FormState } from "@/lib/auth-actions";
 import { t } from "@/lib/dict";
@@ -52,7 +53,7 @@ export function AuthModal({ locale, initial, next, reset, error }: { locale: Loc
               {mode === "signup" && (<label className="flex items-start gap-2 text-xs text-muted"><input type="checkbox" name="marketing" className="mt-0.5 accent-[#bd9b5f]" />{locale === "ar" ? "أرغب بتلقي العروض والتحديثات (اختياري)" : "Send me offers and updates (optional)"}</label>)}
               {mode === "signup" && (<label className="flex items-start gap-2 text-xs text-muted"><input type="checkbox" name="agree" className="mt-0.5 accent-[#bd9b5f]" />{d.agree}</label>)}
               {mode === "login" && <Link href={`/${locale}/forgot-password`} className="block text-xs text-gold-hi">{d.forgot}</Link>}
-              <button disabled={pending} className="btn btn-gold w-full !py-3">{mode === "login" ? d.login : d.signup}</button>
+              <TurnstileBox locale={locale} /><button disabled={pending} className="btn btn-gold w-full !py-3">{mode === "login" ? d.login : d.signup}</button>
               <div className="flex justify-between text-xs text-muted">
                 <button type="button" onClick={() => setStep("choose")} className="hover:text-ink">‹ {d.back}</button>
                 <button type="button" onClick={() => setMode(mode === "login" ? "signup" : "login")} className="hover:text-ink">{mode === "login" ? d.noAcct + " " + d.signup : d.haveAcct + " " + d.login}</button>
