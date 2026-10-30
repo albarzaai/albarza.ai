@@ -5,9 +5,8 @@ const l = (ar: string, en: string) => ({ ar, en });
 const copy = {
   badge: l("الجهات الحكومية", "Government & public sector"),
   title: l("مصمَّمة للجهات الحكومية في الإمارات", "Built for UAE government entities"),
-  sub: l("إنشاء صور وفيديو بالذكاء الاصطناعي بخصوصية وامتثال كاملين للوزارات والهيئات والمؤسسات العامة، مع بقاء بياناتكم داخل الدولة وفريق يدعم إجراءات الشراء لديكم.", "Private, compliant AI image and video creation for ministries, authorities and public institutions, with your data kept in the UAE and a team that supports your procurement."),
+  sub: l("إنشاء صور وفيديو بالذكاء الاصطناعي بخصوصية وضوابط واضحة للوزارات والهيئات والمؤسسات العامة، مع فريق يدعم إجراءات الشراء لديكم.", "Private AI image and video creation with clear controls for ministries, authorities and public institutions, and a team that supports your procurement."),
   points: [
-    l("استضافة البيانات داخل الإمارات وضوابط متوافقة مع قانون حماية البيانات", "UAE data residency and PDPL-aligned controls"),
     l("تسجيل دخول موحّد وصلاحيات حسب الأدوار للفرق", "Single sign-on and role-based team access"),
     l("رصيد مركزي مشترك وتقارير استخدام وفواتير رسمية", "Central credit pools, usage reports and official invoices"),
     l("تهيئة وتدريب مخصّصان ودعم ذو أولوية", "Dedicated onboarding, training and priority support"),
