@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Icon } from "./Icon";
 import { ta } from "@/lib/app-dict";
 import { plans, planName, planFeatures, t } from "@/lib/dict";
+import { PlanName } from "./PlanName";
 import { aed, type Locale } from "@/lib/i18n";
 
 const packs = [[5000, 39], [10000, 75], [15000, 109], [25000, 169], [40000, 249]] as const;
@@ -29,8 +30,8 @@ export function PricingView({ locale, initialTab, current = "starter" }: { local
               {plans.map((p) => {
                 const pop = "popular" in p, mine = p.id === current;
                 return (
-                  <article key={p.id} className={`flex flex-col rounded-2xl bg-white/[.06] p-5 ${pop ? "ring-1 ring-gold" : ""}`}>
-                    <div className="flex items-center gap-2"><h2 className="text-2xl font-semibold">{planName[p.id][locale]}</h2>{pop && <span className="rounded-full bg-gold px-2.5 py-0.5 text-[11px] font-semibold text-black">{d.popular}</span>}</div>
+                  <article key={p.id} className={`flex flex-col rounded-2xl bg-white/[.06] p-5 ${pop ? "ring-1 ring-gold" : p.id === "studio" ? "ring-1 ring-[#5fc6e8]" : ""}`}>
+                    <div className="flex items-center gap-2"><h2 className="text-2xl font-semibold"><PlanName id={p.id} locale={locale} /></h2>{pop && <span className="rounded-full bg-gold px-2.5 py-0.5 text-[11px] font-semibold text-black">{d.popular}</span>}</div>
                     <p className="mt-5 text-3xl font-bold">{aed(p.price, locale)}<span className="text-sm font-normal text-white/50"> {d.perMonth}</span></p>
                     <p className="mt-2 text-sm text-white/60">{n(p.credits)} {d.credits}</p>
                     <button disabled={mine} className={`mt-4 w-full rounded-xl py-2.5 text-sm font-semibold ${mine ? "bg-white/20 text-white/70" : "bg-white text-black hover:bg-gold-hi"}`}>{mine ? a.currentPlan : `${a.go} ${planName[p.id][locale]}`}</button>

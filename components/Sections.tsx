@@ -5,7 +5,8 @@ import { StepCards } from "./StepCards";
 import { ModelShowcase } from "./ModelShowcase";
 import { Icon } from "./Icon";
 import { faqs, features, testimonials, toolTitles } from "@/lib/content";
-import { plans, planName, planFeatures, t } from "@/lib/dict";
+import { PlanName, planAccent } from "./PlanName";
+import { plans, planFeatures, t } from "@/lib/dict";
 import { aed, type Locale } from "@/lib/i18n";
 
 const Start = ({ locale, label }: { locale: Locale; label?: string }) => <Link href={`/${locale}/signup`} className="btn btn-gold">{label ?? t(locale).startCreating}</Link>;
@@ -185,9 +186,9 @@ export function Pricing({ locale }: { locale: Locale }) {
       <div className="text-center"><H2>{d.pricingTitle}</H2><p className="mt-3 text-sm text-muted">{d.vatNote}</p></div>
       <div className="mt-10 grid gap-4 md:grid-cols-3">
         {plans.map((p) => (
-          <div key={p.id} className={`card p-7 ${"popular" in p ? "!border-gold" : ""}`}>
+          <div key={p.id} className={`card p-7 ${"popular" in p ? "!border-gold" : ""} ${planAccent[p.id] ?? ""}`}>
             {"popular" in p && <span className="rounded-full bg-gold px-3 py-1 text-xs font-semibold text-black">{d.popular}</span>}
-            <h3 className="mt-3 text-xl font-semibold">{planName[p.id][locale]}</h3>
+            <h3 className="mt-3 text-xl font-semibold"><PlanName id={p.id} locale={locale} /></h3>
             <p className="mt-4 text-4xl font-bold">{aed(p.price, locale)} <span className="text-sm font-normal text-muted">{d.perMonth}</span></p>
             <p className="mt-2 text-sm text-muted">{p.credits.toLocaleString(locale === "ar" ? "ar-AE" : "en-AE")} {d.credits}</p>
             <Link href={`/${locale}/signup`} className={`btn mt-6 w-full ${"popular" in p ? "btn-gold" : "btn-ghost"}`}>{d.choose}</Link>

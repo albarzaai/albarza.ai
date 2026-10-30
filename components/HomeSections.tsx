@@ -3,11 +3,12 @@ import { FontReveal } from "./FontReveal";
 import { HeroVideo } from "./HeroVideo";
 import { Carousel } from "./Carousel";
 import { ScrollDrift } from "./ScrollDrift";
+import { PlanName, planAccent } from "./PlanName";
 import { SuiteTabs } from "./SuiteTabs";
 import { Icon } from "./Icon";
 import { H, channels, featured, homeFaqs, modelNames, whyCards } from "@/lib/home-copy";
 import { gallery, pic } from "@/lib/media";
-import { plans, planName, planFeatures, t } from "@/lib/dict";
+import { plans, planFeatures, t } from "@/lib/dict";
 import { aed, type Locale } from "@/lib/i18n";
 
 const btnGold = "btn btn-gold";
@@ -190,8 +191,8 @@ export function Plans({ locale }: { locale: Locale }) {
           {plans.map((p) => {
             const pop = "popular" in p;
             return (
-              <div key={p.id} className={`rounded-3xl border p-7 ${pop ? "border-gold bg-surface shadow-lg" : "border-line bg-surface"}`}>
-                <div className="flex items-center gap-2"><h3 className="text-lg font-semibold">{planName[p.id][locale]}</h3>{pop && <span className="rounded-full bg-gold px-2.5 py-0.5 text-[11px] font-semibold text-black">{d.popular}</span>}</div>
+              <div key={p.id} className={`rounded-3xl border p-7 ${pop ? "border-gold bg-surface shadow-lg" : "border-line bg-surface"} ${planAccent[p.id] ?? ""}`}>
+                <div className="flex items-center gap-2"><h3 className="text-lg font-semibold"><PlanName id={p.id} locale={locale} /></h3>{pop && <span className="rounded-full bg-gold px-2.5 py-0.5 text-[11px] font-semibold text-black">{d.popular}</span>}</div>
                 <p className="mt-5 text-4xl font-bold">{aed(p.price, locale)} <span className="text-sm font-normal text-muted">{d.perMonth}</span></p>
                 <Link href={`/${locale}/signup`} className={`mt-6 block rounded-full py-3 text-center text-sm font-medium transition ${pop ? "bg-ink text-white hover:bg-ink/85" : "bg-white text-ink ring-1 ring-line hover:bg-ink/5"}`}>{d.choose}</Link>
                 <p className="mt-5 flex items-center gap-2 border-t border-line pt-4 text-sm"><Icon n="coins" size={16} className="text-gold-hi" />{p.credits.toLocaleString(locale === "ar" ? "ar-AE" : "en-AE")} {d.credits}</p>
