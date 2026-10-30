@@ -89,9 +89,3 @@ export const appDict = { ar, en };
 export const ta = (l: Locale) => appDict[l];
 export type AppDict = T;
 
-export const plansApp = [
-  { id: "pro", ar: "Pro", en: "Pro", credits: 2200, price: 29, annual: 23 },
-  { id: "max", ar: "Max", en: "Max", credits: 5000, price: 69, annual: 55 },
-  { id: "ultimate", ar: "Ultimate", en: "Ultimate", credits: 15000, price: 169, annual: 135, },
-  { id: "creator", ar: "Creator", en: "Creator", credits: 40000, price: 349, annual: 279, best: true },
-] as const;

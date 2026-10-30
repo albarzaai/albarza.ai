@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { Icon } from "./Icon";
-import { plansApp, ta } from "@/lib/app-dict";
+import { ta } from "@/lib/app-dict";
+import { plans, planName, planFeatures, t } from "@/lib/dict";
 import { aed, type Locale } from "@/lib/i18n";
 
 const packs = [[5000, 39], [10000, 75], [15000, 109], [25000, 169], [40000, 249]] as const;
 
-export function PricingView({ locale, initialTab }: { locale: Locale; initialTab: "upgrade" | "topup" }) {
+export function PricingView({ locale, initialTab, current = "starter" }: { locale: Locale; initialTab: "upgrade" | "topup"; current?: string }) {
   const a = ta(locale);
-  const [tab, setTab] = useState(initialTab); const [annual, setAnnual] = useState(true); const [pk, setPk] = useState(4); const [auto, setAuto] = useState(false);
+  const d = t(locale);
+  const [tab, setTab] = useState(initialTab); const [pk, setPk] = useState(4); const [auto, setAuto] = useState(false);
   const n = (x: number) => x.toLocaleString(locale === "ar" ? "ar-AE" : "en-AE");
   const sw = (on: boolean, set: (b: boolean) => void, l: string) => <button type="button" role="switch" aria-checked={on} aria-label={l} onClick={() => set(!on)} className={`relative h-6 w-11 rounded-full ${on ? "bg-emerald-500" : "bg-white/20"}`}><span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? "start-[22px]" : "start-0.5"}`} /></button>;
   return (
@@ -19,22 +21,23 @@ export function PricingView({ locale, initialTab }: { locale: Locale; initialTab
         <p className="mt-2 text-white/55">{tab === "upgrade" ? a.pickPlanSub : a.buyCreditsSub}</p>
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
           <div className="inline-flex rounded-full bg-white/10 p-1.5"><button onClick={() => setTab("upgrade")} className={`flex items-center gap-2 rounded-full px-5 py-2 text-sm ${tab === "upgrade" ? "bg-white text-black" : ""}`}><Icon n="spark" size={14} />{a.upgradeTab}</button><button onClick={() => setTab("topup")} className={`flex items-center gap-2 rounded-full px-5 py-2 text-sm ${tab === "topup" ? "bg-white text-black" : ""}`}><Icon n="coins" size={14} />{a.topUpTab}</button></div>
-          {tab === "upgrade" ? <div className="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-2 text-sm"><span>{a.annual} <b className="text-emerald-400">{a.off20}</b></span>{sw(annual, setAnnual, a.annual)}</div> : <div className="flex items-center gap-3 rounded-full bg-white/10 px-4 py-2 text-sm">{a.autoRefillT}{sw(auto, setAuto, a.autoRefillT)}</div>}
+          {tab === "upgrade" ? null : <div className="flex items-center gap-3 rounded-full bg-white/10 px-4 py-2 text-sm">{a.autoRefillT}{sw(auto, setAuto, a.autoRefillT)}</div>}
         </div>
         {tab === "upgrade" ? (
           <>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {plansApp.map((p, k) => (
-                <article key={p.id} className={`flex flex-col rounded-2xl bg-white/[.06] p-5 ${"best" in p ? "ring-1 ring-gold" : ""}`}>
-                  {"best" in p && <p className="-mt-2 mb-2 text-center text-xs text-gold-hi">{a.bestValue}</p>}
-                  <h2 className="text-2xl font-semibold">{p[locale]}</h2>
-                  <p className="mt-6 font-semibold">{n(p.credits)} <span className="font-normal text-white/60">{a.creditsPerMonth}</span></p>
-                  <p className="mt-3 flex-1 text-sm text-white/50">{locale === "ar" ? `حتى ${n(Math.round(p.credits / 13))} صورة · ${n(Math.round(p.credits / 95))} فيديو` : `Up to ${n(Math.round(p.credits / 13))} images · ${n(Math.round(p.credits / 95))} videos`}</p>
-                  <p className="mt-5 text-3xl font-bold">{aed(annual ? p.annual : p.price, locale)}<span className="text-sm font-normal text-white/50"> {a.perMonth}</span></p>
-                  <button disabled={k === 0} className={`mt-4 w-full rounded-xl py-2.5 text-sm font-semibold ${k === 0 ? "bg-white/20 text-white/70" : "bg-white text-black hover:bg-gold-hi"}`}>{k === 0 ? a.currentPlan : `${a.go} ${p[locale]}`}</button>
-                  <ul className="mt-4 space-y-2 text-xs text-white/65">{[locale === "ar" ? "كل نماذج الصور والفيديو" : "All image and video models", locale === "ar" ? "تنزيل دون علامة مائية" : "No-watermark downloads", locale === "ar" ? "أولوية في قائمة الانتظار" : "Priority queue", locale === "ar" ? "استخدام تجاري" : "Commercial use"].map((f) => <li key={f} className="flex gap-2"><Icon n="check" size={13} className="mt-0.5 text-gold-hi" />{f}</li>)}</ul>
-                </article>
-              ))}
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {plans.map((p) => {
+                const pop = "popular" in p, mine = p.id === current;
+                return (
+                  <article key={p.id} className={`flex flex-col rounded-2xl bg-white/[.06] p-5 ${pop ? "ring-1 ring-gold" : ""}`}>
+                    <div className="flex items-center gap-2"><h2 className="text-2xl font-semibold">{planName[p.id][locale]}</h2>{pop && <span className="rounded-full bg-gold px-2.5 py-0.5 text-[11px] font-semibold text-black">{d.popular}</span>}</div>
+                    <p className="mt-5 text-3xl font-bold">{aed(p.price, locale)}<span className="text-sm font-normal text-white/50"> {d.perMonth}</span></p>
+                    <p className="mt-2 text-sm text-white/60">{n(p.credits)} {d.credits}</p>
+                    <button disabled={mine} className={`mt-4 w-full rounded-xl py-2.5 text-sm font-semibold ${mine ? "bg-white/20 text-white/70" : "bg-white text-black hover:bg-gold-hi"}`}>{mine ? a.currentPlan : `${a.go} ${planName[p.id][locale]}`}</button>
+                    <ul className="mt-4 space-y-2 text-xs text-white/65">{planFeatures[p.id][locale].map((f) => <li key={f} className="flex items-start gap-2"><span className="mt-px text-gold-hi">✓</span><span>{f}</span></li>)}</ul>
+                  </article>
+                );
+              })}
             </div>
             <p className="mt-6 text-xs text-white/45">{a.vatNote}</p>
           </>
